@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
@@ -61,20 +61,20 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Brain, label: "AI Career Test" },
-  { icon: ClipboardList, label: "My Results" },
-  { icon: Map, label: "Learning Roadmap" },
-  { icon: LineChart, label: "Salary Analytics" },
-  { icon: GraduationCap, label: "University Finder" },
-  { icon: Briefcase, label: "Job Finder" },
-  { icon: FileText, label: "CV Builder" },
-  { icon: MessageCircle, label: "Interview Coach" },
-  { icon: Sparkles, label: "AI Chat" },
-  { icon: Trophy, label: "Achievements" },
-  { icon: CalendarIcon, label: "Calendar" },
-  { icon: User, label: "Profile" },
-  { icon: Settings, label: "Settings" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard", active: true },
+  { icon: Brain, label: "AI Career Test", to: "/career-test" },
+  { icon: ClipboardList, label: "My Results", to: "/dashboard" },
+  { icon: Map, label: "Learning Roadmap", to: "/dashboard" },
+  { icon: LineChart, label: "Salary Analytics", to: "/dashboard" },
+  { icon: GraduationCap, label: "University Finder", to: "/dashboard" },
+  { icon: Briefcase, label: "Job Finder", to: "/dashboard" },
+  { icon: FileText, label: "CV Builder", to: "/dashboard" },
+  { icon: MessageCircle, label: "Interview Coach", to: "/dashboard" },
+  { icon: Sparkles, label: "AI Chat", to: "/dashboard" },
+  { icon: Trophy, label: "Achievements", to: "/dashboard" },
+  { icon: CalendarIcon, label: "Calendar", to: "/dashboard" },
+  { icon: User, label: "Profile", to: "/dashboard" },
+  { icon: Settings, label: "Settings", to: "/dashboard" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -109,18 +109,20 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           </div>
           <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href="#"
+                to={item.to}
+                activeOptions={{ exact: true }}
                 className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                   item.active
                     ? "gradient-brand text-white shadow-elegant"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }`}
+                onClick={onClose}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
                 <span className="truncate">{item.label}</span>
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="p-3 border-t border-border/60">
