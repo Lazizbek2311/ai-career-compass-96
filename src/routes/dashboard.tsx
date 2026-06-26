@@ -109,18 +109,20 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
           </div>
           <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href="#"
+                to={item.to}
+                activeOptions={{ exact: true }}
                 className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                   item.active
                     ? "gradient-brand text-white shadow-elegant"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }`}
+                onClick={onClose}
               >
                 <item.icon className="h-4 w-4 shrink-0" />
                 <span className="truncate">{item.label}</span>
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="p-3 border-t border-border/60">
