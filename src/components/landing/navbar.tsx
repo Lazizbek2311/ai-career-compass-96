@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { Menu, X, Sparkles, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
