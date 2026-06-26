@@ -84,6 +84,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "AI-powered career guidance. Personalized roadmaps, university matches, salary insights, and an always-on AI mentor." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "CareerAI — Discover Your Perfect Career with AI" },
+      { name: "twitter:description", content: "AI-powered career guidance. Personalized roadmaps, university matches, salary insights, and an always-on AI mentor." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9d1bee5f-4147-43dc-b56b-f607c7878fd9/id-preview-2ddc7786--d046abd2-09f6-4747-afa0-482291197b10.lovable.app-1782493711918.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9d1bee5f-4147-43dc-b56b-f607c7878fd9/id-preview-2ddc7786--d046abd2-09f6-4747-afa0-482291197b10.lovable.app-1782493711918.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
