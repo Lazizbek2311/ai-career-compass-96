@@ -336,7 +336,7 @@ function CareerTestPage() {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
 
