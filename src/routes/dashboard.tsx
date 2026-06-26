@@ -1,26 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
-  LayoutDashboard,
   Brain,
-  ClipboardList,
-  Map,
-  LineChart,
-  GraduationCap,
-  Briefcase,
-  FileText,
-  MessageCircle,
   Sparkles,
   Trophy,
-  Calendar as CalendarIcon,
-  User,
-  Settings,
-  Search,
-  Bell,
-  Globe,
-  Menu,
-  X,
   TrendingUp,
   BookOpen,
   Zap,
@@ -34,21 +18,12 @@ import {
   Lightbulb,
   Quote,
   Plus,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "@/components/landing/theme-toggle";
+import { DashboardLayout } from "@/components/dashboard/layout";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
