@@ -79,9 +79,11 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
             <ThemeToggle />
-            <Button variant="ghost" size="sm" className="rounded-full">Login</Button>
-            <Button size="sm" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant">
-              Get Started
+            <Button asChild variant="ghost" size="sm" className="rounded-full">
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant">
+              <Link to="/dashboard">Get Started</Link>
             </Button>
           </div>
 
