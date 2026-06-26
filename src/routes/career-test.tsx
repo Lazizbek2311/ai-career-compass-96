@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { DashboardLayout } from "@/components/dashboard/layout";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
