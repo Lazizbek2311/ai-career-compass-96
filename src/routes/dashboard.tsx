@@ -410,9 +410,6 @@ function DashboardPage() {
                 </Card>
               </aside>
             </div>
-          </main>
-        </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 }
