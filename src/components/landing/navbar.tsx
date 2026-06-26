@@ -118,8 +118,12 @@ export function Navbar() {
                 <Button variant="ghost" size="sm" onClick={() => setLang(lang === "EN" ? "UZ" : "EN")} className="rounded-full gap-1.5">
                   <Globe className="h-4 w-4" /> {lang}
                 </Button>
-                <Button variant="ghost" size="sm" className="rounded-full ml-auto">Login</Button>
-                <Button size="sm" className="rounded-full gradient-brand text-white border-0">Get Started</Button>
+                <Button asChild variant="ghost" size="sm" className="rounded-full ml-auto">
+                  <Link to="/login">Login</Link>
+                </Button>
+                <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0">
+                  <Link to="/dashboard">Get Started</Link>
+                </Button>
               </div>
             </div>
           </motion.div>
