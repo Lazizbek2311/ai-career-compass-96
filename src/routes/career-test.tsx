@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { DashboardLayout } from "@/components/dashboard/layout";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -188,36 +189,8 @@ function CareerTestPage() {
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden">
-      <div className="absolute inset-0 gradient-hero pointer-events-none" />
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.12] dark:opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-          maskImage:
-            "radial-gradient(ellipse 70% 50% at 50% 0%, black, transparent 80%)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-5xl px-4 py-10 sm:py-14">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to Dashboard
-          </Link>
-          <Link to="/" className="flex items-center gap-2">
-            <div className="grid h-8 w-8 place-items-center rounded-xl gradient-brand shadow-glow">
-              <Sparkles className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-sm font-bold tracking-tight">CareerAI</span>
-          </Link>
-        </div>
-
+    <DashboardLayout>
+      <div className="relative mx-auto max-w-5xl">
         {/* Title */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 text-xs font-medium mb-4">
@@ -231,6 +204,7 @@ function CareerTestPage() {
             Answer a few questions and our AI will craft a tailored career plan for you.
           </p>
         </div>
+
 
         {/* Progress */}
         <div className="glass rounded-2xl p-5 mb-6 shadow-elegant">
@@ -363,7 +337,7 @@ function CareerTestPage() {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
 
