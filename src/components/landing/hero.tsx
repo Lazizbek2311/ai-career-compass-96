@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -55,9 +56,11 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.25 }}
           className="mt-8 flex flex-wrap items-center justify-center gap-3"
         >
-          <Button size="lg" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant h-12 px-6 group">
-            Start Free
-            <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
+          <Button asChild size="lg" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant h-12 px-6 group">
+            <Link to="/dashboard">
+              Start Free
+              <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full h-12 px-6 gap-2 glass">
             <Play className="h-4 w-4" /> Watch Demo
