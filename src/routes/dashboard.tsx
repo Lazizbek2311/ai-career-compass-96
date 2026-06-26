@@ -61,20 +61,20 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: Brain, label: "AI Career Test" },
-  { icon: ClipboardList, label: "My Results" },
-  { icon: Map, label: "Learning Roadmap" },
-  { icon: LineChart, label: "Salary Analytics" },
-  { icon: GraduationCap, label: "University Finder" },
-  { icon: Briefcase, label: "Job Finder" },
-  { icon: FileText, label: "CV Builder" },
-  { icon: MessageCircle, label: "Interview Coach" },
-  { icon: Sparkles, label: "AI Chat" },
-  { icon: Trophy, label: "Achievements" },
-  { icon: CalendarIcon, label: "Calendar" },
-  { icon: User, label: "Profile" },
-  { icon: Settings, label: "Settings" },
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard", active: true },
+  { icon: Brain, label: "AI Career Test", to: "/career-test" },
+  { icon: ClipboardList, label: "My Results", to: "/dashboard" },
+  { icon: Map, label: "Learning Roadmap", to: "/dashboard" },
+  { icon: LineChart, label: "Salary Analytics", to: "/dashboard" },
+  { icon: GraduationCap, label: "University Finder", to: "/dashboard" },
+  { icon: Briefcase, label: "Job Finder", to: "/dashboard" },
+  { icon: FileText, label: "CV Builder", to: "/dashboard" },
+  { icon: MessageCircle, label: "Interview Coach", to: "/dashboard" },
+  { icon: Sparkles, label: "AI Chat", to: "/dashboard" },
+  { icon: Trophy, label: "Achievements", to: "/dashboard" },
+  { icon: CalendarIcon, label: "Calendar", to: "/dashboard" },
+  { icon: User, label: "Profile", to: "/dashboard" },
+  { icon: Settings, label: "Settings", to: "/dashboard" },
 ];
 
 function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
