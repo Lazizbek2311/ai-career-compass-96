@@ -109,7 +109,6 @@ const quickActions = [
 ];
 
 function DashboardPage() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [progressValues, setProgressValues] = useState(skills.map(() => 0));
 
   useEffect(() => {
@@ -118,13 +117,8 @@ function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background gradient-hero">
-      <div className="flex">
-        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="flex-1 min-w-0">
-          <TopBar onMenuClick={() => setSidebarOpen(true)} />
-          <main className="px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-            <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6">
+    <DashboardLayout>
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_320px] gap-6">
               {/* Main column */}
               <div className="space-y-6 min-w-0">
                 {/* Hero card */}
