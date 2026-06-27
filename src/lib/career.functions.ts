@@ -80,14 +80,14 @@ Requirements:
 - Strengths/weaknesses are about the user, not generic.
 - Write in clear, professional English.`;
 
-    const { experimental_output } = await generateText({
+    const result = await generateText({
       model: gateway("google/gemini-3-flash-preview"),
-      experimental_output: Output.object({ schema: ReportSchema }),
+      output: Output.object({ schema: ReportSchema }),
       prompt,
     });
 
     return {
-      report: experimental_output as CareerReport,
+      report: result.output as CareerReport,
       generatedAt: new Date().toISOString(),
       user: { name: data.fullName, country: data.country },
     };
