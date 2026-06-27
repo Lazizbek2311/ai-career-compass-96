@@ -347,11 +347,22 @@ function CareerTestPage() {
             <div className="flex flex-col items-end gap-1">
               <Button
                 size="lg"
-                className="rounded-full h-14 px-8 text-base gradient-brand text-white border-0 hover:opacity-90 shadow-elegant group"
+                onClick={handleAnalyze}
+                disabled={analyzing}
+                className="rounded-full h-14 px-8 text-base gradient-brand text-white border-0 hover:opacity-90 shadow-elegant group disabled:opacity-70"
               >
-                <Sparkles className="h-5 w-5 mr-2" />
-                Analyze with AI
-                <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-0.5" />
+                {analyzing ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Analyzing your profile...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    Analyze with AI
+                    <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
               </Button>
               <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                 <Timer className="h-3 w-3" /> About 10 seconds
