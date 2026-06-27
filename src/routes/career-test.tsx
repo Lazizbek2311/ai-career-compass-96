@@ -192,6 +192,25 @@ function CareerTestPage() {
   const next = () => setStep((s) => Math.min(STEPS.length, s + 1));
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
+  const navigate = useNavigate();
+  const analyze = useServerFn(analyzeCareer);
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const handleAnalyze = async () => {
+    setAnalyzing(true);
+    try {
+      const result = await analyze({ data });
+      localStorage.setItem("careerai:report", JSON.stringify(result));
+      toast.success("Your AI career report is ready!");
+      navigate({ to: "/my-results" });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Analysis failed";
+      toast.error(msg.includes("402") ? "AI credits exhausted. Please add credits to continue." : msg.includes("429") ? "Rate limited. Please try again in a moment." : "Could not generate report. Please try again.");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="relative mx-auto max-w-5xl">
