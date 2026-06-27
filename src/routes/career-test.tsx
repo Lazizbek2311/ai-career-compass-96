@@ -1,6 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { analyzeCareer } from "@/lib/career.functions";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Sparkles,
