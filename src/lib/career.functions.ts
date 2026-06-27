@@ -21,38 +21,33 @@ const AssessmentInput = z.object({
 
 const ReportSchema = z.object({
   summary: z.string(),
-  strengths: z.array(z.string()).min(3).max(8),
-  weaknesses: z.array(z.string()).min(2).max(6),
-  careers: z
-    .array(
-      z.object({
-        title: z.string(),
-        match: z.number().min(0).max(100),
-        whyItFits: z.string(),
-        universityMajors: z.array(z.string()).min(2).max(6),
-        technicalSkills: z.array(z.string()).min(3).max(10),
-        softSkills: z.array(z.string()).min(3).max(8),
-        salary: z.object({
-          local: z.string(),
-          usa: z.string(),
-          europe: z.string(),
-        }),
-        futureDemand: z.string(),
-        demandScore: z.number().min(0).max(100),
-        roadmap: z
-          .array(
-            z.object({
-              phase: z.string(),
-              duration: z.string(),
-              focus: z.string(),
-              milestones: z.array(z.string()).min(2).max(5),
-            }),
-          )
-          .min(3)
-          .max(6),
+  strengths: z.array(z.string()),
+  weaknesses: z.array(z.string()),
+  careers: z.array(
+    z.object({
+      title: z.string(),
+      match: z.number(),
+      whyItFits: z.string(),
+      universityMajors: z.array(z.string()),
+      technicalSkills: z.array(z.string()),
+      softSkills: z.array(z.string()),
+      salary: z.object({
+        local: z.string(),
+        usa: z.string(),
+        europe: z.string(),
       }),
-    )
-    .length(5),
+      futureDemand: z.string(),
+      demandScore: z.number(),
+      roadmap: z.array(
+        z.object({
+          phase: z.string(),
+          duration: z.string(),
+          focus: z.string(),
+          milestones: z.array(z.string()),
+        }),
+      ),
+    }),
+  ),
 });
 
 export type CareerReport = z.infer<typeof ReportSchema>;
