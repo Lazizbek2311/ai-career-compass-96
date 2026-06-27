@@ -38,7 +38,7 @@ import { ThemeToggle } from "@/components/landing/theme-toggle";
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
   { icon: Brain, label: "AI Career Test", to: "/career-test" },
-  { icon: ClipboardList, label: "My Results", to: "/dashboard" },
+  { icon: ClipboardList, label: "My Results", to: "/my-results" },
   { icon: Map, label: "Learning Roadmap", to: "/dashboard" },
   { icon: LineChart, label: "Salary Analytics", to: "/dashboard" },
   { icon: GraduationCap, label: "University Finder", to: "/dashboard" },
