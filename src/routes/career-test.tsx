@@ -1,6 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { analyzeCareer } from "@/lib/career.functions";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Sparkles,
@@ -188,6 +192,25 @@ function CareerTestPage() {
   const next = () => setStep((s) => Math.min(STEPS.length, s + 1));
   const prev = () => setStep((s) => Math.max(1, s - 1));
 
+  const navigate = useNavigate();
+  const analyze = useServerFn(analyzeCareer);
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const handleAnalyze = async () => {
+    setAnalyzing(true);
+    try {
+      const result = await analyze({ data });
+      localStorage.setItem("careerai:report", JSON.stringify(result));
+      toast.success("Your AI career report is ready!");
+      navigate({ to: "/my-results" });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Analysis failed";
+      toast.error(msg.includes("402") ? "AI credits exhausted. Please add credits to continue." : msg.includes("429") ? "Rate limited. Please try again in a moment." : "Could not generate report. Please try again.");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="relative mx-auto max-w-5xl">
@@ -324,11 +347,22 @@ function CareerTestPage() {
             <div className="flex flex-col items-end gap-1">
               <Button
                 size="lg"
-                className="rounded-full h-14 px-8 text-base gradient-brand text-white border-0 hover:opacity-90 shadow-elegant group"
+                onClick={handleAnalyze}
+                disabled={analyzing}
+                className="rounded-full h-14 px-8 text-base gradient-brand text-white border-0 hover:opacity-90 shadow-elegant group disabled:opacity-70"
               >
-                <Sparkles className="h-5 w-5 mr-2" />
-                Analyze with AI
-                <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-0.5" />
+                {analyzing ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Analyzing your profile...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    Analyze with AI
+                    <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-0.5" />
+                  </>
+                )}
               </Button>
               <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                 <Timer className="h-3 w-3" /> About 10 seconds
