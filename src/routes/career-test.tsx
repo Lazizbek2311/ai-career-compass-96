@@ -200,7 +200,10 @@ function CareerTestPage() {
     setAnalyzing(true);
     try {
       const result = await analyze({ data });
-      localStorage.setItem("careerai:report", JSON.stringify(result));
+      localStorage.setItem(
+        "careerai:report",
+        JSON.stringify({ ...result, assessment: data }),
+      );
       toast.success("Your AI career report is ready!");
       navigate({ to: "/my-results" });
     } catch (e) {
