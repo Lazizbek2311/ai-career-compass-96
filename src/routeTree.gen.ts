@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResumeOptimizerRouteImport } from './routes/resume-optimizer'
 import { Route as MyResultsRouteImport } from './routes/my-results'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as InterviewCoachRouteImport } from './routes/interview-coach'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CareerTestRouteImport } from './routes/career-test'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const MyResultsRoute = MyResultsRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewCoachRoute = InterviewCoachRouteImport.update({
+  id: '/interview-coach',
+  path: '/interview-coach',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
+  '/interview-coach': typeof InterviewCoachRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
+  '/interview-coach': typeof InterviewCoachRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
+  '/interview-coach': typeof InterviewCoachRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/career-test'
     | '/dashboard'
+    | '/interview-coach'
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/career-test'
     | '/dashboard'
+    | '/interview-coach'
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/career-test'
     | '/dashboard'
+    | '/interview-coach'
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CareerTestRoute: typeof CareerTestRoute
   DashboardRoute: typeof DashboardRoute
+  InterviewCoachRoute: typeof InterviewCoachRoute
   LoginRoute: typeof LoginRoute
   MyResultsRoute: typeof MyResultsRoute
   ResumeOptimizerRoute: typeof ResumeOptimizerRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview-coach': {
+      id: '/interview-coach'
+      path: '/interview-coach'
+      fullPath: '/interview-coach'
+      preLoaderRoute: typeof InterviewCoachRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CareerTestRoute: CareerTestRoute,
   DashboardRoute: DashboardRoute,
+  InterviewCoachRoute: InterviewCoachRoute,
   LoginRoute: LoginRoute,
   MyResultsRoute: MyResultsRoute,
   ResumeOptimizerRoute: ResumeOptimizerRoute,
