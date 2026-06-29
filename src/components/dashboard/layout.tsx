@@ -44,6 +44,7 @@ const navItems = [
   { icon: GraduationCap, label: "University Finder", to: "/dashboard" },
   { icon: Briefcase, label: "Job Finder", to: "/dashboard" },
   { icon: FileText, label: "CV Builder", to: "/dashboard" },
+  { icon: FileText, label: "Resume Optimizer", to: "/resume-optimizer" },
   { icon: MessageCircle, label: "Interview Coach", to: "/dashboard" },
   { icon: Sparkles, label: "AI Chat", to: "/dashboard" },
   { icon: Trophy, label: "Achievements", to: "/dashboard" },
