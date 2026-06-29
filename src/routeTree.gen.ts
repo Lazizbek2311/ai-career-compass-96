@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResumeOptimizerRouteImport } from './routes/resume-optimizer'
 import { Route as MyResultsRouteImport } from './routes/my-results'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CareerTestRouteImport } from './routes/career-test'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ResumeOptimizerRoute = ResumeOptimizerRouteImport.update({
+  id: '/resume-optimizer',
+  path: '/resume-optimizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyResultsRoute = MyResultsRouteImport.update({
   id: '/my-results',
   path: '/my-results',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/resume-optimizer': typeof ResumeOptimizerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/resume-optimizer': typeof ResumeOptimizerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,12 +70,25 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/resume-optimizer': typeof ResumeOptimizerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/career-test' | '/dashboard' | '/login' | '/my-results'
+  fullPaths:
+    | '/'
+    | '/career-test'
+    | '/dashboard'
+    | '/login'
+    | '/my-results'
+    | '/resume-optimizer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/career-test' | '/dashboard' | '/login' | '/my-results'
+  to:
+    | '/'
+    | '/career-test'
+    | '/dashboard'
+    | '/login'
+    | '/my-results'
+    | '/resume-optimizer'
   id:
     | '__root__'
     | '/'
@@ -75,6 +96,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/my-results'
+    | '/resume-optimizer'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,10 +105,18 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   MyResultsRoute: typeof MyResultsRoute
+  ResumeOptimizerRoute: typeof ResumeOptimizerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/resume-optimizer': {
+      id: '/resume-optimizer'
+      path: '/resume-optimizer'
+      fullPath: '/resume-optimizer'
+      preLoaderRoute: typeof ResumeOptimizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-results': {
       id: '/my-results'
       path: '/my-results'
@@ -131,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   MyResultsRoute: MyResultsRoute,
+  ResumeOptimizerRoute: ResumeOptimizerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
