@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as InterviewCoachRouteImport } from './routes/interview-coach'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CareerTestRouteImport } from './routes/career-test'
+import { Route as AiMentorRouteImport } from './routes/ai-mentor'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiMentorChatRouteImport } from './routes/api/mentor-chat'
 
@@ -48,6 +49,11 @@ const CareerTestRoute = CareerTestRouteImport.update({
   path: '/career-test',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiMentorRoute = AiMentorRouteImport.update({
+  id: '/ai-mentor',
+  path: '/ai-mentor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,6 +67,7 @@ const ApiMentorChatRoute = ApiMentorChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-mentor': typeof AiMentorRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-mentor': typeof AiMentorRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-mentor': typeof AiMentorRoute
   '/career-test': typeof CareerTestRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-mentor'
     | '/career-test'
     | '/dashboard'
     | '/interview-coach'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-mentor'
     | '/career-test'
     | '/dashboard'
     | '/interview-coach'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-mentor'
     | '/career-test'
     | '/dashboard'
     | '/interview-coach'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiMentorRoute: typeof AiMentorRoute
   CareerTestRoute: typeof CareerTestRoute
   DashboardRoute: typeof DashboardRoute
   InterviewCoachRoute: typeof InterviewCoachRoute
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareerTestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-mentor': {
+      id: '/ai-mentor'
+      path: '/ai-mentor'
+      fullPath: '/ai-mentor'
+      preLoaderRoute: typeof AiMentorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,6 +217,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiMentorRoute: AiMentorRoute,
   CareerTestRoute: CareerTestRoute,
   DashboardRoute: DashboardRoute,
   InterviewCoachRoute: InterviewCoachRoute,
@@ -208,3 +229,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
