@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UniversityFinderRouteImport } from './routes/university-finder'
 import { Route as SalaryAnalyticsRouteImport } from './routes/salary-analytics'
 import { Route as ResumeOptimizerRouteImport } from './routes/resume-optimizer'
 import { Route as MyResultsRouteImport } from './routes/my-results'
@@ -21,6 +22,11 @@ import { Route as AiMentorRouteImport } from './routes/ai-mentor'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiMentorChatRouteImport } from './routes/api/mentor-chat'
 
+const UniversityFinderRoute = UniversityFinderRouteImport.update({
+  id: '/university-finder',
+  path: '/university-finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SalaryAnalyticsRoute = SalaryAnalyticsRouteImport.update({
   id: '/salary-analytics',
   path: '/salary-analytics',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/my-results'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/university-finder'
     | '/api/mentor-chat'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/my-results'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/university-finder'
     | '/api/mentor-chat'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/my-results'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/university-finder'
     | '/api/mentor-chat'
   fileRoutesById: FileRoutesById
 }
@@ -170,11 +182,19 @@ export interface RootRouteChildren {
   MyResultsRoute: typeof MyResultsRoute
   ResumeOptimizerRoute: typeof ResumeOptimizerRoute
   SalaryAnalyticsRoute: typeof SalaryAnalyticsRoute
+  UniversityFinderRoute: typeof UniversityFinderRoute
   ApiMentorChatRoute: typeof ApiMentorChatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/university-finder': {
+      id: '/university-finder'
+      path: '/university-finder'
+      fullPath: '/university-finder'
+      preLoaderRoute: typeof UniversityFinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/salary-analytics': {
       id: '/salary-analytics'
       path: '/salary-analytics'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyResultsRoute: MyResultsRoute,
   ResumeOptimizerRoute: ResumeOptimizerRoute,
   SalaryAnalyticsRoute: SalaryAnalyticsRoute,
+  UniversityFinderRoute: UniversityFinderRoute,
   ApiMentorChatRoute: ApiMentorChatRoute,
 }
 export const routeTree = rootRouteImport
