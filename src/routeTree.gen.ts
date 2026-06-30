@@ -10,21 +10,32 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UniversityFinderRouteImport } from './routes/university-finder'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalaryAnalyticsRouteImport } from './routes/salary-analytics'
 import { Route as ResumeOptimizerRouteImport } from './routes/resume-optimizer'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MyResultsRouteImport } from './routes/my-results'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LearningRoadmapRouteImport } from './routes/learning-roadmap'
+import { Route as JobFinderRouteImport } from './routes/job-finder'
 import { Route as InterviewCoachRouteImport } from './routes/interview-coach'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CvBuilderRouteImport } from './routes/cv-builder'
 import { Route as CareerTestRouteImport } from './routes/career-test'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as AiMentorRouteImport } from './routes/ai-mentor'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiMentorChatRouteImport } from './routes/api/mentor-chat'
 
 const UniversityFinderRoute = UniversityFinderRouteImport.update({
   id: '/university-finder',
   path: '/university-finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SalaryAnalyticsRoute = SalaryAnalyticsRouteImport.update({
@@ -35,6 +46,11 @@ const SalaryAnalyticsRoute = SalaryAnalyticsRouteImport.update({
 const ResumeOptimizerRoute = ResumeOptimizerRouteImport.update({
   id: '/resume-optimizer',
   path: '/resume-optimizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyResultsRoute = MyResultsRouteImport.update({
@@ -52,6 +68,11 @@ const LearningRoadmapRoute = LearningRoadmapRouteImport.update({
   path: '/learning-roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobFinderRoute = JobFinderRouteImport.update({
+  id: '/job-finder',
+  path: '/job-finder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const InterviewCoachRoute = InterviewCoachRouteImport.update({
   id: '/interview-coach',
   path: '/interview-coach',
@@ -62,14 +83,29 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvBuilderRoute = CvBuilderRouteImport.update({
+  id: '/cv-builder',
+  path: '/cv-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CareerTestRoute = CareerTestRouteImport.update({
   id: '/career-test',
   path: '/career-test',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AiMentorRoute = AiMentorRouteImport.update({
   id: '/ai-mentor',
   path: '/ai-mentor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -85,44 +121,62 @@ const ApiMentorChatRoute = ApiMentorChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/ai-mentor': typeof AiMentorRoute
+  '/calendar': typeof CalendarRoute
   '/career-test': typeof CareerTestRoute
+  '/cv-builder': typeof CvBuilderRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
+  '/job-finder': typeof JobFinderRoute
   '/learning-roadmap': typeof LearningRoadmapRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/profile': typeof ProfileRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/settings': typeof SettingsRoute
   '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/ai-mentor': typeof AiMentorRoute
+  '/calendar': typeof CalendarRoute
   '/career-test': typeof CareerTestRoute
+  '/cv-builder': typeof CvBuilderRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
+  '/job-finder': typeof JobFinderRoute
   '/learning-roadmap': typeof LearningRoadmapRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/profile': typeof ProfileRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/settings': typeof SettingsRoute
   '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/achievements': typeof AchievementsRoute
   '/ai-mentor': typeof AiMentorRoute
+  '/calendar': typeof CalendarRoute
   '/career-test': typeof CareerTestRoute
+  '/cv-builder': typeof CvBuilderRoute
   '/dashboard': typeof DashboardRoute
   '/interview-coach': typeof InterviewCoachRoute
+  '/job-finder': typeof JobFinderRoute
   '/learning-roadmap': typeof LearningRoadmapRoute
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
+  '/profile': typeof ProfileRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
   '/salary-analytics': typeof SalaryAnalyticsRoute
+  '/settings': typeof SettingsRoute
   '/university-finder': typeof UniversityFinderRoute
   '/api/mentor-chat': typeof ApiMentorChatRoute
 }
@@ -130,58 +184,82 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/achievements'
     | '/ai-mentor'
+    | '/calendar'
     | '/career-test'
+    | '/cv-builder'
     | '/dashboard'
     | '/interview-coach'
+    | '/job-finder'
     | '/learning-roadmap'
     | '/login'
     | '/my-results'
+    | '/profile'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/settings'
     | '/university-finder'
     | '/api/mentor-chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/achievements'
     | '/ai-mentor'
+    | '/calendar'
     | '/career-test'
+    | '/cv-builder'
     | '/dashboard'
     | '/interview-coach'
+    | '/job-finder'
     | '/learning-roadmap'
     | '/login'
     | '/my-results'
+    | '/profile'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/settings'
     | '/university-finder'
     | '/api/mentor-chat'
   id:
     | '__root__'
     | '/'
+    | '/achievements'
     | '/ai-mentor'
+    | '/calendar'
     | '/career-test'
+    | '/cv-builder'
     | '/dashboard'
     | '/interview-coach'
+    | '/job-finder'
     | '/learning-roadmap'
     | '/login'
     | '/my-results'
+    | '/profile'
     | '/resume-optimizer'
     | '/salary-analytics'
+    | '/settings'
     | '/university-finder'
     | '/api/mentor-chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AchievementsRoute: typeof AchievementsRoute
   AiMentorRoute: typeof AiMentorRoute
+  CalendarRoute: typeof CalendarRoute
   CareerTestRoute: typeof CareerTestRoute
+  CvBuilderRoute: typeof CvBuilderRoute
   DashboardRoute: typeof DashboardRoute
   InterviewCoachRoute: typeof InterviewCoachRoute
+  JobFinderRoute: typeof JobFinderRoute
   LearningRoadmapRoute: typeof LearningRoadmapRoute
   LoginRoute: typeof LoginRoute
   MyResultsRoute: typeof MyResultsRoute
+  ProfileRoute: typeof ProfileRoute
   ResumeOptimizerRoute: typeof ResumeOptimizerRoute
   SalaryAnalyticsRoute: typeof SalaryAnalyticsRoute
+  SettingsRoute: typeof SettingsRoute
   UniversityFinderRoute: typeof UniversityFinderRoute
   ApiMentorChatRoute: typeof ApiMentorChatRoute
 }
@@ -193,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/university-finder'
       fullPath: '/university-finder'
       preLoaderRoute: typeof UniversityFinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/salary-analytics': {
@@ -207,6 +292,13 @@ declare module '@tanstack/react-router' {
       path: '/resume-optimizer'
       fullPath: '/resume-optimizer'
       preLoaderRoute: typeof ResumeOptimizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-results': {
@@ -230,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearningRoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/job-finder': {
+      id: '/job-finder'
+      path: '/job-finder'
+      fullPath: '/job-finder'
+      preLoaderRoute: typeof JobFinderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/interview-coach': {
       id: '/interview-coach'
       path: '/interview-coach'
@@ -244,6 +343,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cv-builder': {
+      id: '/cv-builder'
+      path: '/cv-builder'
+      fullPath: '/cv-builder'
+      preLoaderRoute: typeof CvBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/career-test': {
       id: '/career-test'
       path: '/career-test'
@@ -251,11 +357,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareerTestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai-mentor': {
       id: '/ai-mentor'
       path: '/ai-mentor'
       fullPath: '/ai-mentor'
       preLoaderRoute: typeof AiMentorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -277,15 +397,21 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AchievementsRoute: AchievementsRoute,
   AiMentorRoute: AiMentorRoute,
+  CalendarRoute: CalendarRoute,
   CareerTestRoute: CareerTestRoute,
+  CvBuilderRoute: CvBuilderRoute,
   DashboardRoute: DashboardRoute,
   InterviewCoachRoute: InterviewCoachRoute,
+  JobFinderRoute: JobFinderRoute,
   LearningRoadmapRoute: LearningRoadmapRoute,
   LoginRoute: LoginRoute,
   MyResultsRoute: MyResultsRoute,
+  ProfileRoute: ProfileRoute,
   ResumeOptimizerRoute: ResumeOptimizerRoute,
   SalaryAnalyticsRoute: SalaryAnalyticsRoute,
+  SettingsRoute: SettingsRoute,
   UniversityFinderRoute: UniversityFinderRoute,
   ApiMentorChatRoute: ApiMentorChatRoute,
 }
