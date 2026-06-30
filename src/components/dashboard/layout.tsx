@@ -46,7 +46,7 @@ const navItems = [
   { icon: FileText, label: "CV Builder", to: "/dashboard" },
   { icon: FileText, label: "Resume Optimizer", to: "/resume-optimizer" },
   { icon: MessageCircle, label: "Interview Coach", to: "/interview-coach" },
-  { icon: Sparkles, label: "AI Chat", to: "/dashboard" },
+  { icon: Sparkles, label: "AI Mentor", to: "/ai-mentor" },
   { icon: Trophy, label: "Achievements", to: "/dashboard" },
   { icon: CalendarIcon, label: "Calendar", to: "/dashboard" },
   { icon: User, label: "Profile", to: "/dashboard" },

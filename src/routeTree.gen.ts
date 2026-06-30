@@ -16,6 +16,7 @@ import { Route as InterviewCoachRouteImport } from './routes/interview-coach'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CareerTestRouteImport } from './routes/career-test'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiMentorChatRouteImport } from './routes/api/mentor-chat'
 
 const ResumeOptimizerRoute = ResumeOptimizerRouteImport.update({
   id: '/resume-optimizer',
@@ -52,6 +53,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMentorChatRoute = ApiMentorChatRouteImport.update({
+  id: '/api/mentor-chat',
+  path: '/api/mentor-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
+  '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
+  '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/my-results': typeof MyResultsRoute
   '/resume-optimizer': typeof ResumeOptimizerRoute
+  '/api/mentor-chat': typeof ApiMentorChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
+    | '/api/mentor-chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
+    | '/api/mentor-chat'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/my-results'
     | '/resume-optimizer'
+    | '/api/mentor-chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MyResultsRoute: typeof MyResultsRoute
   ResumeOptimizerRoute: typeof ResumeOptimizerRoute
+  ApiMentorChatRoute: typeof ApiMentorChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/mentor-chat': {
+      id: '/api/mentor-chat'
+      path: '/api/mentor-chat'
+      fullPath: '/api/mentor-chat'
+      preLoaderRoute: typeof ApiMentorChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MyResultsRoute: MyResultsRoute,
   ResumeOptimizerRoute: ResumeOptimizerRoute,
+  ApiMentorChatRoute: ApiMentorChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
