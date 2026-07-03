@@ -95,10 +95,10 @@ function SalaryPage() {
                   <Briefcase className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="mt-4 space-y-3">
-                  {([["Junior", j], ["Mid", m], ["Senior", s]] as const).map(([lab, val]) => (
+                  {([["pages.salary.junior", j], ["pages.salary.mid", m], ["pages.salary.senior", s]] as const).map(([lab, val]) => (
                     <div key={lab}>
                       <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="text-muted-foreground">{lab}</span>
+                        <span className="text-muted-foreground">{t(lab)}</span>
                         <span className="font-semibold">{fmt(val)}</span>
                       </div>
                       <div className="h-2 rounded-full bg-secondary overflow-hidden">
