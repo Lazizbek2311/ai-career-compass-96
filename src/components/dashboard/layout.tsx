@@ -34,23 +34,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/landing/theme-toggle";
+import { useI18n, type Lang } from "@/lib/i18n";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
-  { icon: Brain, label: "AI Career Test", to: "/career-test" },
-  { icon: ClipboardList, label: "My Results", to: "/my-results" },
-  { icon: Map, label: "Learning Roadmap", to: "/learning-roadmap" },
-  { icon: LineChart, label: "Salary Analytics", to: "/salary-analytics" },
-  { icon: GraduationCap, label: "University Finder", to: "/university-finder" },
-  { icon: Briefcase, label: "Job Finder", to: "/job-finder" },
-  { icon: FileText, label: "CV Builder", to: "/cv-builder" },
-  { icon: FileText, label: "Resume Optimizer", to: "/resume-optimizer" },
-  { icon: MessageCircle, label: "Interview Coach", to: "/interview-coach" },
-  { icon: Sparkles, label: "AI Mentor", to: "/ai-mentor" },
-  { icon: Trophy, label: "Achievements", to: "/achievements" },
-  { icon: CalendarIcon, label: "Calendar", to: "/calendar" },
-  { icon: User, label: "Profile", to: "/profile" },
-  { icon: Settings, label: "Settings", to: "/settings" },
+  { icon: LayoutDashboard, key: "nav.dashboard", to: "/dashboard" },
+  { icon: Brain, key: "nav.careerTest", to: "/career-test" },
+  { icon: ClipboardList, key: "nav.myResults", to: "/my-results" },
+  { icon: Map, key: "nav.roadmap", to: "/learning-roadmap" },
+  { icon: LineChart, key: "nav.salary", to: "/salary-analytics" },
+  { icon: GraduationCap, key: "nav.universities", to: "/university-finder" },
+  { icon: Briefcase, key: "nav.jobs", to: "/job-finder" },
+  { icon: FileText, key: "nav.cv", to: "/cv-builder" },
+  { icon: FileText, key: "nav.resume", to: "/resume-optimizer" },
+  { icon: MessageCircle, key: "nav.interview", to: "/interview-coach" },
+  { icon: Sparkles, key: "nav.mentor", to: "/ai-mentor" },
+  { icon: Trophy, key: "nav.achievements", to: "/achievements" },
+  { icon: CalendarIcon, key: "nav.calendar", to: "/calendar" },
+  { icon: User, key: "nav.profile", to: "/profile" },
+  { icon: Settings, key: "nav.settings", to: "/settings" },
 ];
 
 function Sidebar({
@@ -62,6 +63,7 @@ function Sidebar({
   onClose: () => void;
   pathname: string;
 }) {
+  const { t } = useI18n();
   return (
     <>
       {open && (
@@ -96,7 +98,7 @@ function Sidebar({
               const active = item.to === pathname;
               return (
                 <Link
-                  key={`${item.label}-${idx}`}
+                  key={`${item.key}-${idx}`}
                   to={item.to}
                   className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                     active
@@ -106,7 +108,7 @@ function Sidebar({
                   onClick={onClose}
                 >
                   <item.icon className="h-4 w-4 shrink-0" />
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{t(item.key)}</span>
                 </Link>
               );
             })}
@@ -116,15 +118,15 @@ function Sidebar({
               <div className="mx-auto grid h-10 w-10 place-items-center rounded-full gradient-brand mb-2">
                 <Zap className="h-5 w-5 text-white" />
               </div>
-              <p className="text-xs font-semibold">Upgrade to Pro</p>
+              <p className="text-xs font-semibold">{t("topbar.upgradeTitle")}</p>
               <p className="text-[11px] text-muted-foreground mb-2">
-                Unlock unlimited AI sessions
+                {t("topbar.upgradeDesc")}
               </p>
               <Button
                 size="sm"
                 className="w-full rounded-full gradient-brand text-white border-0 hover:opacity-90"
               >
-                Upgrade
+                {t("common.upgrade")}
               </Button>
             </div>
           </div>
@@ -135,7 +137,7 @@ function Sidebar({
 }
 
 function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
-  const [lang, setLang] = useState<"EN" | "UZ">("EN");
+  const { lang, setLang, t } = useI18n();
   return (
     <header className="sticky top-0 z-30 glass border-b border-border/60">
       <div className="flex items-center gap-3 h-16 px-4 sm:px-6">
@@ -149,7 +151,7 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search careers, lessons, jobs..."
+            placeholder={t("topbar.searchPlaceholder")}
             className="pl-9 rounded-full bg-secondary/60 border-border/60"
           />
         </div>
@@ -158,16 +160,16 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="rounded-full gap-1.5">
                 <Globe className="h-4 w-4" />
-                <span className="text-xs font-semibold hidden sm:inline">{lang}</span>
+                <span className="text-xs font-semibold hidden sm:inline">{lang.toUpperCase()}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-[8rem]">
-              <DropdownMenuItem onClick={() => setLang("EN")}>English</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLang("UZ")}>O'zbek</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("en" as Lang)}>English</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("uz" as Lang)}>O'zbek</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" className="rounded-full relative">
+          <Button variant="ghost" size="icon" className="rounded-full relative" aria-label={t("topbar.notifications")}>
             <Bell className="h-4 w-4" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive" />
           </Button>
@@ -183,13 +185,13 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>My account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("topbar.myAccount")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>{t("nav.profile")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("nav.settings")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("topbar.billing")}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Sign out</DropdownMenuItem>
+              <DropdownMenuItem>{t("common.signOut")}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

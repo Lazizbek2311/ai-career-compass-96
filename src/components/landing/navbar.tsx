@@ -10,19 +10,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "./theme-toggle";
-
-const links = [
-  { href: "#home", label: "Home" },
-  { href: "#features", label: "Features" },
-  { href: "#about", label: "About" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
-];
+import { useI18n, type Lang } from "@/lib/i18n";
 
 export function Navbar() {
+  const { t, lang, setLang } = useI18n();
+  const links = [
+    { href: "#home", label: t("landing.home") },
+    { href: "#features", label: t("landing.features") },
+    { href: "#about", label: t("landing.about") },
+    { href: "#faq", label: t("landing.faq") },
+    { href: "#contact", label: t("landing.contact") },
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState<"EN" | "UZ">("EN");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -70,20 +70,20 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="rounded-full gap-1.5">
                   <Globe className="h-4 w-4" />
-                  <span className="text-xs font-semibold">{lang}</span>
+                  <span className="text-xs font-semibold">{lang.toUpperCase()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[8rem]">
-                <DropdownMenuItem onClick={() => setLang("EN")}>English</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLang("UZ")}>O'zbek</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLang("en" as Lang)}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLang("uz" as Lang)}>O'zbek</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <ThemeToggle />
             <Button asChild variant="ghost" size="sm" className="rounded-full">
-              <Link to="/login">Login</Link>
+              <Link to="/login">{t("common.login")}</Link>
             </Button>
             <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant">
-              <Link to="/dashboard">Get Started</Link>
+              <Link to="/dashboard">{t("common.getStarted")}</Link>
             </Button>
           </div>
 
@@ -115,14 +115,14 @@ export function Navbar() {
               ))}
               <div className="flex items-center gap-2 mt-2 pt-2 border-t">
                 <ThemeToggle />
-                <Button variant="ghost" size="sm" onClick={() => setLang(lang === "EN" ? "UZ" : "EN")} className="rounded-full gap-1.5">
-                  <Globe className="h-4 w-4" /> {lang}
+                <Button variant="ghost" size="sm" onClick={() => setLang(lang === "en" ? "uz" : "en")} className="rounded-full gap-1.5">
+                  <Globe className="h-4 w-4" /> {lang.toUpperCase()}
                 </Button>
                 <Button asChild variant="ghost" size="sm" className="rounded-full ml-auto">
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{t("common.login")}</Link>
                 </Button>
                 <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0">
-                  <Link to="/dashboard">Get Started</Link>
+                  <Link to="/dashboard">{t("common.getStarted")}</Link>
                 </Button>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Calendar as CalIcon, Clock } from "lucide-re
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/calendar")({
   head: () => ({ meta: [{ title: "Calendar — CareerAI" }] }),
@@ -32,6 +33,7 @@ const TYPE_COLOR: Record<Ev["type"], string> = {
 };
 
 function CalPage() {
+  const { t } = useI18n();
   const [view, setView] = useState<"month" | "week">("month");
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
 
@@ -59,13 +61,13 @@ function CalPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">Stay on Track</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Calendar</h1>
-              <p className="mt-2 text-muted-foreground">Your learning schedule, interviews and deadlines.</p>
+              <Badge className="rounded-full">{t("pages.calendar.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.calendar.title")}</h1>
+              <p className="mt-2 text-muted-foreground">{t("pages.calendar.subtitle")}</p>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>Month</Button>
-              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>Week</Button>
+              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>{t("pages.calendar.month")}</Button>
+              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>{t("pages.calendar.week")}</Button>
             </div>
           </div>
         </motion.div>
@@ -101,14 +103,14 @@ function CalPage() {
               </>
             ) : (
               <div className="space-y-2">
-                <h2 className="font-bold mb-3">This Week</h2>
+                <h2 className="font-bold mb-3">{t("pages.calendar.thisWeek")}</h2>
                 {weekDates.map((d) => {
                   const key = iso(d);
                   const evs = EVENTS.filter((e) => e.date === key);
                   return (
                     <div key={key} className="rounded-2xl border border-border/60 p-3 bg-card/40">
                       <p className="text-xs font-semibold">{d.toLocaleDateString("en", { weekday: "long", month: "short", day: "numeric" })}</p>
-                      {evs.length === 0 && <p className="text-xs text-muted-foreground mt-1">No events</p>}
+                      {evs.length === 0 && <p className="text-xs text-muted-foreground mt-1">{t("pages.calendar.noEvents")}</p>}
                       {evs.map((e, i) => <Badge key={i} variant="secondary" className={`mt-2 mr-2 rounded-full ${TYPE_COLOR[e.type]}`}>{e.title}</Badge>)}
                     </div>
                   );
@@ -118,7 +120,7 @@ function CalPage() {
           </div>
 
           <div className="glass rounded-3xl p-6 shadow-elegant">
-            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />Upcoming</h2>
+            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />{t("pages.calendar.upcoming")}</h2>
             <div className="space-y-2">
               {EVENTS.slice(0, 6).map((e, i) => (
                 <div key={i} className="rounded-2xl border border-border/60 bg-card/50 p-3">

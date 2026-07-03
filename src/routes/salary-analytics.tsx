@@ -5,6 +5,7 @@ import { TrendingUp, Briefcase } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/salary-analytics")({
   head: () => ({ meta: [{ title: "Salary Analytics — CareerAI" }] }),
@@ -50,6 +51,7 @@ const COUNTRIES: Country[] = ["USA", "Canada", "UK", "Germany", "UAE", "Uzbekist
 function fmt(n: number) { return n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`; }
 
 function SalaryPage() {
+  const { t } = useI18n();
   const [role, setRole] = useState<Role>("AI Engineer");
   const data = DATA[role];
   const max = Math.max(...COUNTRIES.flatMap((c) => data[c]));
@@ -60,9 +62,9 @@ function SalaryPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">Global Salary Insights</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Salary Analytics</h1>
-              <p className="mt-2 text-muted-foreground max-w-2xl">Compare junior, mid and senior compensation across countries.</p>
+              <Badge className="rounded-full">{t("pages.salary.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.salary.title")}</h1>
+              <p className="mt-2 text-muted-foreground max-w-2xl">{t("pages.salary.subtitle")}</p>
             </div>
             <Select value={role} onValueChange={(v) => setRole(v as Role)}>
               <SelectTrigger className="w-[220px] rounded-full"><SelectValue /></SelectTrigger>
@@ -73,11 +75,11 @@ function SalaryPage() {
           </div>
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">Demand Level</p>
+              <p className="text-xs text-muted-foreground">{t("pages.salary.demand")}</p>
               <p className={`text-2xl font-bold bg-gradient-to-r ${DEMAND[role].color} bg-clip-text text-transparent`}>{DEMAND[role].level}</p>
             </div>
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">Job Growth</p>
+              <p className="text-xs text-muted-foreground">{t("pages.salary.growth")}</p>
               <p className="text-2xl font-bold flex items-center gap-2"><TrendingUp className="h-5 w-5 text-emerald-500" />{DEMAND[role].growth}</p>
             </div>
           </div>
@@ -93,10 +95,10 @@ function SalaryPage() {
                   <Briefcase className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="mt-4 space-y-3">
-                  {([["Junior", j], ["Mid", m], ["Senior", s]] as const).map(([lab, val]) => (
+                  {([["pages.salary.junior", j], ["pages.salary.mid", m], ["pages.salary.senior", s]] as const).map(([lab, val]) => (
                     <div key={lab}>
                       <div className="flex items-center justify-between text-xs mb-1">
-                        <span className="text-muted-foreground">{lab}</span>
+                        <span className="text-muted-foreground">{t(lab)}</span>
                         <span className="font-semibold">{fmt(val)}</span>
                       </div>
                       <div className="h-2 rounded-full bg-secondary overflow-hidden">
