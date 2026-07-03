@@ -97,7 +97,7 @@ function Sidebar({
               const active = item.to === pathname;
               return (
                 <Link
-                  key={`${item.label}-${idx}`}
+                  key={`${item.key}-${idx}`}
                   to={item.to}
                   className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                     active
@@ -107,7 +107,7 @@ function Sidebar({
                   onClick={onClose}
                 >
                   <item.icon className="h-4 w-4 shrink-0" />
-                  <span className="truncate">{item.label}</span>
+                  <span className="truncate">{t(item.key)}</span>
                 </Link>
               );
             })}
@@ -117,15 +117,15 @@ function Sidebar({
               <div className="mx-auto grid h-10 w-10 place-items-center rounded-full gradient-brand mb-2">
                 <Zap className="h-5 w-5 text-white" />
               </div>
-              <p className="text-xs font-semibold">Upgrade to Pro</p>
+              <p className="text-xs font-semibold">{t("topbar.upgradeTitle")}</p>
               <p className="text-[11px] text-muted-foreground mb-2">
-                Unlock unlimited AI sessions
+                {t("topbar.upgradeDesc")}
               </p>
               <Button
                 size="sm"
                 className="w-full rounded-full gradient-brand text-white border-0 hover:opacity-90"
               >
-                Upgrade
+                {t("common.upgrade")}
               </Button>
             </div>
           </div>
