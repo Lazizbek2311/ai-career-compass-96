@@ -120,7 +120,7 @@ function CalPage() {
           </div>
 
           <div className="glass rounded-3xl p-6 shadow-elegant">
-            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />Upcoming</h2>
+            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />{t("pages.calendar.upcoming")}</h2>
             <div className="space-y-2">
               {EVENTS.slice(0, 6).map((e, i) => (
                 <div key={i} className="rounded-2xl border border-border/60 bg-card/50 p-3">
