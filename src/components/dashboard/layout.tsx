@@ -63,6 +63,7 @@ function Sidebar({
   onClose: () => void;
   pathname: string;
 }) {
+  const { t } = useI18n();
   return (
     <>
       {open && (
