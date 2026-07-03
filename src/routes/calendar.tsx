@@ -33,6 +33,7 @@ const TYPE_COLOR: Record<Ev["type"], string> = {
 };
 
 function CalPage() {
+  const { t } = useI18n();
   const [view, setView] = useState<"month" | "week">("month");
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
 
