@@ -34,23 +34,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/landing/theme-toggle";
+import { useI18n, type Lang } from "@/lib/i18n";
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
-  { icon: Brain, label: "AI Career Test", to: "/career-test" },
-  { icon: ClipboardList, label: "My Results", to: "/my-results" },
-  { icon: Map, label: "Learning Roadmap", to: "/learning-roadmap" },
-  { icon: LineChart, label: "Salary Analytics", to: "/salary-analytics" },
-  { icon: GraduationCap, label: "University Finder", to: "/university-finder" },
-  { icon: Briefcase, label: "Job Finder", to: "/job-finder" },
-  { icon: FileText, label: "CV Builder", to: "/cv-builder" },
-  { icon: FileText, label: "Resume Optimizer", to: "/resume-optimizer" },
-  { icon: MessageCircle, label: "Interview Coach", to: "/interview-coach" },
-  { icon: Sparkles, label: "AI Mentor", to: "/ai-mentor" },
-  { icon: Trophy, label: "Achievements", to: "/achievements" },
-  { icon: CalendarIcon, label: "Calendar", to: "/calendar" },
-  { icon: User, label: "Profile", to: "/profile" },
-  { icon: Settings, label: "Settings", to: "/settings" },
+  { icon: LayoutDashboard, key: "nav.dashboard", to: "/dashboard" },
+  { icon: Brain, key: "nav.careerTest", to: "/career-test" },
+  { icon: ClipboardList, key: "nav.myResults", to: "/my-results" },
+  { icon: Map, key: "nav.roadmap", to: "/learning-roadmap" },
+  { icon: LineChart, key: "nav.salary", to: "/salary-analytics" },
+  { icon: GraduationCap, key: "nav.universities", to: "/university-finder" },
+  { icon: Briefcase, key: "nav.jobs", to: "/job-finder" },
+  { icon: FileText, key: "nav.cv", to: "/cv-builder" },
+  { icon: FileText, key: "nav.resume", to: "/resume-optimizer" },
+  { icon: MessageCircle, key: "nav.interview", to: "/interview-coach" },
+  { icon: Sparkles, key: "nav.mentor", to: "/ai-mentor" },
+  { icon: Trophy, key: "nav.achievements", to: "/achievements" },
+  { icon: CalendarIcon, key: "nav.calendar", to: "/calendar" },
+  { icon: User, key: "nav.profile", to: "/profile" },
+  { icon: Settings, key: "nav.settings", to: "/settings" },
 ];
 
 function Sidebar({
