@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Calendar as CalIcon, Clock } from "lucide-re
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/calendar")({
   head: () => ({ meta: [{ title: "Calendar — CareerAI" }] }),
