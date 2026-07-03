@@ -10,19 +10,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "./theme-toggle";
-
-const links = [
-  { href: "#home", label: "Home" },
-  { href: "#features", label: "Features" },
-  { href: "#about", label: "About" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
-];
+import { useI18n, type Lang } from "@/lib/i18n";
 
 export function Navbar() {
+  const { t, lang, setLang } = useI18n();
+  const links = [
+    { href: "#home", label: t("landing.home") },
+    { href: "#features", label: t("landing.features") },
+    { href: "#about", label: t("landing.about") },
+    { href: "#faq", label: t("landing.faq") },
+    { href: "#contact", label: t("landing.contact") },
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState<"EN" | "UZ">("EN");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
