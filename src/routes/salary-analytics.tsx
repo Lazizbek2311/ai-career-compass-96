@@ -51,6 +51,7 @@ const COUNTRIES: Country[] = ["USA", "Canada", "UK", "Germany", "UAE", "Uzbekist
 function fmt(n: number) { return n >= 1000 ? `$${(n / 1000).toFixed(0)}k` : `$${n}`; }
 
 function SalaryPage() {
+  const { t } = useI18n();
   const [role, setRole] = useState<Role>("AI Engineer");
   const data = DATA[role];
   const max = Math.max(...COUNTRIES.flatMap((c) => data[c]));
