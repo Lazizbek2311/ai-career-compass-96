@@ -137,7 +137,7 @@ function Sidebar({
 }
 
 function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
-  const [lang, setLang] = useState<"EN" | "UZ">("EN");
+  const { lang, setLang, t } = useI18n();
   return (
     <header className="sticky top-0 z-30 glass border-b border-border/60">
       <div className="flex items-center gap-3 h-16 px-4 sm:px-6">
@@ -151,7 +151,7 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search careers, lessons, jobs..."
+            placeholder={t("topbar.searchPlaceholder")}
             className="pl-9 rounded-full bg-secondary/60 border-border/60"
           />
         </div>
@@ -160,16 +160,16 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="rounded-full gap-1.5">
                 <Globe className="h-4 w-4" />
-                <span className="text-xs font-semibold hidden sm:inline">{lang}</span>
+                <span className="text-xs font-semibold hidden sm:inline">{lang.toUpperCase()}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-[8rem]">
-              <DropdownMenuItem onClick={() => setLang("EN")}>English</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLang("UZ")}>O'zbek</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("en" as Lang)}>English</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLang("uz" as Lang)}>O'zbek</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <ThemeToggle />
-          <Button variant="ghost" size="icon" className="rounded-full relative">
+          <Button variant="ghost" size="icon" className="rounded-full relative" aria-label={t("topbar.notifications")}>
             <Bell className="h-4 w-4" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive" />
           </Button>
@@ -185,13 +185,13 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>My account</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("topbar.myAccount")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>{t("nav.profile")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("nav.settings")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("topbar.billing")}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Sign out</DropdownMenuItem>
+              <DropdownMenuItem>{t("common.signOut")}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
