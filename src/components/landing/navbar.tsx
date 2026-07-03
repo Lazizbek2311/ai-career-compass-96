@@ -70,20 +70,20 @@ export function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="rounded-full gap-1.5">
                   <Globe className="h-4 w-4" />
-                  <span className="text-xs font-semibold">{lang}</span>
+                  <span className="text-xs font-semibold">{lang.toUpperCase()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[8rem]">
-                <DropdownMenuItem onClick={() => setLang("EN")}>English</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLang("UZ")}>O'zbek</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLang("en" as Lang)}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLang("uz" as Lang)}>O'zbek</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <ThemeToggle />
             <Button asChild variant="ghost" size="sm" className="rounded-full">
-              <Link to="/login">Login</Link>
+              <Link to="/login">{t("common.login")}</Link>
             </Button>
             <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant">
-              <Link to="/dashboard">Get Started</Link>
+              <Link to="/dashboard">{t("common.getStarted")}</Link>
             </Button>
           </div>
 
