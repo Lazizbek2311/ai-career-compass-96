@@ -115,14 +115,14 @@ export function Navbar() {
               ))}
               <div className="flex items-center gap-2 mt-2 pt-2 border-t">
                 <ThemeToggle />
-                <Button variant="ghost" size="sm" onClick={() => setLang(lang === "EN" ? "UZ" : "EN")} className="rounded-full gap-1.5">
-                  <Globe className="h-4 w-4" /> {lang}
+                <Button variant="ghost" size="sm" onClick={() => setLang(lang === "en" ? "uz" : "en")} className="rounded-full gap-1.5">
+                  <Globe className="h-4 w-4" /> {lang.toUpperCase()}
                 </Button>
                 <Button asChild variant="ghost" size="sm" className="rounded-full ml-auto">
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{t("common.login")}</Link>
                 </Button>
                 <Button asChild size="sm" className="rounded-full gradient-brand text-white border-0">
-                  <Link to="/dashboard">Get Started</Link>
+                  <Link to="/dashboard">{t("common.getStarted")}</Link>
                 </Button>
               </div>
             </div>
