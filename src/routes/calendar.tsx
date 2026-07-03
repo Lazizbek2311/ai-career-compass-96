@@ -61,13 +61,13 @@ function CalPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">Stay on Track</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Calendar</h1>
-              <p className="mt-2 text-muted-foreground">Your learning schedule, interviews and deadlines.</p>
+              <Badge className="rounded-full">{t("pages.calendar.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.calendar.title")}</h1>
+              <p className="mt-2 text-muted-foreground">{t("pages.calendar.subtitle")}</p>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>Month</Button>
-              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>Week</Button>
+              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>{t("pages.calendar.month")}</Button>
+              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>{t("pages.calendar.week")}</Button>
             </div>
           </div>
         </motion.div>
