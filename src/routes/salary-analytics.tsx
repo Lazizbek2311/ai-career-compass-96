@@ -5,6 +5,7 @@ import { TrendingUp, Briefcase } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/salary-analytics")({
   head: () => ({ meta: [{ title: "Salary Analytics — CareerAI" }] }),
