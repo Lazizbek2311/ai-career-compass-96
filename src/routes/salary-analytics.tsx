@@ -62,9 +62,9 @@ function SalaryPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">Global Salary Insights</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Salary Analytics</h1>
-              <p className="mt-2 text-muted-foreground max-w-2xl">Compare junior, mid and senior compensation across countries.</p>
+              <Badge className="rounded-full">{t("pages.salary.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.salary.title")}</h1>
+              <p className="mt-2 text-muted-foreground max-w-2xl">{t("pages.salary.subtitle")}</p>
             </div>
             <Select value={role} onValueChange={(v) => setRole(v as Role)}>
               <SelectTrigger className="w-[220px] rounded-full"><SelectValue /></SelectTrigger>
@@ -75,11 +75,11 @@ function SalaryPage() {
           </div>
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">Demand Level</p>
+              <p className="text-xs text-muted-foreground">{t("pages.salary.demand")}</p>
               <p className={`text-2xl font-bold bg-gradient-to-r ${DEMAND[role].color} bg-clip-text text-transparent`}>{DEMAND[role].level}</p>
             </div>
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">Job Growth</p>
+              <p className="text-xs text-muted-foreground">{t("pages.salary.growth")}</p>
               <p className="text-2xl font-bold flex items-center gap-2"><TrendingUp className="h-5 w-5 text-emerald-500" />{DEMAND[role].growth}</p>
             </div>
           </div>
