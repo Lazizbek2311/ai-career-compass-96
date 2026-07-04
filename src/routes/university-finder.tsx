@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/university-finder")({
   head: () => ({ meta: [{ title: "University Finder — CareerAI" }] }),
@@ -29,12 +30,11 @@ const UNIS: Uni[] = [
   { name: "TU Munich", country: "Germany", field: "AI / Engineering", tuition: 0, ranking: 22, scholarship: true, requirements: "Abitur equiv., German B2 / English C1", url: "https://www.tum.de" },
   { name: "RWTH Aachen", country: "Germany", field: "Engineering", tuition: 0, ranking: 38, scholarship: true, requirements: "Abitur equiv.", url: "https://www.rwth-aachen.de" },
   { name: "MBZUAI", country: "UAE", field: "AI", tuition: 0, ranking: 45, scholarship: true, requirements: "Bachelor in CS/Math, IELTS 6.5+", url: "https://mbzuai.ac.ae" },
-  { name: "Khalifa University", country: "UAE", field: "Engineering / CS", tuition: 22000, ranking: 180, scholarship: true, requirements: "SAT 1100+, IELTS 6.5+", url: "https://www.ku.ac.ae" },
-  { name: "Westminster Tashkent", country: "Uzbekistan", field: "CS / Business", tuition: 6500, ranking: 600, scholarship: true, requirements: "IELTS 6+", url: "https://www.wiut.uz" },
-  { name: "Inha University Tashkent", country: "Uzbekistan", field: "CS / IT", tuition: 5500, ranking: 700, scholarship: true, requirements: "IELTS 5.5+", url: "https://inha.uz" },
+  { name: "Khalifa University", country: "UAE", field: "Engineering / CS", tuition: 22000, ranking: 60, scholarship: true, requirements: "IELTS 6.0+", url: "https://www.ku.ac.ae" },
 ];
 
 function UniPage() {
+  const { t } = useI18n();
   const [q, setQ] = useState("");
   const [country, setCountry] = useState("All");
   const [scholar, setScholar] = useState("All");
@@ -50,36 +50,40 @@ function UniPage() {
     return r;
   }, [q, country, scholar, sort]);
 
+  const scholarLabel = (s: string) => s === "All" ? t("common.all") : s === "Yes" ? t("common.yes") : t("common.no");
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
-          <Badge className="rounded-full">Find Your University</Badge>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">University Finder</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">Search top universities worldwide and compare tuition, ranking and scholarships.</p>
+          <Badge className="rounded-full">{t("uni.badge")}</Badge>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.universities.title")}</h1>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{t("uni.subtitle")}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-4">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name or field..." className="pl-9 rounded-full" />
+              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("uni.searchPlaceholder")} className="pl-9 rounded-full" />
             </div>
             <Select value={country} onValueChange={setCountry}>
               <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {["All", "USA", "Canada", "UK", "Germany", "UAE", "Uzbekistan"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                {["All", "USA", "Canada", "UK", "Germany", "UAE", "Uzbekistan"].map((c) => (
+                  <SelectItem key={c} value={c}>{c === "All" ? t("common.all") : c}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select value={sort} onValueChange={setSort}>
               <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="ranking">Sort: Ranking</SelectItem>
-                <SelectItem value="tuition">Sort: Tuition</SelectItem>
+                <SelectItem value="ranking">{t("uni.sortRanking")}</SelectItem>
+                <SelectItem value="tuition">{t("uni.sortTuition")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="mt-3 flex gap-2">
             {["All", "Yes", "No"].map((s) => (
               <Button key={s} size="sm" variant={scholar === s ? "default" : "outline"} className="rounded-full" onClick={() => setScholar(s)}>
-                Scholarship: {s}
+                {t("uni.scholarship")}: {scholarLabel(s)}
               </Button>
             ))}
           </div>
@@ -102,21 +106,21 @@ function UniPage() {
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div className="glass rounded-xl p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase">Tuition / yr</p>
-                  <p className="font-bold flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />{u.tuition === 0 ? "Free" : `$${u.tuition.toLocaleString()}`}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase">{t("uni.tuitionYr")}</p>
+                  <p className="font-bold flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />{u.tuition === 0 ? t("common.free") : `$${u.tuition.toLocaleString()}`}</p>
                 </div>
                 <div className="glass rounded-xl p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase">Scholarship</p>
-                  <p className="font-bold flex items-center gap-1"><Award className="h-3.5 w-3.5" />{u.scholarship ? "Available" : "—"}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase">{t("uni.scholarship")}</p>
+                  <p className="font-bold flex items-center gap-1"><Award className="h-3.5 w-3.5" />{u.scholarship ? t("uni.available") : "—"}</p>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-3"><span className="font-semibold text-foreground">Requirements:</span> {u.requirements}</p>
+              <p className="text-xs text-muted-foreground mt-3"><span className="font-semibold text-foreground">{t("uni.requirements")}</span> {u.requirements}</p>
               <Button asChild size="sm" className="mt-4 rounded-full gradient-brand text-white border-0 w-full">
-                <a href={u.url} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5 mr-1.5" />Visit Website</a>
+                <a href={u.url} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5 mr-1.5" />{t("uni.visit")}</a>
               </Button>
             </motion.div>
           ))}
-          {filtered.length === 0 && <p className="text-center text-muted-foreground col-span-full py-12">No universities match your filters.</p>}
+          {filtered.length === 0 && <p className="text-center text-muted-foreground col-span-full py-12">{t("uni.noResults")}</p>}
         </div>
       </div>
     </DashboardLayout>
