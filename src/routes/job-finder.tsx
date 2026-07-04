@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/job-finder")({
   head: () => ({ meta: [{ title: "Job Finder — CareerAI" }] }),
@@ -27,6 +28,7 @@ const JOBS: Job[] = [
 ];
 
 function JobsPage() {
+  const { t } = useI18n();
   const [q, setQ] = useState("");
   const [type, setType] = useState("All");
   const [level, setLevel] = useState("All");
@@ -37,25 +39,40 @@ function JobsPage() {
     (q === "" || `${j.title} ${j.company} ${j.location}`.toLowerCase().includes(q.toLowerCase()))
   ), [q, type, level]);
 
+  const typeLabel = (x: string) => {
+    if (x === "All") return t("common.all");
+    if (x === "Full-time") return t("jobs.types.fullTime");
+    if (x === "Contract") return t("jobs.types.contract");
+    if (x === "Internship") return t("jobs.types.internship");
+    return x;
+  };
+  const levelLabel = (x: string) => {
+    if (x === "All") return t("common.all");
+    if (x === "Junior") return t("jobs.levels.junior");
+    if (x === "Mid") return t("jobs.levels.mid");
+    if (x === "Senior") return t("jobs.levels.senior");
+    return x;
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
-          <Badge className="rounded-full">Curated Opportunities</Badge>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Job Finder</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">Discover roles that match your skills and ambitions.</p>
+          <Badge className="rounded-full">{t("jobs.badge")}</Badge>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.jobs.title")}</h1>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{t("jobs.subtitle")}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-4">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search jobs, companies..." className="pl-9 rounded-full" />
+              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("jobs.searchPlaceholder")} className="pl-9 rounded-full" />
             </div>
             <Select value={type} onValueChange={setType}>
-              <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
-              <SelectContent>{["All", "Full-time", "Contract", "Internship"].map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent>
+              <SelectTrigger className="rounded-full"><SelectValue>{typeLabel(type)}</SelectValue></SelectTrigger>
+              <SelectContent>{["All", "Full-time", "Contract", "Internship"].map((x) => <SelectItem key={x} value={x}>{typeLabel(x)}</SelectItem>)}</SelectContent>
             </Select>
             <Select value={level} onValueChange={setLevel}>
-              <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
-              <SelectContent>{["All", "Junior", "Mid", "Senior"].map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent>
+              <SelectTrigger className="rounded-full"><SelectValue>{levelLabel(level)}</SelectValue></SelectTrigger>
+              <SelectContent>{["All", "Junior", "Mid", "Senior"].map((x) => <SelectItem key={x} value={x}>{levelLabel(x)}</SelectItem>)}</SelectContent>
             </Select>
           </div>
         </motion.div>
@@ -71,24 +88,24 @@ function JobsPage() {
                   <div>
                     <h3 className="font-bold text-lg">{j.title}</h3>
                     <p className="text-sm text-muted-foreground">{j.company}</p>
-                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
                       <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{j.location}</span>
                       <span className="inline-flex items-center gap-1"><DollarSign className="h-3 w-3" />{j.salary}</span>
-                      <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" />{j.type}</span>
+                      <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" />{typeLabel(j.type)}</span>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      {j.tags.map((t) => <Badge key={t} variant="secondary" className="rounded-full text-xs">{t}</Badge>)}
+                      {j.tags.map((t2) => <Badge key={t2} variant="secondary" className="rounded-full text-xs">{t2}</Badge>)}
                     </div>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <Badge className="rounded-full">{j.level}</Badge>
-                  <Button size="sm" className="rounded-full gradient-brand text-white border-0">Apply</Button>
+                  <Badge className="rounded-full">{levelLabel(j.level)}</Badge>
+                  <Button size="sm" className="rounded-full gradient-brand text-white border-0">{t("jobs.apply")}</Button>
                 </div>
               </div>
             </motion.div>
           ))}
-          {filtered.length === 0 && <p className="text-center text-muted-foreground py-12">No jobs match your filters.</p>}
+          {filtered.length === 0 && <p className="text-center text-muted-foreground py-12">{t("jobs.noResults")}</p>}
         </div>
       </div>
     </DashboardLayout>
