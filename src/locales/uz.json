@@ -1,6 +1,8 @@
 {
   "common": {
     "save": "Saqlash",
+    "saved": "Saqlandi!",
+    "saveChanges": "O'zgarishlarni saqlash",
     "cancel": "Bekor qilish",
     "delete": "O'chirish",
     "edit": "Tahrirlash",
@@ -22,20 +24,123 @@
     "signIn": "Kirish",
     "login": "Kirish",
     "getStarted": "Boshlash",
+    "startFree": "Bepul boshlash",
     "learnMore": "Batafsil",
     "viewAll": "Barchasini ko'rish",
     "upgrade": "Yangilash",
     "success": "Muvaffaqiyat",
     "error": "Xatolik",
     "empty": "Hozircha bo'sh",
-    "language": "Til"
+    "language": "Til",
+    "apply": "Ariza berish",
+    "done": "Bajarildi",
+    "all": "Barchasi",
+    "yes": "Ha",
+    "no": "Yo'q",
+    "free": "Bepul",
+    "watchDemo": "Demoni ko'rish",
+    "contactSales": "Sotuvga murojaat",
+    "orContinueWith": "Yoki quyidagi orqali",
+    "noAccount": "Akkauntingiz yo'qmi?",
+    "signInToContinue": "Karyera yo'lingizni davom ettirish uchun kiring",
+    "welcomeBack": "Xush kelibsiz",
+    "email": "Email",
+    "password": "Parol",
+    "forgotPassword": "Parolni unutdingizmi?"
   },
   "landing": {
     "home": "Bosh sahifa",
     "features": "Imkoniyatlar",
     "about": "Biz haqimizda",
     "faq": "Savollar",
-    "contact": "Bog'lanish"
+    "contact": "Bog'lanish",
+    "hero": {
+      "badge": "CareerAI 2.0 — har qachongidan ham aqlliroq",
+      "titleA": "AI yordamida",
+      "titleB": "mukammal karyerangizni",
+      "titleC": "kashf eting",
+      "desc": "CareerAI sizning qiziqishlaringiz, shaxsiyatingiz, kuchli tomonlaringiz va maqsadlaringizni sun'iy intellekt yordamida tahlil qiladi va eng mos karyera yo'lini, o'quv reja, universitetlar, maosh ma'lumotlari va kelajak imkoniyatlarini tavsiya qiladi.",
+      "matchScore": "Moslik darajasi",
+      "avgSalary": "O'rtacha maosh"
+    },
+    "stats": {
+      "careerPaths": "Kasblar",
+      "universities": "Universitetlar",
+      "countries": "Davlatlar",
+      "powered": "Quvvatlangan",
+      "mentor": "Karyera murabbiyi",
+      "roadmaps": "Shaxsiy yo'l xaritalari"
+    },
+    "features": {
+      "badge": "Imkoniyatlar",
+      "titleA": "Kelajagingizni",
+      "titleB": "tanlash uchun barchasi",
+      "subtitle": "Talabalar, bitiruvchilar va mutaxassislar uchun to'liq AI vositalar to'plami.",
+      "items": {
+        "test": { "title": "AI Karyera testi", "desc": "Har bir javobdan o'rganib, sizga mos sohani topadigan moslashuvchan test." },
+        "personality": { "title": "Shaxsiyat tahlili", "desc": "Chuqur shaxsiyat tahlili — kasb va jamoa mosligiga qarab." },
+        "salary": { "title": "Maosh tahlili", "desc": "Mavqe, hudud va tajriba bo'yicha real vaqt maosh solishtirmasi." },
+        "uni": { "title": "Universitet qidiruv", "desc": "50+ davlatdagi maqsadlaringizga mos dasturlarni toping." },
+        "roadmap": { "title": "O'quv yo'l xaritasi", "desc": "Kurslar, loyihalar va bosqichlar bilan bosqichma-bosqich yo'l." },
+        "cv": { "title": "AI CV Yaratuvchi", "desc": "Har bir lavozimga moslashtirilgan ATS ga tayyor rezyume yarating." },
+        "interview": { "title": "AI Suhbat murabbiyi", "desc": "Haqiqiy savollar bilan mashq qiling va zudlik bilan izoh oling." },
+        "chat": { "title": "AI Chat yordamchisi", "desc": "24/7 murabbiy — maslahat, qaror va motivatsiya uchun." },
+        "dashboard": { "title": "Yutuqlar paneli", "desc": "Ko'nikma, kurslar va karyera tayyorligini kuzating." },
+        "lang": { "title": "Ko'p tilli qo'llab-quvvatlash", "desc": "Ingliz, o'zbek va boshqa tillarda tabiiy tajriba." }
+      }
+    },
+    "how": {
+      "step": "BOSQICH",
+      "s1": { "title": "AI Karyera testini oling", "desc": "Qiziqish, ko'nikma va maqsadlar haqidagi savollarga javob bering." },
+      "s2": { "title": "AI profilingizni tahlil qiladi", "desc": "Modellarimiz sizga eng mos kasblarni topish uchun minglab signalni baholaydi." },
+      "s3": { "title": "Yo'l xaritangizni oling", "desc": "Universitetlar, kurslar va bosqichlar bilan shaxsiy reja." },
+      "s4": { "title": "O'rganing va o'sing", "desc": "Ko'nikma orttiring, AI murabbiy bilan mashq qiling va maqsadingizga tezroq erishing." }
+    },
+    "testimonials": {
+      "badge": "O'quvchilar sevgan",
+      "titleA": "Kelajagini",
+      "titleB": "quruvchilar ishonchi",
+      "t1": { "quote": "CareerAI bir dam olish kunida chalkashlikdan aniqlikka o'tishimga yordam berdi. Yo'l xaritasi ajoyib.", "role": "Kompyuter fanlari talabasi" },
+      "t2": { "quote": "Maosh tahlili va universitet qidiruv oylab tadqiqotdan qutqardi.", "role": "Yaqinda bitirgan" },
+      "t3": { "quote": "32 yoshimda AI murabbiy va suhbat murabbiyi tufayli kasbimni o'zgartirdim.", "role": "Mahsulot dizayneri" }
+    },
+    "faq": {
+      "badge": "Savollar",
+      "titleA": "Savollarga",
+      "titleB": "javoblar",
+      "q1": { "q": "CareerAI nima?", "a": "CareerAI — qiziqish, shaxsiyat, ko'nikma, maqsad va maosh imkoniyatlari asosida eng yaxshi kasbni topishga yordam beruvchi AI platforma." },
+      "q2": { "q": "CareerAI bepulmi?", "a": "Ha. AI karyera testini olib, eng yaxshi kasb mosligini bepul ko'rishingiz mumkin. Premium tarif ilg'or yo'l xaritalari va murabbiylik ochadi." },
+      "q3": { "q": "AI qanchalik aniq?", "a": "Modellarimiz 50+ davlatdagi mehnat bozori ma'lumotlari bilan birlashadi va har bir foydalanuvchi bilan aniqroq bo'ladi." },
+      "q4": { "q": "Qaysi tillar qo'llab-quvvatlanadi?", "a": "Hozirda ingliz va o'zbek. Tez orada boshqa tillar qo'shiladi." },
+      "q5": { "q": "Ishlayotgan mutaxassis sifatida foydalanishim mumkinmi?", "a": "Albatta. CareerAI istalgan bosqichdagi talaba, bitiruvchi va mutaxassislarni qo'llab-quvvatlaydi." },
+      "q6": { "q": "Ma'lumotlarim maxfiymi?", "a": "Ma'lumotlaringiz shifrlangan va sotilmaydi. Istalgan vaqtda o'chirishni so'rashingiz mumkin." }
+    },
+    "cta": {
+      "title": "Kelajakni kashf qilishga tayyormisiz?",
+      "desc": "CareerAI bilan sevimli kasbini quruvchi minglab o'quvchilarga qo'shiling."
+    },
+    "footer": {
+      "tagline": "Talabalar va mutaxassislar uchun AI karyera yo'riqchi. Kashf qiling, rejalashtiring va munosib karyera quring.",
+      "product": "Mahsulot",
+      "company": "Kompaniya",
+      "legal": "Huquqiy",
+      "rights": "Barcha huquqlar himoyalangan.",
+      "built": "Yangi avlod uchun mehr bilan yaratilgan.",
+      "links": {
+        "features": "Imkoniyatlar",
+        "test": "AI Karyera testi",
+        "roadmaps": "Yo'l xaritalari",
+        "pricing": "Narxlar",
+        "about": "Biz haqimizda",
+        "blog": "Blog",
+        "careers": "Karyera",
+        "contact": "Bog'lanish",
+        "privacy": "Maxfiylik siyosati",
+        "terms": "Shartlar",
+        "cookies": "Cookies",
+        "security": "Xavfsizlik"
+      }
+    }
   },
   "nav": {
     "dashboard": "Boshqaruv paneli",
@@ -89,6 +194,95 @@
     "signOutAll": "Barcha qurilmalardan chiqish",
     "deleteAccount": "Akkauntni o'chirish",
     "deleteAccountDesc": "Akkauntingiz va ma'lumotlaringizni butunlay o'chiring."
+  },
+  "profile": {
+    "badge": "Profil",
+    "fullName": "To'liq ism",
+    "email": "Email",
+    "education": "Ta'lim",
+    "goal": "Karyera maqsadi",
+    "interests": "Qiziqishlar",
+    "skills": "Ko'nikmalar",
+    "stats": {
+      "tests": "AI Testlar",
+      "lessons": "Darslar",
+      "badges": "Nishonlar",
+      "streak": "Ketma-ketlik"
+    }
+  },
+  "achievements": {
+    "badge": "Sizning yo'lingiz",
+    "subtitle": "Karyera yo'lingizda oldinga siljish sari nishonlar oling.",
+    "earned": "Olindi",
+    "certificates": "Sertifikatlar",
+    "badges": {
+      "firstTest": { "name": "Birinchi test", "desc": "Birinchi AI Karyera testini yakunladingiz" },
+      "learner": { "name": "Qiziquvchan o'quvchi", "desc": "5 ta darsni yakunladingiz" },
+      "streak7": { "name": "7 kunlik ketma-ketlik", "desc": "7 kun ketma-ket o'qidingiz" },
+      "goal": { "name": "Maqsad qo'yuvchi", "desc": "Karyera maqsadingizni belgiladingiz" },
+      "chat": { "name": "AI suhbatdosh", "desc": "AI Murabbiy bilan 10 marta suhbat" },
+      "resume": { "name": "Rezyume ustasi", "desc": "ATS bali 85 dan yuqori" },
+      "interview": { "name": "Suhbat ustasi", "desc": "Suhbatda 90+ ball" },
+      "streak30": { "name": "30 kunlik ketma-ketlik", "desc": "30 kun ketma-ket o'qing" }
+    }
+  },
+  "roadmap": {
+    "personalizedFor": "Shaxsiylashtirilgan:",
+    "heading": "Sizning o'quv yo'l xaritangiz",
+    "subtitle": "Asoslardan mutaxassislikkacha sizning maqsadingizga moslashtirilgan yo'l.",
+    "milestones": "bosqich yakunlandi",
+    "of": "/",
+    "phase": "bosqich",
+    "hoursEstimated": "soat taxminan",
+    "complete": "tugallandi",
+    "resource": "Manba",
+    "done": "Bajarildi",
+    "continue": "Davom etish",
+    "beginner": "Boshlang'ich",
+    "intermediate": "O'rta",
+    "advanced": "Ilg'or"
+  },
+  "uni": {
+    "badge": "Universitetingizni toping",
+    "subtitle": "Dunyodagi eng yaxshi universitetlarni izlang va o'quv to'lovi, reyting va stipendiyalarni solishtiring.",
+    "searchPlaceholder": "Nomi yoki soha bo'yicha qidirish...",
+    "sortRanking": "Saralash: Reyting",
+    "sortTuition": "Saralash: To'lov",
+    "scholarship": "Stipendiya",
+    "tuitionYr": "To'lov / yil",
+    "available": "Mavjud",
+    "requirements": "Talablar:",
+    "visit": "Saytga kirish",
+    "noResults": "Filtringizga mos universitet topilmadi."
+  },
+  "jobs": {
+    "badge": "Tanlangan imkoniyatlar",
+    "subtitle": "Ko'nikma va intilishingizga mos ish o'rinlarini toping.",
+    "searchPlaceholder": "Ish, kompaniyalarni qidiring...",
+    "apply": "Ariza berish",
+    "noResults": "Filtringizga mos ish topilmadi.",
+    "types": { "fullTime": "To'liq stavka", "contract": "Shartnoma", "internship": "Amaliyot" },
+    "levels": { "junior": "Junior", "mid": "O'rta", "senior": "Katta" }
+  },
+  "cv": {
+    "badge": "Professional CV",
+    "subtitle": "ATS ga optimallashtirilgan rezyumeni jonli oldindan ko'rish bilan yarating.",
+    "atsScore": "ATS bali",
+    "steps": { "personal": "Shaxsiy", "experience": "Tajriba", "education": "Ta'lim", "skills": "Ko'nikmalar" },
+    "fullName": "To'liq ism",
+    "titleLbl": "Lavozim",
+    "email": "Email",
+    "phone": "Telefon",
+    "location": "Manzil",
+    "summary": "Qisqacha",
+    "skillsHelp": "Ko'nikmalar (vergul bilan)",
+    "aiSuggestion": "AI tavsiyasi",
+    "aiSuggestionText": "O'lchanadigan ta'sirni qo'shing (masalan, \"Kechikishni 30% kamaytirdim\") va ATS bali uchun ish tavsifidan 2–3 ta kalit so'z qo'shing.",
+    "livePreview": "Jonli oldindan ko'rish",
+    "export": "Eksport"
+  },
+  "auth": {
+    "signIn": "Kirish"
   },
   "pages": {
     "dashboard": { "title": "Boshqaruv paneli", "subtitle": "Karyera yo'lingiz bir qarashda." },

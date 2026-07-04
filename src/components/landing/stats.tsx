@@ -1,16 +1,17 @@
 import { motion } from "motion/react";
 import { Briefcase, GraduationCap, Globe2, Cpu, MessageCircle, Map } from "lucide-react";
-
-const stats = [
-  { icon: Briefcase, value: "100+", label: "Career Paths" },
-  { icon: GraduationCap, value: "200+", label: "Universities" },
-  { icon: Globe2, value: "50+", label: "Countries" },
-  { icon: Cpu, value: "AI", label: "Powered" },
-  { icon: MessageCircle, value: "24/7", label: "Career Mentor" },
-  { icon: Map, value: "1:1", label: "Personalized Roadmaps" },
-];
+import { useI18n } from "@/lib/i18n";
 
 export function Stats() {
+  const { t } = useI18n();
+  const stats = [
+    { icon: Briefcase, value: "100+", label: t("landing.stats.careerPaths") },
+    { icon: GraduationCap, value: "200+", label: t("landing.stats.universities") },
+    { icon: Globe2, value: "50+", label: t("landing.stats.countries") },
+    { icon: Cpu, value: "AI", label: t("landing.stats.powered") },
+    { icon: MessageCircle, value: "24/7", label: t("landing.stats.mentor") },
+    { icon: Map, value: "1:1", label: t("landing.stats.roadmaps") },
+  ];
   return (
     <section className="relative py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4">

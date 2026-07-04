@@ -2,8 +2,10 @@ import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 export function Hero() {
+  const { t } = useI18n();
   return (
     <section id="home" className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
       <div className="absolute inset-0 gradient-hero pointer-events-none" />
@@ -25,7 +27,7 @@ export function Hero() {
           className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium"
         >
           <Sparkles className="h-3.5 w-3.5 text-[var(--brand)]" />
-          <span>Introducing CareerAI 2.0 — smarter than ever</span>
+          <span>{t("landing.hero.badge")}</span>
         </motion.div>
 
         <motion.h1
@@ -34,9 +36,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.05 }}
           className="mt-6 text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]"
         >
-          Discover Your{" "}
-          <span className="gradient-text">Perfect Career</span>
-          <br className="hidden sm:block" /> with AI
+          {t("landing.hero.titleA")}{" "}
+          <span className="gradient-text">{t("landing.hero.titleB")}</span>
+          <br className="hidden sm:block" /> {t("landing.hero.titleC")}
         </motion.h1>
 
         <motion.p
@@ -45,9 +47,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed"
         >
-          CareerAI analyzes your interests, personality, strengths, and goals using
-          artificial intelligence to recommend the best career path, learning roadmap,
-          universities, salary insights, and future opportunities.
+          {t("landing.hero.desc")}
         </motion.p>
 
         <motion.div
@@ -58,12 +58,12 @@ export function Hero() {
         >
           <Button asChild size="lg" className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant h-12 px-6 group">
             <Link to="/dashboard">
-              Start Free
+              {t("common.startFree")}
               <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
             </Link>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full h-12 px-6 gap-2 glass">
-            <Play className="h-4 w-4" /> Watch Demo
+            <Play className="h-4 w-4" /> {t("common.watchDemo")}
           </Button>
         </motion.div>
 
@@ -102,12 +102,12 @@ export function Hero() {
                 <div className="col-span-4 row-span-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-4">
                   <div className="h-2 w-12 rounded-full bg-white/40 mb-3" />
                   <div className="text-white/90 text-2xl font-bold">94%</div>
-                  <div className="text-white/60 text-xs mt-1">Match Score</div>
+                  <div className="text-white/60 text-xs mt-1">{t("landing.hero.matchScore")}</div>
                 </div>
                 <div className="col-span-4 row-span-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 p-4">
                   <div className="h-2 w-16 rounded-full bg-white/40 mb-3" />
                   <div className="text-white/90 text-2xl font-bold">$128k</div>
-                  <div className="text-white/60 text-xs mt-1">Avg Salary</div>
+                  <div className="text-white/60 text-xs mt-1">{t("landing.hero.avgSalary")}</div>
                 </div>
               </div>
             </div>

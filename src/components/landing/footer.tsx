@@ -1,12 +1,13 @@
 import { Sparkles, Twitter, Github, Linkedin, Instagram } from "lucide-react";
-
-const cols = [
-  { title: "Product", links: ["Features", "AI Career Test", "Roadmaps", "Pricing"] },
-  { title: "Company", links: ["About", "Blog", "Careers", "Contact"] },
-  { title: "Legal", links: ["Privacy Policy", "Terms", "Cookies", "Security"] },
-];
+import { useI18n } from "@/lib/i18n";
 
 export function Footer() {
+  const { t } = useI18n();
+  const cols = [
+    { title: t("landing.footer.product"), keys: ["features", "test", "roadmaps", "pricing"] },
+    { title: t("landing.footer.company"), keys: ["about", "blog", "careers", "contact"] },
+    { title: t("landing.footer.legal"), keys: ["privacy", "terms", "cookies", "security"] },
+  ];
   return (
     <footer className="relative border-t bg-card/50">
       <div className="mx-auto max-w-7xl px-4 py-16">
@@ -19,7 +20,7 @@ export function Footer() {
               <span className="text-lg font-bold tracking-tight">CareerAI</span>
             </div>
             <p className="mt-4 text-sm text-muted-foreground max-w-sm leading-relaxed">
-              AI-powered career guidance for students and professionals. Discover, plan, and build the career you deserve.
+              {t("landing.footer.tagline")}
             </p>
             <div className="mt-6 flex gap-2">
               {[Twitter, Github, Linkedin, Instagram].map((Icon, i) => (
@@ -39,10 +40,10 @@ export function Footer() {
             <div key={c.title}>
               <h4 className="text-sm font-semibold tracking-tight">{c.title}</h4>
               <ul className="mt-4 space-y-3">
-                {c.links.map((l) => (
-                  <li key={l}>
+                {c.keys.map((k) => (
+                  <li key={k}>
                     <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                      {l}
+                      {t(`landing.footer.links.${k}`)}
                     </a>
                   </li>
                 ))}
@@ -52,8 +53,8 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} CareerAI. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground">Built with care for the next generation.</p>
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} CareerAI. {t("landing.footer.rights")}</p>
+          <p className="text-xs text-muted-foreground">{t("landing.footer.built")}</p>
         </div>
       </div>
     </footer>

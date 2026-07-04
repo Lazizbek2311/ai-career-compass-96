@@ -1,8 +1,10 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 export function CTA() {
+  const { t } = useI18n();
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4">
@@ -24,18 +26,18 @@ export function CTA() {
           />
           <div className="relative">
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
-              Ready to discover your future?
+              {t("landing.cta.title")}
             </h2>
             <p className="mt-4 text-white/80 max-w-xl mx-auto text-base sm:text-lg">
-              Join thousands of learners building careers they love with CareerAI.
+              {t("landing.cta.desc")}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button size="lg" className="rounded-full bg-white text-foreground hover:bg-white/90 h-12 px-6 group">
-                Start Free
+                {t("common.startFree")}
                 <ArrowRight className="h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5" />
               </Button>
               <Button size="lg" variant="outline" className="rounded-full h-12 px-6 bg-transparent text-white border-white/40 hover:bg-white/10 hover:text-white">
-                Contact Sales
+                {t("common.contactSales")}
               </Button>
             </div>
           </div>

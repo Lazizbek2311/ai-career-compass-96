@@ -1,6 +1,8 @@
 {
   "common": {
     "save": "Save",
+    "saved": "Saved!",
+    "saveChanges": "Save Changes",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
@@ -22,20 +24,123 @@
     "signIn": "Sign in",
     "login": "Login",
     "getStarted": "Get Started",
+    "startFree": "Start Free",
     "learnMore": "Learn more",
     "viewAll": "View all",
     "upgrade": "Upgrade",
     "success": "Success",
     "error": "Error",
     "empty": "Nothing here yet",
-    "language": "Language"
+    "language": "Language",
+    "apply": "Apply",
+    "done": "Done",
+    "all": "All",
+    "yes": "Yes",
+    "no": "No",
+    "free": "Free",
+    "watchDemo": "Watch Demo",
+    "contactSales": "Contact Sales",
+    "orContinueWith": "Or continue with",
+    "noAccount": "Don't have an account?",
+    "signInToContinue": "Sign in to continue your career journey",
+    "welcomeBack": "Welcome back",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?"
   },
   "landing": {
     "home": "Home",
     "features": "Features",
     "about": "About",
     "faq": "FAQ",
-    "contact": "Contact"
+    "contact": "Contact",
+    "hero": {
+      "badge": "Introducing CareerAI 2.0 — smarter than ever",
+      "titleA": "Discover Your",
+      "titleB": "Perfect Career",
+      "titleC": "with AI",
+      "desc": "CareerAI analyzes your interests, personality, strengths, and goals using artificial intelligence to recommend the best career path, learning roadmap, universities, salary insights, and future opportunities.",
+      "matchScore": "Match Score",
+      "avgSalary": "Avg Salary"
+    },
+    "stats": {
+      "careerPaths": "Career Paths",
+      "universities": "Universities",
+      "countries": "Countries",
+      "powered": "Powered",
+      "mentor": "Career Mentor",
+      "roadmaps": "Personalized Roadmaps"
+    },
+    "features": {
+      "badge": "Features",
+      "titleA": "Everything you need to",
+      "titleB": "choose your future",
+      "subtitle": "A complete suite of AI tools built for students, graduates, and professionals.",
+      "items": {
+        "test": { "title": "AI Career Test", "desc": "Adaptive assessment that learns from each answer to surface your ideal field." },
+        "personality": { "title": "AI Personality Analysis", "desc": "Deep personality insights mapped to career fit and team dynamics." },
+        "salary": { "title": "Salary Analytics", "desc": "Real-time salary benchmarks across roles, regions, and seniority levels." },
+        "uni": { "title": "University Finder", "desc": "Discover programs across 50+ countries matched to your goals." },
+        "roadmap": { "title": "Learning Roadmap", "desc": "Step-by-step path with courses, projects, and milestones." },
+        "cv": { "title": "AI CV Builder", "desc": "Generate polished, ATS-ready resumes tailored to each role." },
+        "interview": { "title": "AI Interview Coach", "desc": "Practice real questions and get instant, expert feedback." },
+        "chat": { "title": "AI Chat Assistant", "desc": "Always-on mentor for guidance, decisions, and motivation." },
+        "dashboard": { "title": "Progress Dashboard", "desc": "Track skills, courses, and career readiness over time." },
+        "lang": { "title": "Multi-language Support", "desc": "Native experience in English, Uzbek, and more languages." }
+      }
+    },
+    "how": {
+      "step": "STEP",
+      "s1": { "title": "Take AI Career Test", "desc": "Answer adaptive questions about your interests, skills, and goals." },
+      "s2": { "title": "AI analyzes your profile", "desc": "Our models evaluate thousands of signals to find your best-fit careers." },
+      "s3": { "title": "Receive your roadmap", "desc": "Get a personalized plan with universities, courses, and milestones." },
+      "s4": { "title": "Start learning and grow", "desc": "Build skills, train with our AI coach and reach your goals faster." }
+    },
+    "testimonials": {
+      "badge": "Loved by learners",
+      "titleA": "Trusted by people",
+      "titleB": "building their future",
+      "t1": { "quote": "CareerAI helped me move from confusion to clarity in a single weekend. The roadmap is unreal.", "role": "Computer Science Student" },
+      "t2": { "quote": "The salary analytics and university finder saved me months of research. Worth every minute.", "role": "Recent Graduate" },
+      "t3": { "quote": "I switched careers at 32 thanks to the AI mentor and interview coach. Life-changing product.", "role": "Product Designer" }
+    },
+    "faq": {
+      "badge": "FAQ",
+      "titleA": "Questions,",
+      "titleB": "answered",
+      "q1": { "q": "What is CareerAI?", "a": "CareerAI is an AI-powered career guidance platform that helps you discover the best career based on your interests, personality, skills, goals, and salary potential." },
+      "q2": { "q": "Is CareerAI free to start?", "a": "Yes. You can take the AI career test and explore your top career matches completely free. Premium plans unlock advanced roadmaps and coaching." },
+      "q3": { "q": "How accurate is the AI?", "a": "Our models combine assessments with labor market data from 50+ countries, continuously improving accuracy with every user interaction." },
+      "q4": { "q": "Which languages are supported?", "a": "CareerAI is currently available in English and Uzbek, with more languages coming soon." },
+      "q5": { "q": "Can I use CareerAI as a working professional?", "a": "Absolutely. CareerAI supports students, graduates, and professionals considering a career change at any stage." },
+      "q6": { "q": "Is my data private?", "a": "Your data is encrypted and never sold. You can request deletion at any time from your dashboard." }
+    },
+    "cta": {
+      "title": "Ready to discover your future?",
+      "desc": "Join thousands of learners building careers they love with CareerAI."
+    },
+    "footer": {
+      "tagline": "AI-powered career guidance for students and professionals. Discover, plan, and build the career you deserve.",
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal",
+      "rights": "All rights reserved.",
+      "built": "Built with care for the next generation.",
+      "links": {
+        "features": "Features",
+        "test": "AI Career Test",
+        "roadmaps": "Roadmaps",
+        "pricing": "Pricing",
+        "about": "About",
+        "blog": "Blog",
+        "careers": "Careers",
+        "contact": "Contact",
+        "privacy": "Privacy Policy",
+        "terms": "Terms",
+        "cookies": "Cookies",
+        "security": "Security"
+      }
+    }
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -89,6 +194,95 @@
     "signOutAll": "Sign out of all devices",
     "deleteAccount": "Delete account",
     "deleteAccountDesc": "Permanently remove your account and data."
+  },
+  "profile": {
+    "badge": "Profile",
+    "fullName": "Full Name",
+    "email": "Email",
+    "education": "Education",
+    "goal": "Career Goal",
+    "interests": "Interests",
+    "skills": "Skills",
+    "stats": {
+      "tests": "AI Tests",
+      "lessons": "Lessons",
+      "badges": "Badges",
+      "streak": "Streak"
+    }
+  },
+  "achievements": {
+    "badge": "Your Journey",
+    "subtitle": "Earn badges as you progress along your career path.",
+    "earned": "Earned",
+    "certificates": "Certificates",
+    "badges": {
+      "firstTest": { "name": "First Test", "desc": "Completed your first AI Career Test" },
+      "learner": { "name": "Curious Learner", "desc": "Completed 5 lessons" },
+      "streak7": { "name": "7-Day Streak", "desc": "Studied 7 days in a row" },
+      "goal": { "name": "Goal Setter", "desc": "Set your career goal" },
+      "chat": { "name": "AI Conversationalist", "desc": "Chat 10 times with AI Mentor" },
+      "resume": { "name": "Resume Pro", "desc": "ATS score above 85" },
+      "interview": { "name": "Interview Ace", "desc": "Score 90+ on mock interview" },
+      "streak30": { "name": "30-Day Streak", "desc": "Study for 30 days straight" }
+    }
+  },
+  "roadmap": {
+    "personalizedFor": "Personalized for",
+    "heading": "Your Learning Roadmap",
+    "subtitle": "A guided path from fundamentals to expert mastery, tailored to your career goal.",
+    "milestones": "milestones complete",
+    "of": "of",
+    "phase": "Phase",
+    "hoursEstimated": "hours estimated",
+    "complete": "complete",
+    "resource": "Resource",
+    "done": "Done",
+    "continue": "Continue",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "uni": {
+    "badge": "Find Your University",
+    "subtitle": "Search top universities worldwide and compare tuition, ranking and scholarships.",
+    "searchPlaceholder": "Search by name or field...",
+    "sortRanking": "Sort: Ranking",
+    "sortTuition": "Sort: Tuition",
+    "scholarship": "Scholarship",
+    "tuitionYr": "Tuition / yr",
+    "available": "Available",
+    "requirements": "Requirements:",
+    "visit": "Visit Website",
+    "noResults": "No universities match your filters."
+  },
+  "jobs": {
+    "badge": "Curated Opportunities",
+    "subtitle": "Discover roles that match your skills and ambitions.",
+    "searchPlaceholder": "Search jobs, companies...",
+    "apply": "Apply",
+    "noResults": "No jobs match your filters.",
+    "types": { "fullTime": "Full-time", "contract": "Contract", "internship": "Internship" },
+    "levels": { "junior": "Junior", "mid": "Mid", "senior": "Senior" }
+  },
+  "cv": {
+    "badge": "Professional CV",
+    "subtitle": "Craft an ATS-optimized resume with live preview.",
+    "atsScore": "ATS Score",
+    "steps": { "personal": "Personal", "experience": "Experience", "education": "Education", "skills": "Skills" },
+    "fullName": "Full Name",
+    "titleLbl": "Title",
+    "email": "Email",
+    "phone": "Phone",
+    "location": "Location",
+    "summary": "Summary",
+    "skillsHelp": "Skills (comma-separated)",
+    "aiSuggestion": "AI Suggestion",
+    "aiSuggestionText": "Add measurable impact (e.g. \"Reduced latency by 30%\") and 2–3 keywords from the job description for a higher ATS score.",
+    "livePreview": "Live Preview",
+    "export": "Export"
+  },
+  "auth": {
+    "signIn": "Sign In"
   },
   "pages": {
     "dashboard": { "title": "Dashboard", "subtitle": "Your career journey at a glance." },
