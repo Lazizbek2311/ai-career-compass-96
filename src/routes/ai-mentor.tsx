@@ -91,6 +91,7 @@ function messageText(m: UIMessage) {
 }
 
 function AiMentorPage() {
+  const { t } = useI18n();
   const [{ list, activeId }, setState] = useState(loadConversations);
   const active = list.find((c) => c.id === activeId) ?? list[0];
 
@@ -110,7 +111,7 @@ function AiMentorPage() {
     id: active.id,
     messages: active.messages,
     transport,
-    onError: (e) => toast.error(e.message || "Chat error"),
+    onError: (e) => toast.error(e.message || t("mentor.chatError")),
   });
 
   // sync streamed messages back into conversation store
