@@ -27,6 +27,7 @@ import {
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/ai-mentor")({
   component: AiMentorPage,
@@ -43,15 +44,15 @@ const STORAGE_KEY = "careerai.mentor.conversations.v1";
 const ACTIVE_KEY = "careerai.mentor.active.v1";
 
 const SUGGESTED = [
-  { icon: Sparkles, label: "Which career fits a curious problem-solver?", group: "Career" },
-  { icon: BookOpen, label: "Build me a 3-month Python learning roadmap", group: "Learning" },
-  { icon: Mic, label: "Ask me 5 behavioral interview questions and grade my answers", group: "Interview" },
-  { icon: FileText, label: "Review and improve my resume bullet points", group: "Resume" },
-  { icon: DollarSign, label: "Compare AI Engineer salaries in Uzbekistan, USA, Germany", group: "Salary" },
-  { icon: GraduationCap, label: "Best majors for someone who loves data and design", group: "University" },
-  { icon: Briefcase, label: "How do I land my first junior developer job?", group: "Jobs" },
-  { icon: Code2, label: "Show a clean React debounce hook with explanation", group: "Code" },
-];
+  { icon: Sparkles, key: "career" },
+  { icon: BookOpen, key: "learning" },
+  { icon: Mic, key: "interview" },
+  { icon: FileText, key: "resume" },
+  { icon: DollarSign, key: "salary" },
+  { icon: GraduationCap, key: "university" },
+  { icon: Briefcase, key: "jobs" },
+  { icon: Code2, key: "code" },
+] as const;
 
 function newConversation(): Conversation {
   return {
