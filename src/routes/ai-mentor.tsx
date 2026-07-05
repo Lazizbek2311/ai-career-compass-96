@@ -412,6 +412,7 @@ function MessageBubble({
   isStreaming: boolean;
   onRegenerate: () => void;
 }) {
+  const { t } = useI18n();
   const isUser = message.role === "user";
   const text = messageText(message);
   const [copied, setCopied] = useState(false);
@@ -422,7 +423,7 @@ function MessageBubble({
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      toast.error("Copy failed");
+      toast.error(t("mentor.copyFail"));
     }
   };
 
@@ -463,7 +464,7 @@ function MessageBubble({
               className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-accent transition"
             >
               {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-              {copied ? "Copied" : "Copy"}
+              {copied ? t("common.copied") : t("common.copy")}
             </button>
             {isLast && (
               <button
@@ -472,7 +473,7 @@ function MessageBubble({
                 className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-accent transition"
               >
                 <RefreshCw className="h-3 w-3" />
-                Regenerate
+                {t("mentor.regenerate")}
               </button>
             )}
           </div>
