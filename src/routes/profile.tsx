@@ -26,19 +26,31 @@ const DEFAULT = {
 
 function ProfilePage() {
   const { t } = useI18n();
-  const [p, setP] = useState(DEFAULT);
+  const { user, displayName, initials: authInitials, updateUser } = useUser();
+  const [p, setP] = useState({ ...DEFAULT, name: user.name, email: user.email });
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    try { const r = localStorage.getItem(KEY); if (r) setP({ ...DEFAULT, ...JSON.parse(r) }); } catch {}
-  }, []);
+    try {
+      const r = localStorage.getItem(KEY);
+      const stored = r ? JSON.parse(r) : {};
+      setP({
+        ...DEFAULT,
+        ...stored,
+        name: stored.name || user.name || "",
+        email: stored.email || user.email || "",
+      });
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.name, user.email]);
 
   const save = () => {
     localStorage.setItem(KEY, JSON.stringify(p));
+    updateUser({ name: p.name, email: p.email });
     setSaved(true); setTimeout(() => setSaved(false), 1500);
   };
 
-  const initials = p.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+  const initials = (p.name || displayName).split(" ").filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase() || authInitials;
   const stats = [
     { icon: Brain, label: t("profile.stats.tests"), value: "3" },
     { icon: BookOpen, label: t("profile.stats.lessons"), value: "27" },
