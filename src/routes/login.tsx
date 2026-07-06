@@ -21,11 +21,13 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const { updateUser } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (email) updateUser({ email });
     navigate({ to: "/dashboard" });
   };
 
