@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -20,11 +21,13 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const { updateUser } = useUser();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (email) updateUser({ email });
     navigate({ to: "/dashboard" });
   };
 

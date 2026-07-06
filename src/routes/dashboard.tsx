@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { useI18n } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -59,6 +60,8 @@ function Card({
 
 function DashboardPage() {
   const { t } = useI18n();
+  const { firstName } = useUser();
+
 
   const stats = [
     { key: "careerMatch", value: "98%", icon: Target, color: "from-violet-500 to-fuchsia-500" },
@@ -130,7 +133,7 @@ function DashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground mb-1">{t("dashboard.welcomeBack")}</p>
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                  Lazizbek <span className="inline-block">👋</span>
+                  {firstName} <span className="inline-block">👋</span>
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground max-w-md">
                   {t("dashboard.currentGoal")}:{" "}

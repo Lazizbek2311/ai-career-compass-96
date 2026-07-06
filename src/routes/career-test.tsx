@@ -407,7 +407,7 @@ function Step1({
           <Label htmlFor="fullName">Full Name</Label>
           <Input
             id="fullName"
-            placeholder="Lazizbek Karimov"
+            placeholder="Your full name"
             value={data.fullName}
             onChange={(e) => update("fullName", e.target.value)}
             className="h-11 rounded-xl"
