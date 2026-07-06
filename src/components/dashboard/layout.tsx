@@ -140,6 +140,9 @@ function Sidebar({
 
 function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
   const { lang, setLang, t } = useI18n();
+  const { displayName, firstName, initials, user, signOut } = useUser();
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-30 glass border-b border-border/60">
       <div className="flex items-center gap-3 h-16 px-4 sm:px-6">
