@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useI18n } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
 
 export const Route = createFileRoute("/cv-builder")({
   head: () => ({ meta: [{ title: "CV Builder — CareerAI" }] }),
@@ -20,13 +21,14 @@ const STEP_KEYS = ["personal", "experience", "education", "skills"] as const;
 
 function CvPage() {
   const { t } = useI18n();
+  const { displayName, user } = useUser();
   const [step, setStep] = useState(0);
   const [data, setData] = useState({
-    name: "Lazizbek Karimov", title: "AI Engineer", email: "lazizbek@example.com", phone: "+998 90 000 0000", location: "Tashkent, Uzbekistan",
-    summary: "Passionate engineer focused on AI & ML systems.",
-    experience: "AI Intern — Acme (2024)\n· Built ML pipelines\n· Improved model accuracy by 12%",
-    education: "BSc Computer Science — Inha University (2022–2026)",
-    skills: "Python, PyTorch, SQL, React, TypeScript, Communication",
+    name: displayName, title: "", email: user.email, phone: "", location: "",
+    summary: "",
+    experience: "",
+    education: "",
+    skills: "",
   });
 
   const filled = Object.values(data).filter((v) => v.trim().length > 0).length;
