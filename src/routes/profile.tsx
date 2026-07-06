@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useI18n } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "Profile — CareerAI" }] }),
@@ -18,9 +19,9 @@ export const Route = createFileRoute("/profile")({
 
 const KEY = "careerai_profile";
 const DEFAULT = {
-  name: "Lazizbek Karimov", email: "lazizbek@example.com", education: "BSc Computer Science — Inha University",
-  goal: "Become an AI Engineer at a top global tech company",
-  interests: "AI, Machine Learning, Robotics, Startups", skills: "Python, PyTorch, SQL, React, English (C1)",
+  name: "", email: "", education: "",
+  goal: "",
+  interests: "", skills: "",
 };
 
 function ProfilePage() {
