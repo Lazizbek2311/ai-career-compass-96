@@ -60,6 +60,8 @@ function Card({
 
 function DashboardPage() {
   const { t } = useI18n();
+  const { firstName } = useUser();
+
 
   const stats = [
     { key: "careerMatch", value: "98%", icon: Target, color: "from-violet-500 to-fuchsia-500" },
