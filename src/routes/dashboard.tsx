@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { DashboardLayout } from "@/components/dashboard/layout";
 import { useI18n } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
