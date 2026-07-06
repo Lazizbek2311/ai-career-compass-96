@@ -180,23 +180,37 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-accent transition-colors">
+              <button className="flex items-center gap-2 rounded-full p-1 pr-3 hover:bg-accent transition-colors" title={displayName}>
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="gradient-brand text-white text-xs font-semibold">
-                    LA
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden sm:inline text-sm font-medium">Lazizbek</span>
+                <span className="hidden sm:inline text-sm font-medium">{firstName}</span>
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>{t("topbar.myAccount")}</DropdownMenuLabel>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col">
+                  <span className="text-sm font-semibold truncate">{displayName}</span>
+                  {user.email ? (
+                    <span className="text-xs text-muted-foreground font-normal truncate">{user.email}</span>
+                  ) : null}
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{t("nav.profile")}</DropdownMenuItem>
-              <DropdownMenuItem>{t("nav.settings")}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate({ to: "/profile" })}>{t("nav.profile")}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate({ to: "/settings" })}>{t("nav.settings")}</DropdownMenuItem>
               <DropdownMenuItem>{t("topbar.billing")}</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>{t("common.signOut")}</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  signOut();
+                  navigate({ to: "/login" });
+                }}
+              >
+                {t("common.signOut")}
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
