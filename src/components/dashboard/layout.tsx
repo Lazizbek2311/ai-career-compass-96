@@ -35,6 +35,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/landing/theme-toggle";
 import { useI18n, type Lang } from "@/lib/i18n";
+import { useUser } from "@/lib/user";
+import { useNavigate } from "@tanstack/react-router";
 
 const navItems = [
   { icon: LayoutDashboard, key: "nav.dashboard", to: "/dashboard" },
