@@ -1,8 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import en from "@/locales/en.json";
 import uz from "@/locales/uz.json";
-import enPatch from "@/locales/_patches/app.en.json";
-import uzPatch from "@/locales/_patches/app.uz.json";
+import enApp from "@/locales/_patches/app.en.json";
+import uzApp from "@/locales/_patches/app.uz.json";
+import enModules from "@/locales/_patches/modules.en.json";
+import uzModules from "@/locales/_patches/modules.uz.json";
+import enIR from "@/locales/_patches/interview-resume.en.json";
+import uzIR from "@/locales/_patches/interview-resume.uz.json";
+import enRT from "@/locales/_patches/results-test.en.json";
+import uzRT from "@/locales/_patches/results-test.uz.json";
 
 export type Lang = "en" | "uz";
 
@@ -18,10 +24,9 @@ function deepMerge(target: any, source: any): any {
   return out;
 }
 
-const dictionaries: Record<Lang, any> = {
-  en: deepMerge(en, enPatch),
-  uz: deepMerge(uz, uzPatch),
-};
+const enMerged = [enApp, enModules, enIR, enRT].reduce((acc, p) => deepMerge(acc, p), en as any);
+const uzMerged = [uzApp, uzModules, uzIR, uzRT].reduce((acc, p) => deepMerge(acc, p), uz as any);
+const dictionaries: Record<Lang, any> = { en: enMerged, uz: uzMerged };
 
 const STORAGE_KEY = "careerai_lang";
 
