@@ -26,6 +26,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { analyzeResume, type ResumeReport } from "@/lib/resume.functions";
+import { l } from "@/lib/i18n";
 
 export const Route = createFileRoute("/resume-optimizer")({
   head: () => ({
@@ -41,30 +42,8 @@ export const Route = createFileRoute("/resume-optimizer")({
   component: ResumeOptimizerPage,
 });
 
-const TEMPLATES = [
-  {
-    name: "Modern Minimal",
-    desc: "Clean single-column layout, perfect for tech & startups.",
-    gradient: "from-blue-500/20 via-indigo-500/20 to-purple-500/20",
-  },
-  {
-    name: "Executive Classic",
-    desc: "Refined typography for senior & leadership roles.",
-    gradient: "from-amber-500/20 via-orange-500/20 to-rose-500/20",
-  },
-  {
-    name: "Creative Pro",
-    desc: "Subtle accents for design, product, and marketing.",
-    gradient: "from-fuchsia-500/20 via-pink-500/20 to-rose-500/20",
-  },
-  {
-    name: "ATS Optimized",
-    desc: "Maximum keyword pass-through, zero formatting traps.",
-    gradient: "from-emerald-500/20 via-teal-500/20 to-cyan-500/20",
-  },
-];
-
 function ResumeOptimizerPage() {
+  const { t } = l();
   const analyze = useServerFn(analyzeResume);
   const [file, setFile] = useState<File | null>(null);
   const [pastedText, setPastedText] = useState("");
@@ -72,6 +51,29 @@ function ResumeOptimizerPage() {
   const [loading, setLoading] = useState(false);
   const [report, setReport] = useState<ResumeReport | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const TEMPLATES = [
+    {
+      name: t("resumeOpt.templateModern"),
+      desc: t("resumeOpt.templateModernDesc"),
+      gradient: "from-blue-500/20 via-indigo-500/20 to-purple-500/20",
+    },
+    {
+      name: t("resumeOpt.templateExecutive"),
+      desc: t("resumeOpt.templateExecutiveDesc"),
+      gradient: "from-amber-500/20 via-orange-500/20 to-rose-500/20",
+    },
+    {
+      name: t("resumeOpt.templateCreative"),
+      desc: t("resumeOpt.templateCreativeDesc"),
+      gradient: "from-fuchsia-500/20 via-pink-500/20 to-rose-500/20",
+    },
+    {
+      name: t("resumeOpt.templateAts"),
+      desc: t("resumeOpt.templateAtsDesc"),
+      gradient: "from-emerald-500/20 via-teal-500/20 to-cyan-500/20",
+    },
+  ];
 
   async function readFileAsBase64(f: File): Promise<string> {
     const buf = await f.arrayBuffer();
@@ -104,19 +106,19 @@ function ResumeOptimizerPage() {
           payload = { kind: "pdf", data: await readFileAsBase64(file), fileName: file.name };
         } else if (name.endsWith(".docx")) {
           const text = await extractDocxText(file);
-          if (!text.trim()) throw new Error("Could not extract text from DOCX");
+          if (!text.trim()) throw new Error(t("resumeOpt.toastDocxFail"));
           payload = { kind: "text", data: text, fileName: file.name };
         } else if (name.endsWith(".txt")) {
           payload = { kind: "text", data: await file.text(), fileName: file.name };
         } else {
-          toast.error("Please upload a PDF, DOCX, or TXT file");
+          toast.error(t("resumeOpt.toastBadFile"));
           setLoading(false);
           return;
         }
       } else if (pastedText.trim().length > 50) {
         payload = { kind: "text", data: pastedText, fileName: "pasted-resume.txt" };
       } else {
-        toast.error("Upload a resume or paste at least a few lines of text");
+        toast.error(t("resumeOpt.toastNoContent"));
         setLoading(false);
         return;
       }
@@ -124,13 +126,13 @@ function ResumeOptimizerPage() {
       const result = await analyze({ data: { ...payload, targetRole } });
       setReport(result.report);
       if (result.source === "fallback") {
-        toast.warning("AI was unavailable. Showing a baseline report.");
+        toast.warning(t("resumeOpt.toastFallback"));
       } else {
-        toast.success("Resume analyzed");
+        toast.success(t("resumeOpt.toastSuccess"));
       }
     } catch (e) {
       console.error(e);
-      toast.error(e instanceof Error ? e.message : "Analysis failed");
+      toast.error(e instanceof Error ? e.message : t("resumeOpt.toastAnalysisFail"));
     } finally {
       setLoading(false);
     }
@@ -162,14 +164,13 @@ function ResumeOptimizerPage() {
           <div className="relative flex flex-col lg:flex-row lg:items-center gap-6">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5" /> AI Resume Optimizer
+                <Sparkles className="h-3.5 w-3.5" /> {t("resumeOpt.badge")}
               </div>
               <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
-                Make your resume <span className="gradient-text">recruiter-ready</span>
+                {t("resumeOpt.heading")} <span className="gradient-text">{t("resumeOpt.headingHighlight")}</span>
               </h1>
               <p className="mt-2 text-muted-foreground max-w-xl">
-                Upload your PDF or DOCX. Our AI scores ATS-readiness, grammar, readability,
-                and rewrites your resume with high-impact, quantified phrasing.
+                {t("resumeOpt.subheading")}
               </p>
             </div>
             <div className="grid h-20 w-20 place-items-center rounded-3xl gradient-brand shadow-glow shrink-0">
@@ -186,7 +187,7 @@ function ResumeOptimizerPage() {
             transition={{ delay: 0.05 }}
             className="lg:col-span-2 rounded-3xl glass p-6 shadow-elegant"
           >
-            <h2 className="text-lg font-semibold mb-4">1. Upload your resume</h2>
+            <h2 className="text-lg font-semibold mb-4">{t("resumeOpt.uploadSection")}</h2>
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
@@ -196,10 +197,10 @@ function ResumeOptimizerPage() {
                 <Upload className="h-6 w-6 text-white" />
               </div>
               <p className="font-semibold">
-                {file ? file.name : "Click to upload PDF, DOCX, or TXT"}
+                {file ? file.name : t("resumeOpt.uploadPrompt")}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                Max ~5MB · Your file is processed securely
+                {t("resumeOpt.uploadHint")}
               </p>
               <input
                 ref={inputRef}
@@ -211,11 +212,11 @@ function ResumeOptimizerPage() {
             </button>
 
             <div className="mt-5">
-              <label className="text-sm font-medium">Or paste resume text</label>
+              <label className="text-sm font-medium">{t("resumeOpt.pasteLabel")}</label>
               <textarea
                 value={pastedText}
                 onChange={(e) => setPastedText(e.target.value)}
-                placeholder="Paste your resume content here..."
+                placeholder={t("resumeOpt.pastePlaceholder")}
                 rows={5}
                 className="mt-2 w-full rounded-2xl bg-secondary/60 border border-border/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
               />
@@ -223,11 +224,11 @@ function ResumeOptimizerPage() {
 
             <div className="mt-5 grid sm:grid-cols-[1fr_auto] gap-3">
               <div>
-                <label className="text-sm font-medium">Target role (optional)</label>
+                <label className="text-sm font-medium">{t("resumeOpt.targetRoleLabel")}</label>
                 <Input
                   value={targetRole}
                   onChange={(e) => setTargetRole(e.target.value)}
-                  placeholder="e.g. Senior Frontend Engineer"
+                  placeholder={t("resumeOpt.targetRolePlaceholder")}
                   className="mt-2 rounded-full bg-secondary/60 border-border/60"
                 />
               </div>
@@ -238,11 +239,11 @@ function ResumeOptimizerPage() {
               >
                 {loading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("resumeOpt.analyzing")}
                   </>
                 ) : (
                   <>
-                    <Sparkles className="mr-2 h-4 w-4" /> Analyze with AI
+                    <Sparkles className="mr-2 h-4 w-4" /> {t("resumeOpt.analyzeBtn")}
                   </>
                 )}
               </Button>
@@ -258,18 +259,18 @@ function ResumeOptimizerPage() {
           >
             <div className="flex items-center gap-2 mb-4">
               <LayoutIcon className="h-4 w-4" />
-              <h2 className="text-lg font-semibold">Resume Templates</h2>
+              <h2 className="text-lg font-semibold">{t("resumeOpt.templatesTitle")}</h2>
             </div>
             <div className="space-y-3">
-              {TEMPLATES.map((t) => (
+              {TEMPLATES.map((tpl) => (
                 <div
-                  key={t.name}
-                  className={`group relative rounded-2xl p-4 bg-gradient-to-br ${t.gradient} border border-border/60 hover:shadow-elegant transition-all cursor-pointer`}
+                  key={tpl.name}
+                  className={`group relative rounded-2xl p-4 bg-gradient-to-br ${tpl.gradient} border border-border/60 hover:shadow-elegant transition-all cursor-pointer`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-semibold text-sm">{t.name}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                      <p className="font-semibold text-sm">{tpl.name}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{tpl.desc}</p>
                     </div>
                     <ArrowRight className="h-4 w-4 opacity-50 group-hover:translate-x-0.5 group-hover:opacity-100 transition" />
                   </div>
@@ -291,22 +292,22 @@ function ResumeOptimizerPage() {
             >
               {/* ATS hero */}
               <div className="rounded-3xl glass p-6 sm:p-8 shadow-elegant flex flex-col sm:flex-row sm:items-center gap-6">
-                <ATSCircle value={report.atsScore} />
+                <ATSCircle value={report.atsScore} atsLabel={t("resumeOpt.atsLabel")} />
                 <div className="flex-1">
                   <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Overall analysis
+                    {t("resumeOpt.overallAnalysis")}
                   </div>
-                  <h2 className="mt-1 text-2xl font-bold">ATS Score</h2>
+                  <h2 className="mt-1 text-2xl font-bold">{t("resumeOpt.atsScore")}</h2>
                   <p className="mt-2 text-muted-foreground">{report.overallSummary}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button onClick={downloadImproved} className="rounded-full gradient-brand text-white border-0 hover:opacity-90">
-                      <Download className="mr-2 h-4 w-4" /> Download improved
+                      <Download className="mr-2 h-4 w-4" /> {t("resumeOpt.downloadImproved")}
                     </Button>
                     <Button variant="outline" className="rounded-full" onClick={() => {
                       navigator.clipboard.writeText(report.improvedResumeMarkdown);
-                      toast.success("Improved resume copied");
+                      toast.success(t("resumeOpt.toastCopied"));
                     }}>
-                      Copy markdown
+                      {t("resumeOpt.copyMarkdown")}
                     </Button>
                   </div>
                 </div>
@@ -314,24 +315,24 @@ function ResumeOptimizerPage() {
 
               {/* Score cards */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                <ScoreCard icon={BookOpen} label="Grammar" score={report.scores.grammar.score} summary={report.scores.grammar.summary} tone="from-blue-500/20 to-indigo-500/20" />
-                <ScoreCard icon={Gauge} label="Readability" score={report.scores.readability.score} summary={report.scores.readability.summary} tone="from-emerald-500/20 to-teal-500/20" />
-                <ScoreCard icon={Award} label="Professionalism" score={report.scores.professionalism.score} summary={report.scores.professionalism.summary} tone="from-amber-500/20 to-orange-500/20" />
-                <ScoreCard icon={Briefcase} label="Experience" score={report.scores.experienceQuality.score} summary={report.scores.experienceQuality.summary} tone="from-fuchsia-500/20 to-pink-500/20" />
-                <ScoreCard icon={GraduationCap} label="Education" score={report.scores.educationQuality.score} summary={report.scores.educationQuality.summary} tone="from-cyan-500/20 to-sky-500/20" />
+                <ScoreCard icon={BookOpen} label={t("resumeOpt.grammarLabel")} score={report.scores.grammar.score} summary={report.scores.grammar.summary} tone="from-blue-500/20 to-indigo-500/20" />
+                <ScoreCard icon={Gauge} label={t("resumeOpt.readabilityLabel")} score={report.scores.readability.score} summary={report.scores.readability.summary} tone="from-emerald-500/20 to-teal-500/20" />
+                <ScoreCard icon={Award} label={t("resumeOpt.professionalismLabel")} score={report.scores.professionalism.score} summary={report.scores.professionalism.summary} tone="from-amber-500/20 to-orange-500/20" />
+                <ScoreCard icon={Briefcase} label={t("resumeOpt.experienceLabel")} score={report.scores.experienceQuality.score} summary={report.scores.experienceQuality.summary} tone="from-fuchsia-500/20 to-pink-500/20" />
+                <ScoreCard icon={GraduationCap} label={t("resumeOpt.educationLabel")} score={report.scores.educationQuality.score} summary={report.scores.educationQuality.summary} tone="from-cyan-500/20 to-sky-500/20" />
               </div>
 
               {/* Strengths / Weaknesses */}
               <div className="grid lg:grid-cols-2 gap-6">
                 <ListCard
-                  title="Strengths"
+                  title={t("resumeOpt.strengthsTitle")}
                   items={report.strengths}
                   icon={CheckCircle2}
                   tone="text-emerald-500"
                   ring="from-emerald-500/15 to-teal-500/15"
                 />
                 <ListCard
-                  title="Weaknesses"
+                  title={t("resumeOpt.weaknessesTitle")}
                   items={report.weaknesses}
                   icon={AlertTriangle}
                   tone="text-amber-500"
@@ -341,14 +342,14 @@ function ResumeOptimizerPage() {
 
               {/* Missing skills/keywords */}
               <div className="grid lg:grid-cols-2 gap-6">
-                <ChipCard title="Missing Skills" items={report.missingSkills} icon={Target} />
-                <ChipCard title="Missing Keywords" items={report.missingKeywords} icon={Sparkles} />
+                <ChipCard title={t("resumeOpt.missingSkillsTitle")} items={report.missingSkills} icon={Target} />
+                <ChipCard title={t("resumeOpt.missingKeywordsTitle")} items={report.missingKeywords} icon={Sparkles} />
               </div>
 
               {/* Improvements */}
               <div className="rounded-3xl glass p-6 shadow-elegant">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <Wand2 className="h-4 w-4" /> Suggested improvements
+                  <Wand2 className="h-4 w-4" /> {t("resumeOpt.suggestedImprovements")}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {report.improvements.map((imp, i) => (
@@ -366,10 +367,10 @@ function ResumeOptimizerPage() {
               <div className="rounded-3xl glass p-6 shadow-elegant">
                 <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
                   <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <FileText className="h-4 w-4" /> Improved resume preview
+                    <FileText className="h-4 w-4" /> {t("resumeOpt.improvedPreview")}
                   </h3>
                   <Button size="sm" onClick={downloadImproved} className="rounded-full gradient-brand text-white border-0 hover:opacity-90">
-                    <Download className="mr-2 h-3.5 w-3.5" /> Download .md
+                    <Download className="mr-2 h-3.5 w-3.5" /> {t("resumeOpt.downloadMd")}
                   </Button>
                 </div>
                 <pre className="whitespace-pre-wrap text-sm leading-relaxed bg-secondary/50 rounded-2xl p-5 border border-border/60 max-h-[600px] overflow-auto font-sans">
@@ -384,7 +385,7 @@ function ResumeOptimizerPage() {
   );
 }
 
-function ATSCircle({ value }: { value: number }) {
+function ATSCircle({ value, atsLabel }: { value: number; atsLabel: string }) {
   const radius = 54;
   const c = 2 * Math.PI * radius;
   const offset = c - (value / 100) * c;
@@ -414,7 +415,7 @@ function ATSCircle({ value }: { value: number }) {
       <div className="absolute inset-0 grid place-items-center">
         <div className="text-center">
           <div className="text-3xl font-bold">{value}</div>
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">ATS</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{atsLabel}</div>
         </div>
       </div>
     </div>
