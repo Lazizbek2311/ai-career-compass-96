@@ -1,0 +1,201 @@
+{
+  "modules": {
+    "dashboard": {
+      "welcomeBack": "Xush kelibsiz",
+      "currentGoal": "Joriy maqsad",
+      "becomeAiEngineer": "AI Muhandisi bo'lish",
+      "progress": "Rivojlanish",
+      "aiTip": "AI maslahati:",
+      "aiTipText": "ML yo'l xaritasini ochish uchun bu hafta Python modulini tugatishga e'tibor bering.",
+      "continueLearning": "O'qishni davom ettirish",
+      "viewRoadmap": "Yo'l xaritasini ko'rish",
+      "todaysGoal": "Bugungi maqsad",
+      "todaysGoalDesc": "2 ta Python darsini tugating va haftalik AI vazifangizni yakunlang.",
+      "ofDone": "dan",
+      "doneShort": "bajarildi",
+      "stats": {
+        "careerMatch": "Karyera mosligi",
+        "lessonsDone": "Bajarilgan darslar",
+        "skillsLearned": "O'rganilgan ko'nikmalar",
+        "aiSessions": "AI Sessiyalar",
+        "certificates": "Sertifikatlar",
+        "dailyStreak": "Kunlik ketma-ketlik"
+      },
+      "topMatches": "Eng yaxshi karyera mosliklari",
+      "aiPowered": "AI asosida tavsiyalar",
+      "updatedToday": "Bugun yangilangan",
+      "avg": "O'rtacha",
+      "learningProgress": "O'quv rivoji",
+      "thisSemester": "Bu semestrda",
+      "salaryPreview": "Maosh ko'rinishi",
+      "estimatedFor": "AI Muhandisi lavozimi uchun taxmin",
+      "explore": "Ko'proq",
+      "perYear": "yiliga",
+      "upcomingTasks": "Yaqinlashayotgan vazifalar",
+      "stayOnTrack": "Yo'nalishda qoling",
+      "achievements": "Yutuqlar",
+      "badgesEarned": "Siz qo'lga kiritgan nishonlar",
+      "level": "Daraja",
+      "quickActions": "Tezkor amallar",
+      "aiMentorTips": "AI Mentor maslahatlari",
+      "tips": {
+        "t1": "Har kuni 30 daqiqa kod yozishni mashq qiling.",
+        "t2": "Bu hafta bitta mini loyiha yarating.",
+        "t3": "LinkedIn-da 3 nafar AI muhandisi bilan bog'laning."
+      },
+      "chatWithMentor": "AI Mentor bilan suhbat",
+      "quote": "Kelajak bugun qilayotgan ishingizga bog'liq.",
+      "quoteAuthor": "— Mahatma Gandi",
+      "tasks": {
+        "python": "Python 12-darsini tugating",
+        "personality": "AI Shaxsiyat testini yakunlang",
+        "cv": "CV-ni yangi loyiha bilan yangilang",
+        "mock": "Mock suhbatni mashq qiling",
+        "today": "Bugun",
+        "tomorrow": "Ertaga",
+        "done": "Bajarildi",
+        "fri": "Juma"
+      },
+      "achievementLabels": {
+        "fastLearner": "Tez o'rganuvchi",
+        "aiPioneer": "AI Kashfiyotchisi",
+        "streakMaster": "Ketma-ketlik ustasi",
+        "top1": "Eng yaxshi 1%",
+        "mentor": "Mentor",
+        "certified": "Sertifikatlangan"
+      },
+      "quick": {
+        "startTest": "AI Testni boshlash",
+        "continueLearning": "O'qishni davom ettirish",
+        "askAi": "AI-dan so'rash",
+        "buildCv": "CV yaratish"
+      }
+    },
+    "mentor": {
+      "title": "AI Mentor",
+      "subtitle": "Sizning shaxsiy karyera va o'quv murabbiyingiz",
+      "newChat": "Yangi suhbat",
+      "history": "Tarix",
+      "clear": "Tozalash",
+      "new": "Yangi",
+      "deleteChat": "Suhbatni o'chirish",
+      "emptyTitle": "Bugun sizga qanday yordam bera olaman?",
+      "emptyDesc": "Karyera, o'qish, suhbatlar, maoshlar, universitetlar, ishlar yoki kod haqida istalgan narsani so'rang.",
+      "inputPlaceholder": "Karyera, o'qish, suhbatlar haqida istalgan narsani so'rang…",
+      "stop": "To'xtatish",
+      "send": "Yuborish",
+      "disclaimer": "AI Mentor xato qilishi mumkin. Muhim ma'lumotlarni tekshiring.",
+      "regenerate": "Qayta yaratish",
+      "copyFail": "Nusxa olib bo'lmadi",
+      "chatError": "Suhbat xatosi",
+      "groups": {
+        "career": "Karyera",
+        "learning": "O'qish",
+        "interview": "Suhbat",
+        "resume": "Rezyume",
+        "salary": "Maosh",
+        "university": "Universitet",
+        "jobs": "Ishlar",
+        "code": "Kod"
+      },
+      "suggested": {
+        "career": "Qiziquvchan muammo yechuvchiga qaysi karyera mos?",
+        "learning": "Menga 3 oylik Python o'quv yo'l xaritasini tuzing",
+        "interview": "Menga 5 ta xulq-atvor suhbat savollarini bering va javoblarimni baholang",
+        "resume": "Rezyume punktlarimni ko'rib chiqing va yaxshilang",
+        "salary": "AI Muhandis maoshlarini O'zbekiston, AQSh, Germaniyada solishtiring",
+        "university": "Ma'lumot va dizaynni sevuvchi uchun eng yaxshi mutaxassisliklar",
+        "jobs": "Birinchi kichik dasturchi ishini qanday topsam bo'ladi?",
+        "code": "Toza React debounce hook-ni tushuntirish bilan ko'rsating"
+      }
+    },
+    "achievements": {
+      "title": "Yutuqlar",
+      "badge": "Sizning safaringiz",
+      "subtitle": "Karyera yo'lida rivojlanib, nishonlar to'plang.",
+      "earned": "Qo'lga kiritilgan",
+      "certificates": "Sertifikatlar",
+      "badges": {
+        "firstTest": { "name": "Birinchi test", "desc": "Birinchi AI Karyera testini tugatdingiz" },
+        "learner": { "name": "Qiziquvchi o'quvchi", "desc": "5 ta darsni tugatdingiz" },
+        "streak7": { "name": "7 kunlik ketma-ketlik", "desc": "7 kun ketma-ket o'qidingiz" },
+        "goal": { "name": "Maqsad qo'yuvchi", "desc": "Karyera maqsadingizni belgiladingiz" },
+        "chat": { "name": "AI Suhbatdoshi", "desc": "AI Mentor bilan 10 marta suhbatlashdingiz" },
+        "resume": { "name": "Rezyume ustasi", "desc": "ATS balli 85 dan yuqori" },
+        "interview": { "name": "Suhbat asi", "desc": "Mock suhbatda 90+ ball" },
+        "streak30": { "name": "30 kunlik ketma-ketlik", "desc": "30 kun ketma-ket o'qing" }
+      }
+    },
+    "calendar": {
+      "title": "Taqvim",
+      "badge": "Yo'nalishda qoling",
+      "subtitle": "O'quv jadvali, suhbatlar va muddatlaringiz.",
+      "month": "Oy",
+      "week": "Hafta",
+      "thisWeek": "Bu hafta",
+      "upcoming": "Yaqinlashayotgan",
+      "noEvents": "Tadbirlar yo'q",
+      "weekdays": {
+        "sun": "Yak",
+        "mon": "Du",
+        "tue": "Se",
+        "wed": "Cho",
+        "thu": "Pay",
+        "fri": "Ju",
+        "sat": "Sha"
+      },
+      "types": {
+        "lesson": "Dars",
+        "interview": "Suhbat",
+        "deadline": "Muddat"
+      }
+    },
+    "salary": {
+      "title": "Maosh tahlili",
+      "badge": "Global maosh ma'lumotlari",
+      "subtitle": "Turli mamlakatlarda kichik, o'rta va katta mutaxassislar maoshlarini solishtiring.",
+      "demand": "Talab darajasi",
+      "growth": "Ish o'sishi",
+      "junior": "Kichik",
+      "mid": "O'rta",
+      "senior": "Katta",
+      "demandLevels": {
+        "veryHigh": "Juda yuqori",
+        "high": "Yuqori",
+        "moderate": "O'rtacha"
+      }
+    },
+    "uni": {
+      "title": "Universitet qidirish",
+      "badge": "Universitetingizni toping",
+      "subtitle": "Dunyodagi eng yaxshi universitetlarni qidiring va o'quv to'lovlari, reyting va stipendiyalarni solishtiring.",
+      "searchPlaceholder": "Nom yoki soha bo'yicha qidiring...",
+      "sortRanking": "Saralash: Reyting",
+      "sortTuition": "Saralash: To'lov",
+      "scholarship": "Stipendiya",
+      "tuitionYr": "O'qish to'lovi / yil",
+      "available": "Mavjud",
+      "requirements": "Talablar:",
+      "visit": "Saytga tashrif buyurish",
+      "noResults": "Filtrlaringizga mos universitetlar topilmadi."
+    },
+    "jobs": {
+      "title": "Ish qidirish",
+      "badge": "Tanlangan imkoniyatlar",
+      "subtitle": "Ko'nikmalaringiz va maqsadlaringizga mos ish o'rinlarini kashf eting.",
+      "searchPlaceholder": "Ish o'rni, kompaniyalarni qidirish...",
+      "apply": "Ariza berish",
+      "noResults": "Filtrlaringizga mos ish topilmadi.",
+      "types": {
+        "fullTime": "To'liq stavka",
+        "contract": "Shartnoma",
+        "internship": "Amaliyot"
+      },
+      "levels": {
+        "junior": "Kichik",
+        "mid": "O'rta",
+        "senior": "Katta"
+      }
+    }
+  }
+}
