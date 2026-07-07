@@ -92,10 +92,10 @@ function DashboardPage() {
   ];
 
   const tasks = [
-    { key: "python", done: false, due: t("dashboard.tasks.today") },
-    { key: "personality", done: false, due: t("dashboard.tasks.tomorrow") },
-    { key: "cv", done: true, due: t("dashboard.tasks.done") },
-    { key: "mock", done: false, due: t("dashboard.tasks.fri") },
+    { key: "python", done: false, due: t("modules.dashboard.tasks.today") },
+    { key: "personality", done: false, due: t("modules.dashboard.tasks.tomorrow") },
+    { key: "cv", done: true, due: t("modules.dashboard.tasks.done") },
+    { key: "mock", done: false, due: t("modules.dashboard.tasks.fri") },
   ];
 
   const achievements = [
@@ -131,18 +131,18 @@ function DashboardPage() {
             <div className="absolute inset-0 gradient-brand opacity-[0.08] pointer-events-none" />
             <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">{t("dashboard.welcomeBack")}</p>
+                <p className="text-sm text-muted-foreground mb-1">{t("modules.dashboard.welcomeBack")}</p>
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
                   {firstName} <span className="inline-block">👋</span>
                 </h1>
                 <p className="mt-2 text-sm text-muted-foreground max-w-md">
-                  {t("dashboard.currentGoal")}:{" "}
-                  <span className="text-foreground font-medium">{t("dashboard.becomeAiEngineer")}</span>
+                  {t("modules.dashboard.currentGoal")}:{" "}
+                  <span className="text-foreground font-medium">{t("modules.dashboard.becomeAiEngineer")}</span>
                 </p>
                 <div className="mt-4 flex items-center gap-3">
                   <div className="flex-1 max-w-xs">
                     <div className="flex items-center justify-between mb-1.5 text-xs">
-                      <span className="text-muted-foreground">{t("dashboard.progress")}</span>
+                      <span className="text-muted-foreground">{t("modules.dashboard.progress")}</span>
                       <span className="font-semibold">68%</span>
                     </div>
                     <Progress value={68} className="h-2" />
@@ -151,21 +151,21 @@ function DashboardPage() {
                 <div className="mt-5 flex items-start gap-2 rounded-xl bg-background/60 border border-border/60 p-3 max-w-lg">
                   <Lightbulb className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
                   <p className="text-xs text-muted-foreground">
-                    <span className="text-foreground font-medium">{t("dashboard.aiTip")}</span>{" "}
-                    {t("dashboard.aiTipText")}
+                    <span className="text-foreground font-medium">{t("modules.dashboard.aiTip")}</span>{" "}
+                    {t("modules.dashboard.aiTipText")}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col gap-2 md:items-end">
                 <Link to="/learning-roadmap">
                   <Button className="rounded-full gradient-brand text-white border-0 hover:opacity-90 shadow-elegant">
-                    {t("dashboard.continueLearning")}
+                    {t("modules.dashboard.continueLearning")}
                     <ArrowUpRight className="h-4 w-4 ml-1" />
                   </Button>
                 </Link>
                 <Link to="/learning-roadmap">
                   <Button variant="outline" className="rounded-full">
-                    {t("dashboard.viewRoadmap")}
+                    {t("modules.dashboard.viewRoadmap")}
                   </Button>
                 </Link>
               </div>
@@ -177,7 +177,7 @@ function DashboardPage() {
               <Card key={s.key} delay={0.05 * i} className="p-4 hover:shadow-glow transition-shadow">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs text-muted-foreground">{t(`dashboard.stats.${s.key}`)}</p>
+                    <p className="text-xs text-muted-foreground">{t(`modules.dashboard.stats.${s.key}`)}</p>
                     <p className="text-2xl font-bold mt-1">{s.value}</p>
                   </div>
                   <div className={`grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br ${s.color} shadow-elegant`}>
@@ -192,10 +192,10 @@ function DashboardPage() {
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-base font-semibold">{t("dashboard.topMatches")}</h2>
-                  <p className="text-xs text-muted-foreground">{t("dashboard.aiPowered")}</p>
+                  <h2 className="text-base font-semibold">{t("modules.dashboard.topMatches")}</h2>
+                  <p className="text-xs text-muted-foreground">{t("modules.dashboard.aiPowered")}</p>
                 </div>
-                <Badge variant="secondary" className="rounded-full">{t("dashboard.updatedToday")}</Badge>
+                <Badge variant="secondary" className="rounded-full">{t("modules.dashboard.updatedToday")}</Badge>
               </div>
               <div className="space-y-3">
                 {careers.map((c, i) => (
@@ -213,7 +213,7 @@ function DashboardPage() {
                       <div className="min-w-0">
                         <p className="text-sm font-semibold truncate">{t(`careers.${c.key}`)}</p>
                         <p className="text-xs text-muted-foreground">
-                          {t("dashboard.avg")} {c.salary} ·{" "}
+                          {t("modules.dashboard.avg")} {c.salary} ·{" "}
                           <span className="text-emerald-500 font-medium">{c.trend}</span>
                         </p>
                       </div>
@@ -229,8 +229,8 @@ function DashboardPage() {
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-base font-semibold">{t("dashboard.learningProgress")}</h2>
-                  <p className="text-xs text-muted-foreground">{t("dashboard.thisSemester")}</p>
+                  <h2 className="text-base font-semibold">{t("modules.dashboard.learningProgress")}</h2>
+                  <p className="text-xs text-muted-foreground">{t("modules.dashboard.thisSemester")}</p>
                 </div>
                 <TrendingUp className="h-4 w-4 text-emerald-500" />
               </div>
@@ -251,12 +251,12 @@ function DashboardPage() {
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-base font-semibold">{t("dashboard.salaryPreview")}</h2>
-                <p className="text-xs text-muted-foreground">{t("dashboard.estimatedFor")}</p>
+                <h2 className="text-base font-semibold">{t("modules.dashboard.salaryPreview")}</h2>
+                <p className="text-xs text-muted-foreground">{t("modules.dashboard.estimatedFor")}</p>
               </div>
               <Link to="/salary-analytics">
                 <Button variant="ghost" size="sm" className="rounded-full">
-                  {t("dashboard.explore")} <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
+                  {t("modules.dashboard.explore")} <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
                 </Button>
               </Link>
             </div>
@@ -274,7 +274,7 @@ function DashboardPage() {
                     <span className="text-sm font-medium">{t(`countries.${s.key}`)}</span>
                   </div>
                   <p className="text-2xl font-bold gradient-text">{s.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{t("dashboard.perYear")}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t("modules.dashboard.perYear")}</p>
                 </motion.div>
               ))}
             </div>
@@ -284,8 +284,8 @@ function DashboardPage() {
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-base font-semibold">{t("dashboard.upcomingTasks")}</h2>
-                  <p className="text-xs text-muted-foreground">{t("dashboard.stayOnTrack")}</p>
+                  <h2 className="text-base font-semibold">{t("modules.dashboard.upcomingTasks")}</h2>
+                  <p className="text-xs text-muted-foreground">{t("modules.dashboard.stayOnTrack")}</p>
                 </div>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Plus className="h-4 w-4" />
@@ -308,7 +308,7 @@ function DashboardPage() {
                           task.done ? "line-through text-muted-foreground" : ""
                         }`}
                       >
-                        {t(`dashboard.tasks.${task.key}`)}
+                        {t(`modules.dashboard.tasks.${task.key}`)}
                       </p>
                     </div>
                     <Badge variant="secondary" className="rounded-full text-xs shrink-0">
@@ -322,11 +322,11 @@ function DashboardPage() {
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-base font-semibold">{t("dashboard.achievements")}</h2>
-                  <p className="text-xs text-muted-foreground">{t("dashboard.badgesEarned")}</p>
+                  <h2 className="text-base font-semibold">{t("modules.dashboard.achievements")}</h2>
+                  <p className="text-xs text-muted-foreground">{t("modules.dashboard.badgesEarned")}</p>
                 </div>
                 <Badge className="rounded-full gradient-brand text-white border-0">
-                  {t("dashboard.level")} 12
+                  {t("modules.dashboard.level")} 12
                 </Badge>
               </div>
               <div className="grid grid-cols-3 gap-3">
@@ -344,7 +344,7 @@ function DashboardPage() {
                       <a.icon className="h-5 w-5 text-white" />
                     </div>
                     <p className="text-xs font-medium truncate w-full">
-                      {t(`dashboard.achievementLabels.${a.key}`)}
+                      {t(`modules.dashboard.achievementLabels.${a.key}`)}
                     </p>
                   </motion.div>
                 ))}
@@ -353,7 +353,7 @@ function DashboardPage() {
           </div>
 
           <Card className="p-6">
-            <h2 className="text-base font-semibold mb-4">{t("dashboard.quickActions")}</h2>
+            <h2 className="text-base font-semibold mb-4">{t("modules.dashboard.quickActions")}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {quickActions.map((q) => (
                 <Link key={q.key} to={q.to}>
@@ -363,7 +363,7 @@ function DashboardPage() {
                     <div className="grid h-9 w-9 place-items-center rounded-xl bg-secondary group-hover:bg-white/20 transition-colors">
                       <q.icon className="h-4 w-4" />
                     </div>
-                    <span className="text-sm font-semibold">{t(`dashboard.quick.${q.key}`)}</span>
+                    <span className="text-sm font-semibold">{t(`modules.dashboard.quick.${q.key}`)}</span>
                   </button>
                 </Link>
               ))}
@@ -375,11 +375,11 @@ function DashboardPage() {
           <Card className="p-6">
             <div className="flex items-center gap-2 mb-3">
               <Target className="h-4 w-4 text-primary" />
-              <h3 className="text-sm font-semibold">{t("dashboard.todaysGoal")}</h3>
+              <h3 className="text-sm font-semibold">{t("modules.dashboard.todaysGoal")}</h3>
             </div>
-            <p className="text-sm text-muted-foreground mb-4">{t("dashboard.todaysGoalDesc")}</p>
+            <p className="text-sm text-muted-foreground mb-4">{t("modules.dashboard.todaysGoalDesc")}</p>
             <div className="flex items-center justify-between mb-2 text-xs">
-              <span className="text-muted-foreground">2 {t("dashboard.ofDone")} 3 {t("dashboard.doneShort")}</span>
+              <span className="text-muted-foreground">2 {t("modules.dashboard.ofDone")} 3 {t("modules.dashboard.doneShort")}</span>
               <span className="font-semibold">66%</span>
             </div>
             <Progress value={66} className="h-2" />
@@ -388,26 +388,26 @@ function DashboardPage() {
           <Card className="p-6 relative overflow-hidden">
             <div className="absolute inset-0 gradient-brand opacity-10 pointer-events-none" />
             <Quote className="h-6 w-6 text-primary mb-3" />
-            <p className="text-sm font-medium leading-relaxed">"{t("dashboard.quote")}"</p>
-            <p className="text-xs text-muted-foreground mt-2">{t("dashboard.quoteAuthor")}</p>
+            <p className="text-sm font-medium leading-relaxed">"{t("modules.dashboard.quote")}"</p>
+            <p className="text-xs text-muted-foreground mt-2">{t("modules.dashboard.quoteAuthor")}</p>
           </Card>
 
           <Card className="p-6">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="h-4 w-4 text-primary" />
-              <h3 className="text-sm font-semibold">{t("dashboard.aiMentorTips")}</h3>
+              <h3 className="text-sm font-semibold">{t("modules.dashboard.aiMentorTips")}</h3>
             </div>
             <ul className="space-y-3">
               {tips.map((k) => (
                 <li key={k} className="flex items-start gap-2 text-sm">
                   <div className="mt-1.5 h-1.5 w-1.5 rounded-full gradient-brand shrink-0" />
-                  <span className="text-muted-foreground">{t(`dashboard.tips.${k}`)}</span>
+                  <span className="text-muted-foreground">{t(`modules.dashboard.tips.${k}`)}</span>
                 </li>
               ))}
             </ul>
             <Link to="/ai-mentor">
               <Button variant="outline" size="sm" className="w-full rounded-full mt-4">
-                {t("dashboard.chatWithMentor")}
+                {t("modules.dashboard.chatWithMentor")}
               </Button>
             </Link>
           </Card>

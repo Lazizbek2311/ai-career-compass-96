@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 export function ThemeToggle() {
+  const { t } = useI18n();
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme" className="rounded-full">
+    <Button variant="ghost" size="icon" onClick={toggle} aria-label={t("app.theme.toggle")} className="rounded-full">
       {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>
   );

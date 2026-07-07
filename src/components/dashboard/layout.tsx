@@ -90,7 +90,7 @@ function Sidebar({
             <button
               className="lg:hidden p-2 rounded-lg hover:bg-accent"
               onClick={onClose}
-              aria-label="Close menu"
+              aria-label={t("app.layout.closeMenu")}
             >
               <X className="h-4 w-4" />
             </button>
@@ -149,7 +149,7 @@ function TopBar({ onMenuClick }: { onMenuClick: () => void }) {
         <button
           className="lg:hidden p-2 rounded-lg hover:bg-accent"
           onClick={onMenuClick}
-          aria-label="Open menu"
+          aria-label={t("app.layout.openMenu")}
         >
           <Menu className="h-5 w-5" />
         </button>

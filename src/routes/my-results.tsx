@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import type { CareerReport } from "@/lib/career.functions";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/my-results")({
   head: () => ({
@@ -86,6 +87,7 @@ function MyResultsPage() {
 }
 
 function EmptyState() {
+  const { t } = useI18n();
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -96,11 +98,10 @@ function EmptyState() {
         <Brain className="h-8 w-8 text-white" />
       </div>
       <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-        No results yet
+        {t("results.noResults")}
       </h1>
       <p className="mt-2 text-muted-foreground max-w-md mx-auto">
-        Complete the AI Career Test and our model will craft a personalized
-        report tailored to your interests, skills, and goals.
+        {t("results.noResultsDesc")}
       </p>
       <Button
         asChild
@@ -108,7 +109,7 @@ function EmptyState() {
         className="mt-6 rounded-full h-12 px-7 gradient-brand text-white border-0 hover:opacity-90 shadow-elegant"
       >
         <Link to="/career-test">
-          <Sparkles className="h-4 w-4 mr-2" /> Take the AI Career Test
+          <Sparkles className="h-4 w-4 mr-2" /> {t("results.takeTest")}
         </Link>
       </Button>
     </motion.div>
@@ -116,6 +117,7 @@ function EmptyState() {
 }
 
 function ReportView({ data }: { data: Stored }) {
+  const { t } = useI18n();
   const { report } = data;
   const top = report.careers[0];
   const printRef = useRef<HTMLDivElement>(null);
@@ -126,7 +128,7 @@ function ReportView({ data }: { data: Stored }) {
   );
 
   const handleDownload = () => {
-    toast.success("Preparing your PDF report…");
+    toast.success(t("results.toastPdf"));
     setTimeout(() => window.print(), 200);
   };
 
@@ -143,7 +145,7 @@ function ReportView({ data }: { data: Stored }) {
         await navigator.clipboard.writeText(
           `${shareData.text} ${shareData.url}`,
         );
-        toast.success("Report link copied to clipboard");
+        toast.success(t("results.toastCopied"));
       }
     } catch {
       /* user cancelled */
@@ -153,9 +155,9 @@ function ReportView({ data }: { data: Stored }) {
   const handleSave = () => {
     try {
       localStorage.setItem("careerai:report", JSON.stringify(data));
-      toast.success("Report saved to your account");
+      toast.success(t("results.toastSaved"));
     } catch {
-      toast.error("Could not save report");
+      toast.error(t("results.toastSaveError"));
     }
   };
 
@@ -171,13 +173,13 @@ function ReportView({ data }: { data: Stored }) {
         <div className="grid gap-6 lg:grid-cols-[1fr_auto] items-center">
           <div>
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-              <Sparkles className="h-3.5 w-3.5" /> AI CAREER REPORT
+              <Sparkles className="h-3.5 w-3.5" /> {t("results.aiReport")}
               <span className="mx-1">•</span>
               <span>{new Date(data.generatedAt).toLocaleDateString()}</span>
             </div>
             <h1 className="mt-2 text-2xl sm:text-4xl font-bold tracking-tight">
-              {data.user.name ? `${data.user.name}, your` : "Your"} best-fit
-              career is <span className="gradient-text">{top.title}</span>
+              {data.user.name ? `${data.user.name}, ` : ""}{t("results.bestFitWith")}{" "}
+              <span className="gradient-text">{top.title}</span>
             </h1>
             <p className="mt-3 text-muted-foreground max-w-3xl">
               {report.summary}
@@ -188,32 +190,32 @@ function ReportView({ data }: { data: Stored }) {
                 className="rounded-full gradient-brand text-white border-0 hover:opacity-90"
               >
                 <Link to="/dashboard">
-                  <Rocket className="h-4 w-4 mr-2" /> Start Learning
+                  <Rocket className="h-4 w-4 mr-2" /> {t("results.startLearning")}
                 </Link>
               </Button>
               <Button asChild variant="outline" className="rounded-full">
-                <Link to="/career-test">Retake test</Link>
+                <Link to="/career-test">{t("results.retakeTest")}</Link>
               </Button>
               <Button
                 variant="outline"
                 className="rounded-full"
                 onClick={handleDownload}
               >
-                <Download className="h-4 w-4 mr-2" /> Download PDF
+                <Download className="h-4 w-4 mr-2" /> {t("results.downloadPdf")}
               </Button>
               <Button
                 variant="outline"
                 className="rounded-full"
                 onClick={handleShare}
               >
-                <Share2 className="h-4 w-4 mr-2" /> Share
+                <Share2 className="h-4 w-4 mr-2" /> {t("results.share")}
               </Button>
               <Button
                 variant="outline"
                 className="rounded-full"
                 onClick={handleSave}
               >
-                <Save className="h-4 w-4 mr-2" /> Save
+                <Save className="h-4 w-4 mr-2" /> {t("results.save")}
               </Button>
             </div>
           </div>
@@ -225,7 +227,7 @@ function ReportView({ data }: { data: Stored }) {
       <div className="grid gap-4 md:grid-cols-2">
         <Panel
           icon={<CheckCircle2 className="h-4 w-4" />}
-          title="Your strengths"
+          title={t("results.strengths")}
           tone="brand"
         >
           <ul className="space-y-2">
@@ -239,7 +241,7 @@ function ReportView({ data }: { data: Stored }) {
         </Panel>
         <Panel
           icon={<AlertTriangle className="h-4 w-4" />}
-          title="Areas to improve"
+          title={t("results.areasToImprove")}
         >
           <ul className="space-y-2">
             {report.weaknesses.map((w) => (
@@ -256,8 +258,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<Trophy className="h-4 w-4 text-white" />}
-          title="Top 5 recommended careers"
-          subtitle="Ranked by AI-calculated compatibility with your profile"
+          title={t("results.top5Title")}
+          subtitle={t("results.top5Sub")}
         />
         <div className="grid gap-4 md:grid-cols-2">
           {report.careers.slice(0, 5).map((c, i) => (
@@ -270,8 +272,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<DollarSign className="h-4 w-4 text-white" />}
-          title="Salary comparison"
-          subtitle="Estimated annual ranges across regions for your top careers"
+          title={t("results.salaryTitle")}
+          subtitle={t("results.salarySub")}
         />
         <SalaryChart careers={report.careers.slice(0, 5)} />
       </section>
@@ -280,8 +282,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<RadarIcon className="h-4 w-4 text-white" />}
-          title="Skills radar"
-          subtitle="Your current skill profile based on the assessment"
+          title={t("results.skillsTitle")}
+          subtitle={t("results.skillsSub")}
         />
         <SkillsRadar
           skills={
@@ -296,8 +298,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<CalendarDays className="h-4 w-4 text-white" />}
-          title="6-month learning roadmap"
-          subtitle={`Month-by-month plan for ${top.title}`}
+          title={t("results.roadmapTitle")}
+          subtitle={`${t("results.roadmapSub")} ${top.title}`}
         />
         <SixMonthRoadmap career={top} />
       </section>
@@ -306,8 +308,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<BookOpen className="h-4 w-4 text-white" />}
-          title="Recommended courses"
-          subtitle="Curated paths to accelerate your top career match"
+          title={t("results.coursesTitle")}
+          subtitle={t("results.coursesSub")}
         />
         <CoursesGrid career={top} />
       </section>
@@ -316,8 +318,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<Activity className="h-4 w-4 text-white" />}
-          title="Improvement plan"
-          subtitle="Target your weak spots with focused exercises"
+          title={t("results.improvTitle")}
+          subtitle={t("results.improvSub")}
         />
         <ImprovementPlan report={report} />
       </section>
@@ -326,8 +328,8 @@ function ReportView({ data }: { data: Stored }) {
       <section className="rounded-3xl border border-border/60 glass p-4 sm:p-6 shadow-elegant">
         <SectionHeader
           icon={<Brain className="h-4 w-4 text-white" />}
-          title="Deep dive per career"
-          subtitle="Full breakdown including majors, skills, and roadmap phases"
+          title={t("results.deepDiveTitle")}
+          subtitle={t("results.deepDiveSub")}
         />
         <Tabs defaultValue="0" className="w-full">
           <TabsList className="w-full h-auto flex-wrap justify-start gap-1 bg-secondary/60 p-1 rounded-2xl">
@@ -378,6 +380,7 @@ function SectionHeader({
 }
 
 function CircularScore({ value }: { value: number }) {
+  const { t } = useI18n();
   const r = 58;
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
@@ -422,7 +425,7 @@ function CircularScore({ value }: { value: number }) {
         <div>
           <div className="text-3xl font-bold gradient-text">{value}%</div>
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-            Career match
+            {t("results.careerMatch")}
           </div>
         </div>
       </div>
@@ -451,8 +454,22 @@ function CareerCard({
   c: CareerReport["careers"][number];
   rank: number;
 }) {
+  const { t } = useI18n();
   const diff = difficultyFromCareer(c);
   const dem = demandLabel(c.demandScore);
+
+  const diffLabelMap: Record<string, string> = {
+    Advanced: t("results.diffAdvanced"),
+    Intermediate: t("results.diffIntermediate"),
+    Beginner: t("results.diffBeginner"),
+  };
+  const demLabelMap: Record<string, string> = {
+    "Very High": t("results.demandVeryHigh"),
+    High: t("results.demandHigh"),
+    Strong: t("results.demandStrong"),
+    Moderate: t("results.demandModerate"),
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -479,7 +496,7 @@ function CareerCard({
             {c.match}%
           </div>
           <div className="text-[9px] uppercase tracking-wider text-muted-foreground">
-            match
+            {t("results.match")}
           </div>
         </div>
       </div>
@@ -489,9 +506,9 @@ function CareerCard({
       </p>
 
       <div className="mt-4 grid grid-cols-3 gap-2 text-[11px]">
-        <MiniStat label="Local" value={shortSalary(c.salary.local)} />
-        <MiniStat label="USA" value={shortSalary(c.salary.usa)} />
-        <MiniStat label="EU" value={shortSalary(c.salary.europe)} />
+        <MiniStat label={t("results.local")} value={shortSalary(c.salary.local)} />
+        <MiniStat label={t("results.usa")} value={shortSalary(c.salary.usa)} />
+        <MiniStat label={t("results.eu")} value={shortSalary(c.salary.europe)} />
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-2 flex-wrap">
@@ -499,10 +516,10 @@ function CareerCard({
           <span
             className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white ${dem.tone}`}
           >
-            <Flame className="h-3 w-3" /> {dem.label}
+            <Flame className="h-3 w-3" /> {demLabelMap[dem.label] ?? dem.label}
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[10px] font-semibold">
-            <Wrench className="h-3 w-3" /> {diff.label}
+            <Wrench className="h-3 w-3" /> {diffLabelMap[diff.label] ?? diff.label}
           </span>
         </div>
         <Button
@@ -510,7 +527,7 @@ function CareerCard({
           variant="ghost"
           className="rounded-full text-xs hover:gradient-brand hover:text-white"
         >
-          Learn more <ChevronRight className="h-3.5 w-3.5 ml-1" />
+          {t("results.learnMore")} <ChevronRight className="h-3.5 w-3.5 ml-1" />
         </Button>
       </div>
     </motion.div>
@@ -551,6 +568,7 @@ function parseSalaryMid(s: string) {
 }
 
 function SalaryChart({ careers }: { careers: CareerReport["careers"] }) {
+  const { t } = useI18n();
   const rows = careers.map((c) => ({
     title: c.title,
     local: parseSalaryMid(c.salary.local),
@@ -572,9 +590,9 @@ function SalaryChart({ careers }: { careers: CareerReport["careers"] }) {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        <Legend color={palette.local} label="Local" />
-        <Legend color={palette.usa} label="USA" />
-        <Legend color={palette.europe} label="Europe" />
+        <Legend color={palette.local} label={t("results.local")} />
+        <Legend color={palette.usa} label={t("results.usa")} />
+        <Legend color={palette.europe} label={t("results.europe")} />
       </div>
       <div className="space-y-4">
         {rows.map((r) => (
@@ -583,21 +601,21 @@ function SalaryChart({ careers }: { careers: CareerReport["careers"] }) {
               <span className="font-semibold">{r.title}</span>
             </div>
             <Bar
-              label="Local"
+              label={t("results.local")}
               value={r.local}
               max={max}
               color={palette.local}
               raw={r.raw.local}
             />
             <Bar
-              label="USA"
+              label={t("results.usa")}
               value={r.usa}
               max={max}
               color={palette.usa}
               raw={r.raw.usa}
             />
             <Bar
-              label="Europe"
+              label={t("results.europe")}
               value={r.europe}
               max={max}
               color={palette.europe}
@@ -780,6 +798,7 @@ function SixMonthRoadmap({
 }: {
   career: CareerReport["careers"][number];
 }) {
+  const { t } = useI18n();
   const months = useMemo(() => buildSixMonths(career), [career]);
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -794,17 +813,17 @@ function SixMonthRoadmap({
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              Month
+              {t("results.month")}
             </span>
             <span className="text-2xl font-bold gradient-text">{i + 1}</span>
           </div>
           <h4 className="mt-1 font-semibold">{m.title}</h4>
           <div className="mt-3 space-y-2.5 text-sm">
-            <RoadmapRow label="Skills" items={m.skills} />
-            <RoadmapRow label="Tech" items={m.tech} />
+            <RoadmapRow label={t("results.skillsLabel")} items={m.skills} />
+            <RoadmapRow label={t("results.tech")} items={m.tech} />
             <div>
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
-                Outcome
+                {t("results.outcome")}
               </div>
               <p className="text-xs text-muted-foreground">{m.outcome}</p>
             </div>
@@ -860,7 +879,22 @@ function buildSixMonths(c: CareerReport["careers"][number]) {
 /* ----- Courses ----- */
 
 function CoursesGrid({ career }: { career: CareerReport["careers"][number] }) {
+  const { t } = useI18n();
   const courses = buildCourses(career);
+
+  const diffLabelMap: Record<string, string> = {
+    Beginner: t("results.diffBeginner"),
+    Intermediate: t("results.diffIntermediate"),
+    Advanced: t("results.diffAdvanced"),
+  };
+  const durLabelMap: Record<string, string> = {
+    "4 weeks": t("results.weeks4"),
+    "6 weeks": t("results.weeks6"),
+    "8 weeks": t("results.weeks8"),
+    "10 weeks": t("results.weeks10"),
+    "12 weeks": t("results.weeks12"),
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {courses.map((co, i) => (
@@ -877,16 +911,16 @@ function CoursesGrid({ career }: { career: CareerReport["careers"][number] }) {
               {co.platform}
             </span>
             <span className="text-[10px] text-muted-foreground">
-              {co.duration}
+              {durLabelMap[co.duration] ?? co.duration}
             </span>
           </div>
           <h4 className="mt-3 font-semibold leading-tight">{co.title}</h4>
           <div className="mt-1 text-[11px] text-muted-foreground">
-            {co.difficulty}
+            {diffLabelMap[co.difficulty] ?? co.difficulty}
           </div>
           <div className="mt-4">
             <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
-              <span>Progress</span>
+              <span>{t("results.progress")}</span>
               <span>{co.progress}%</span>
             </div>
             <Progress value={co.progress} className="h-1.5" />
@@ -895,7 +929,7 @@ function CoursesGrid({ career }: { career: CareerReport["careers"][number] }) {
             size="sm"
             className="mt-4 w-full rounded-full gradient-brand text-white border-0 hover:opacity-90"
           >
-            <PlayCircle className="h-3.5 w-3.5 mr-1.5" /> Start Learning
+            <PlayCircle className="h-3.5 w-3.5 mr-1.5" /> {t("results.startLearning")}
           </Button>
         </motion.div>
       ))}
@@ -919,14 +953,17 @@ function buildCourses(c: CareerReport["careers"][number]) {
 /* ----- Improvement Plan ----- */
 
 function ImprovementPlan({ report }: { report: CareerReport }) {
+  const { t } = useI18n();
+  const etaKeys = ["weeks2", "weeks4", "weeks6", "weeks8", "weeks12"] as const;
+
   const items = report.weaknesses.slice(0, 5).map((w, i) => ({
     weakness: w,
     exercises: [
-      `Daily 20-minute deliberate practice targeting ${shortText(w, 28)}`,
-      `Weekly project applying ${report.careers[0].technicalSkills[i % report.careers[0].technicalSkills.length]}`,
-      `Bi-weekly review session with a peer or mentor`,
+      `${t("results.exerciseDaily")} ${shortText(w, 28)}`,
+      `${t("results.exerciseWeekly")} ${report.careers[0].technicalSkills[i % report.careers[0].technicalSkills.length]}`,
+      t("results.exerciseBiweekly"),
     ],
-    eta: ["2 weeks", "4 weeks", "6 weeks", "8 weeks", "12 weeks"][i % 5],
+    eta: t(`results.${etaKeys[i % 5]}`),
   }));
 
   return (
@@ -951,7 +988,7 @@ function ImprovementPlan({ report }: { report: CareerReport }) {
             ))}
           </ul>
           <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold">
-            <CalendarDays className="h-3 w-3" /> Estimated improvement: {it.eta}
+            <CalendarDays className="h-3 w-3" /> {t("results.estimatedImprovement")} {it.eta}
           </div>
         </div>
       ))}
@@ -966,6 +1003,7 @@ function shortText(s: string, n: number) {
 /* ----- Career Detail (preserved) ----- */
 
 function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
+  const { t } = useI18n();
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-border/60 bg-card/50 p-5">
@@ -979,7 +1017,7 @@ function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
           <div className="text-right">
             <div className="text-3xl font-bold gradient-text">{c.match}%</div>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-              match
+              {t("results.match")}
             </div>
           </div>
         </div>
@@ -991,7 +1029,7 @@ function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
       <div className="grid gap-4 md:grid-cols-2">
         <Panel
           icon={<GraduationCap className="h-4 w-4" />}
-          title="Recommended university majors"
+          title={t("results.universityMajors")}
         >
           <div className="flex flex-wrap gap-2">
             {c.universityMajors.map((m) => (
@@ -1007,19 +1045,19 @@ function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
 
         <Panel
           icon={<TrendingUp className="h-4 w-4" />}
-          title="Future demand"
+          title={t("results.futureDemand")}
           tone="brand"
         >
           <p className="text-sm text-muted-foreground">{c.futureDemand}</p>
           <div className="mt-3">
             <Progress value={c.demandScore} className="h-2" />
             <div className="mt-1 text-[10px] text-muted-foreground">
-              Demand score: {c.demandScore}/100
+              {t("results.demandScore")} {c.demandScore}/100
             </div>
           </div>
         </Panel>
 
-        <Panel icon={<Wrench className="h-4 w-4" />} title="Technical skills">
+        <Panel icon={<Wrench className="h-4 w-4" />} title={t("results.technicalSkills")}>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {c.technicalSkills.map((s) => (
               <li key={s} className="text-sm flex gap-2">
@@ -1032,7 +1070,7 @@ function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
 
         <Panel
           icon={<HeartHandshake className="h-4 w-4" />}
-          title="Soft skills"
+          title={t("results.softSkills")}
         >
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {c.softSkills.map((s) => (
@@ -1045,17 +1083,17 @@ function CareerDetail({ c }: { c: CareerReport["careers"][number] }) {
         </Panel>
       </div>
 
-      <Panel icon={<DollarSign className="h-4 w-4" />} title="Salary ranges">
+      <Panel icon={<DollarSign className="h-4 w-4" />} title={t("results.salaryRanges")}>
         <div className="grid gap-3 sm:grid-cols-3">
-          <SalaryCard label="Local" value={c.salary.local} />
-          <SalaryCard label="USA" value={c.salary.usa} />
-          <SalaryCard label="Europe" value={c.salary.europe} />
+          <SalaryCard label={t("results.local")} value={c.salary.local} />
+          <SalaryCard label={t("results.usa")} value={c.salary.usa} />
+          <SalaryCard label={t("results.europe")} value={c.salary.europe} />
         </div>
       </Panel>
 
       <Panel
         icon={<MapIcon className="h-4 w-4" />}
-        title="Personalized learning roadmap"
+        title={t("results.learningRoadmap")}
       >
         <ol className="relative border-l border-border/60 ml-2 space-y-5">
           {c.roadmap.map((p, idx) => (

@@ -56,13 +56,13 @@ function UniPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
-          <Badge className="rounded-full">{t("uni.badge")}</Badge>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.universities.title")}</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">{t("uni.subtitle")}</p>
+          <Badge className="rounded-full">{t("modules.uni.badge")}</Badge>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("modules.uni.title")}</h1>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{t("modules.uni.subtitle")}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-4">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("uni.searchPlaceholder")} className="pl-9 rounded-full" />
+              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("modules.uni.searchPlaceholder")} className="pl-9 rounded-full" />
             </div>
             <Select value={country} onValueChange={setCountry}>
               <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
@@ -75,15 +75,15 @@ function UniPage() {
             <Select value={sort} onValueChange={setSort}>
               <SelectTrigger className="rounded-full"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="ranking">{t("uni.sortRanking")}</SelectItem>
-                <SelectItem value="tuition">{t("uni.sortTuition")}</SelectItem>
+                <SelectItem value="ranking">{t("modules.uni.sortRanking")}</SelectItem>
+                <SelectItem value="tuition">{t("modules.uni.sortTuition")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="mt-3 flex gap-2">
             {["All", "Yes", "No"].map((s) => (
               <Button key={s} size="sm" variant={scholar === s ? "default" : "outline"} className="rounded-full" onClick={() => setScholar(s)}>
-                {t("uni.scholarship")}: {scholarLabel(s)}
+                {t("modules.uni.scholarship")}: {scholarLabel(s)}
               </Button>
             ))}
           </div>
@@ -106,21 +106,21 @@ function UniPage() {
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div className="glass rounded-xl p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase">{t("uni.tuitionYr")}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase">{t("modules.uni.tuitionYr")}</p>
                   <p className="font-bold flex items-center gap-1"><DollarSign className="h-3.5 w-3.5" />{u.tuition === 0 ? t("common.free") : `$${u.tuition.toLocaleString()}`}</p>
                 </div>
                 <div className="glass rounded-xl p-3">
-                  <p className="text-[10px] text-muted-foreground uppercase">{t("uni.scholarship")}</p>
-                  <p className="font-bold flex items-center gap-1"><Award className="h-3.5 w-3.5" />{u.scholarship ? t("uni.available") : "—"}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase">{t("modules.uni.scholarship")}</p>
+                  <p className="font-bold flex items-center gap-1"><Award className="h-3.5 w-3.5" />{u.scholarship ? t("modules.uni.available") : "—"}</p>
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-3"><span className="font-semibold text-foreground">{t("uni.requirements")}</span> {u.requirements}</p>
+              <p className="text-xs text-muted-foreground mt-3"><span className="font-semibold text-foreground">{t("modules.uni.requirements")}</span> {u.requirements}</p>
               <Button asChild size="sm" className="mt-4 rounded-full gradient-brand text-white border-0 w-full">
-                <a href={u.url} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5 mr-1.5" />{t("uni.visit")}</a>
+                <a href={u.url} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5 mr-1.5" />{t("modules.uni.visit")}</a>
               </Button>
             </motion.div>
           ))}
-          {filtered.length === 0 && <p className="text-center text-muted-foreground col-span-full py-12">{t("uni.noResults")}</p>}
+          {filtered.length === 0 && <p className="text-center text-muted-foreground col-span-full py-12">{t("modules.uni.noResults")}</p>}
         </div>
       </div>
     </DashboardLayout>

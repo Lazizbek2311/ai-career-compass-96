@@ -1,0 +1,201 @@
+{
+  "modules": {
+    "dashboard": {
+      "welcomeBack": "Welcome back",
+      "currentGoal": "Current goal",
+      "becomeAiEngineer": "Become an AI Engineer",
+      "progress": "Progress",
+      "aiTip": "AI Tip:",
+      "aiTipText": "Focus on completing the Python module this week to unlock the ML roadmap.",
+      "continueLearning": "Continue Learning",
+      "viewRoadmap": "View Roadmap",
+      "todaysGoal": "Today's Goal",
+      "todaysGoalDesc": "Complete 2 Python lessons and finish your weekly AI challenge.",
+      "ofDone": "of",
+      "doneShort": "done",
+      "stats": {
+        "careerMatch": "Career Match",
+        "lessonsDone": "Lessons Done",
+        "skillsLearned": "Skills Learned",
+        "aiSessions": "AI Sessions",
+        "certificates": "Certificates",
+        "dailyStreak": "Daily Streak"
+      },
+      "topMatches": "Top Career Matches",
+      "aiPowered": "AI-powered recommendations",
+      "updatedToday": "Updated today",
+      "avg": "Avg",
+      "learningProgress": "Learning Progress",
+      "thisSemester": "This semester",
+      "salaryPreview": "Salary Preview",
+      "estimatedFor": "Estimated for AI Engineer role",
+      "explore": "Explore",
+      "perYear": "per year",
+      "upcomingTasks": "Upcoming Tasks",
+      "stayOnTrack": "Stay on track",
+      "achievements": "Achievements",
+      "badgesEarned": "Badges you've earned",
+      "level": "Level",
+      "quickActions": "Quick Actions",
+      "aiMentorTips": "AI Mentor Tips",
+      "tips": {
+        "t1": "Practice 30 minutes of coding daily.",
+        "t2": "Build one mini-project this week.",
+        "t3": "Connect with 3 AI engineers on LinkedIn."
+      },
+      "chatWithMentor": "Chat with AI Mentor",
+      "quote": "The future depends on what you do today.",
+      "quoteAuthor": "— Mahatma Gandhi",
+      "tasks": {
+        "python": "Finish Python Lesson 12",
+        "personality": "Complete AI Personality Test",
+        "cv": "Update CV with new project",
+        "mock": "Practice mock interview",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "done": "Done",
+        "fri": "Fri"
+      },
+      "achievementLabels": {
+        "fastLearner": "Fast Learner",
+        "aiPioneer": "AI Pioneer",
+        "streakMaster": "Streak Master",
+        "top1": "Top 1%",
+        "mentor": "Mentor",
+        "certified": "Certified"
+      },
+      "quick": {
+        "startTest": "Start AI Test",
+        "continueLearning": "Continue Learning",
+        "askAi": "Ask AI",
+        "buildCv": "Build CV"
+      }
+    },
+    "mentor": {
+      "title": "AI Mentor",
+      "subtitle": "Your personal career & learning coach",
+      "newChat": "New chat",
+      "history": "History",
+      "clear": "Clear",
+      "new": "New",
+      "deleteChat": "Delete chat",
+      "emptyTitle": "How can I help you today?",
+      "emptyDesc": "Ask anything about careers, learning, interviews, salaries, universities, jobs, or code.",
+      "inputPlaceholder": "Ask anything about your career, learning, interviews…",
+      "stop": "Stop",
+      "send": "Send",
+      "disclaimer": "AI Mentor can make mistakes. Verify important info.",
+      "regenerate": "Regenerate",
+      "copyFail": "Copy failed",
+      "chatError": "Chat error",
+      "groups": {
+        "career": "Career",
+        "learning": "Learning",
+        "interview": "Interview",
+        "resume": "Resume",
+        "salary": "Salary",
+        "university": "University",
+        "jobs": "Jobs",
+        "code": "Code"
+      },
+      "suggested": {
+        "career": "Which career fits a curious problem-solver?",
+        "learning": "Build me a 3-month Python learning roadmap",
+        "interview": "Ask me 5 behavioral interview questions and grade my answers",
+        "resume": "Review and improve my resume bullet points",
+        "salary": "Compare AI Engineer salaries in Uzbekistan, USA, Germany",
+        "university": "Best majors for someone who loves data and design",
+        "jobs": "How do I land my first junior developer job?",
+        "code": "Show a clean React debounce hook with explanation"
+      }
+    },
+    "achievements": {
+      "title": "Achievements",
+      "badge": "Your Journey",
+      "subtitle": "Earn badges as you progress along your career path.",
+      "earned": "Earned",
+      "certificates": "Certificates",
+      "badges": {
+        "firstTest": { "name": "First Test", "desc": "Completed your first AI Career Test" },
+        "learner": { "name": "Curious Learner", "desc": "Completed 5 lessons" },
+        "streak7": { "name": "7-Day Streak", "desc": "Studied 7 days in a row" },
+        "goal": { "name": "Goal Setter", "desc": "Set your career goal" },
+        "chat": { "name": "AI Conversationalist", "desc": "Chat 10 times with AI Mentor" },
+        "resume": { "name": "Resume Pro", "desc": "ATS score above 85" },
+        "interview": { "name": "Interview Ace", "desc": "Score 90+ on mock interview" },
+        "streak30": { "name": "30-Day Streak", "desc": "Study for 30 days straight" }
+      }
+    },
+    "calendar": {
+      "title": "Calendar",
+      "badge": "Stay on Track",
+      "subtitle": "Your learning schedule, interviews and deadlines.",
+      "month": "Month",
+      "week": "Week",
+      "thisWeek": "This Week",
+      "upcoming": "Upcoming",
+      "noEvents": "No events",
+      "weekdays": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      },
+      "types": {
+        "lesson": "Lesson",
+        "interview": "Interview",
+        "deadline": "Deadline"
+      }
+    },
+    "salary": {
+      "title": "Salary Analytics",
+      "badge": "Global Salary Insights",
+      "subtitle": "Compare junior, mid and senior compensation across countries.",
+      "demand": "Demand Level",
+      "growth": "Job Growth",
+      "junior": "Junior",
+      "mid": "Mid",
+      "senior": "Senior",
+      "demandLevels": {
+        "veryHigh": "Very High",
+        "high": "High",
+        "moderate": "Moderate"
+      }
+    },
+    "uni": {
+      "title": "University Finder",
+      "badge": "Find Your University",
+      "subtitle": "Search top universities worldwide and compare tuition, ranking and scholarships.",
+      "searchPlaceholder": "Search by name or field...",
+      "sortRanking": "Sort: Ranking",
+      "sortTuition": "Sort: Tuition",
+      "scholarship": "Scholarship",
+      "tuitionYr": "Tuition / yr",
+      "available": "Available",
+      "requirements": "Requirements:",
+      "visit": "Visit Website",
+      "noResults": "No universities match your filters."
+    },
+    "jobs": {
+      "title": "Job Finder",
+      "badge": "Curated Opportunities",
+      "subtitle": "Discover roles that match your skills and ambitions.",
+      "searchPlaceholder": "Search jobs, companies...",
+      "apply": "Apply",
+      "noResults": "No jobs match your filters.",
+      "types": {
+        "fullTime": "Full-time",
+        "contract": "Contract",
+        "internship": "Internship"
+      },
+      "levels": {
+        "junior": "Junior",
+        "mid": "Mid",
+        "senior": "Senior"
+      }
+    }
+  }
+}

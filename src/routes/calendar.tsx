@@ -61,13 +61,13 @@ function CalPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">{t("pages.calendar.badge")}</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.calendar.title")}</h1>
-              <p className="mt-2 text-muted-foreground">{t("pages.calendar.subtitle")}</p>
+              <Badge className="rounded-full">{t("modules.calendar.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("modules.calendar.title")}</h1>
+              <p className="mt-2 text-muted-foreground">{t("modules.calendar.subtitle")}</p>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>{t("pages.calendar.month")}</Button>
-              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>{t("pages.calendar.week")}</Button>
+              <Button size="sm" variant={view === "month" ? "default" : "outline"} className="rounded-full" onClick={() => setView("month")}>{t("modules.calendar.month")}</Button>
+              <Button size="sm" variant={view === "week" ? "default" : "outline"} className="rounded-full" onClick={() => setView("week")}>{t("modules.calendar.week")}</Button>
             </div>
           </div>
         </motion.div>
@@ -82,7 +82,7 @@ function CalPage() {
                   <Button size="icon" variant="ghost" className="rounded-full" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}><ChevronRight className="h-4 w-4" /></Button>
                 </div>
                 <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-muted-foreground uppercase mb-2">
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => <div key={d}>{d}</div>)}
+                  {(["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const).map((d) => <div key={d}>{t(`modules.calendar.weekdays.${d}`)}</div>)}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
                   {grid.map((d, i) => {
@@ -103,14 +103,14 @@ function CalPage() {
               </>
             ) : (
               <div className="space-y-2">
-                <h2 className="font-bold mb-3">{t("pages.calendar.thisWeek")}</h2>
+                <h2 className="font-bold mb-3">{t("modules.calendar.thisWeek")}</h2>
                 {weekDates.map((d) => {
                   const key = iso(d);
                   const evs = EVENTS.filter((e) => e.date === key);
                   return (
                     <div key={key} className="rounded-2xl border border-border/60 p-3 bg-card/40">
                       <p className="text-xs font-semibold">{d.toLocaleDateString("en", { weekday: "long", month: "short", day: "numeric" })}</p>
-                      {evs.length === 0 && <p className="text-xs text-muted-foreground mt-1">{t("pages.calendar.noEvents")}</p>}
+                      {evs.length === 0 && <p className="text-xs text-muted-foreground mt-1">{t("modules.calendar.noEvents")}</p>}
                       {evs.map((e, i) => <Badge key={i} variant="secondary" className={`mt-2 mr-2 rounded-full ${TYPE_COLOR[e.type]}`}>{e.title}</Badge>)}
                     </div>
                   );
@@ -120,13 +120,13 @@ function CalPage() {
           </div>
 
           <div className="glass rounded-3xl p-6 shadow-elegant">
-            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />{t("pages.calendar.upcoming")}</h2>
+            <h2 className="font-bold mb-3 flex items-center gap-2"><CalIcon className="h-4 w-4" />{t("modules.calendar.upcoming")}</h2>
             <div className="space-y-2">
               {EVENTS.slice(0, 6).map((e, i) => (
                 <div key={i} className="rounded-2xl border border-border/60 bg-card/50 p-3">
                   <div className="flex items-center justify-between gap-2">
                     <p className="text-sm font-semibold truncate">{e.title}</p>
-                    <Badge variant="secondary" className={`rounded-full text-[10px] ${TYPE_COLOR[e.type]}`}>{e.type}</Badge>
+                    <Badge variant="secondary" className={`rounded-full text-[10px] ${TYPE_COLOR[e.type]}`}>{t(`modules.calendar.types.${e.type}`)}</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1"><Clock className="h-3 w-3" />{e.date}</p>
                 </div>

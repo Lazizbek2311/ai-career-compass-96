@@ -1,0 +1,43 @@
+{
+  "app": {
+    "root": {
+      "notFound": "Page not found",
+      "notFoundDesc": "The page you're looking for doesn't exist or has been moved.",
+      "goHome": "Go home",
+      "errorTitle": "This page didn't load",
+      "errorDesc": "Something went wrong on our end. You can try refreshing or head back home.",
+      "tryAgain": "Try again"
+    },
+    "theme": {
+      "toggle": "Toggle theme"
+    },
+    "layout": {
+      "closeMenu": "Close menu",
+      "openMenu": "Open menu"
+    },
+    "cv": {
+      "title": "CV Builder"
+    },
+    "roadmap": {
+      "title": "Learning Roadmap"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "login": {
+      "title": "Login"
+    },
+    "nav": {},
+    "hero": {},
+    "features": {},
+    "how": {},
+    "testimonials": {},
+    "faq": {},
+    "cta": {},
+    "footer": {},
+    "stats": {}
+  }
+}

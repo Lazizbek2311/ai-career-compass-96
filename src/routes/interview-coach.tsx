@@ -31,6 +31,7 @@ import {
   type Evaluation,
   type FinalReport,
 } from "@/lib/interview.functions";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/interview-coach")({
   head: () => ({
@@ -48,7 +49,6 @@ export const Route = createFileRoute("/interview-coach")({
 
 type Difficulty = "beginner" | "intermediate" | "advanced";
 type Type = "hr" | "technical" | "behavioral";
-
 type Stage = "setup" | "interview" | "report";
 
 type Round = {
@@ -57,21 +57,22 @@ type Round = {
   evaluation: Evaluation | null;
 };
 
-const DIFFICULTIES: { id: Difficulty; label: string; desc: string; gradient: string }[] = [
-  { id: "beginner", label: "Beginner", desc: "Friendly pace, foundational depth.", gradient: "from-emerald-500/20 to-teal-500/20" },
-  { id: "intermediate", label: "Intermediate", desc: "Realistic role-level scenarios.", gradient: "from-blue-500/20 to-indigo-500/20" },
-  { id: "advanced", label: "Advanced", desc: "Senior-level depth & follow-ups.", gradient: "from-fuchsia-500/20 to-rose-500/20" },
+const DIFFICULTIES: { id: Difficulty; gradient: string }[] = [
+  { id: "beginner", gradient: "from-emerald-500/20 to-teal-500/20" },
+  { id: "intermediate", gradient: "from-blue-500/20 to-indigo-500/20" },
+  { id: "advanced", gradient: "from-fuchsia-500/20 to-rose-500/20" },
 ];
 
-const TYPES: { id: Type; label: string; desc: string; icon: typeof Brain }[] = [
-  { id: "hr", label: "HR", desc: "Motivation, fit, and culture.", icon: MessageCircle },
-  { id: "technical", label: "Technical", desc: "Role-specific knowledge & problem solving.", icon: Brain },
-  { id: "behavioral", label: "Behavioral", desc: "STAR situations & soft skills.", icon: GraduationCap },
+const TYPES: { id: Type; icon: typeof Brain }[] = [
+  { id: "hr", icon: MessageCircle },
+  { id: "technical", icon: Brain },
+  { id: "behavioral", icon: GraduationCap },
 ];
 
 const TIME_LIMITS: Record<Difficulty, number> = { beginner: 120, intermediate: 90, advanced: 60 };
 
 function InterviewCoachPage() {
+  const { t } = useI18n();
   const generate = useServerFn(generateQuestions);
   const evaluate = useServerFn(evaluateAnswer);
   const finalize = useServerFn(finalizeInterview);
@@ -105,12 +106,9 @@ function InterviewCoachPage() {
     clearTimer();
     setTimeLeft(timeLimit);
     timerRef.current = setInterval(() => {
-      setTimeLeft((t) => {
-        if (t <= 1) {
-          clearTimer();
-          return 0;
-        }
-        return t - 1;
+      setTimeLeft((prev) => {
+        if (prev <= 1) { clearTimer(); return 0; }
+        return prev - 1;
       });
     }, 1000);
   }
@@ -124,9 +122,9 @@ function InterviewCoachPage() {
       setAnswer("");
       setStage("interview");
       startTimer();
-      if (res.source === "fallback") toast.warning("Using offline question bank");
+      if (res.source === "fallback") toast.warning(t("interview.toastFallback"));
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to start interview");
+      toast.error(e instanceof Error ? e.message : t("interview.toastStartFail"));
     } finally {
       setLoading(false);
     }
@@ -148,17 +146,14 @@ function InterviewCoachPage() {
         return next;
       });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Evaluation failed");
+      toast.error(e instanceof Error ? e.message : t("interview.toastEvalFail"));
     } finally {
       setSubmitting(false);
     }
   }
 
   function handleNext() {
-    if (currentIdx + 1 >= rounds.length) {
-      void doFinalize();
-      return;
-    }
+    if (currentIdx + 1 >= rounds.length) { void doFinalize(); return; }
     setCurrentIdx((i) => i + 1);
     setAnswer("");
     startTimer();
@@ -177,7 +172,7 @@ function InterviewCoachPage() {
       setFinalReport(res);
       setStage("report");
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to build report");
+      toast.error(e instanceof Error ? e.message : t("interview.toastReportFail"));
     } finally {
       setFinalizing(false);
     }
@@ -192,6 +187,17 @@ function InterviewCoachPage() {
     setFinalReport(null);
   }
 
+  const diffKeys: Record<Difficulty, [string, string]> = {
+    beginner: ["interview.difficultyBeginner", "interview.difficultyBeginnerDesc"],
+    intermediate: ["interview.difficultyIntermediate", "interview.difficultyIntermediateDesc"],
+    advanced: ["interview.difficultyAdvanced", "interview.difficultyAdvancedDesc"],
+  };
+  const typeKeys: Record<Type, [string, string]> = {
+    hr: ["interview.typeHR", "interview.typeHRDesc"],
+    technical: ["interview.typeTechnical", "interview.typeTechnicalDesc"],
+    behavioral: ["interview.typeBehavioral", "interview.typeBehavioralDesc"],
+  };
+
   return (
     <DashboardLayout>
       <div className="max-w-6xl mx-auto space-y-8">
@@ -204,15 +210,12 @@ function InterviewCoachPage() {
           <div className="relative flex flex-col lg:flex-row lg:items-center gap-6">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <Sparkles className="h-3.5 w-3.5" /> AI Interview Coach
+                <Sparkles className="h-3.5 w-3.5" /> {t("interview.badge")}
               </div>
               <h1 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight">
-                Train like it's the <span className="gradient-text">real interview</span>
+                {t("interview.heading")} <span className="gradient-text">{t("interview.headingHighlight")}</span>
               </h1>
-              <p className="mt-2 text-muted-foreground max-w-xl">
-                Pick a type and difficulty. Get realistic questions, instant scoring,
-                confidence read-out, and a final report with weak/strong skills and learning suggestions.
-              </p>
+              <p className="mt-2 text-muted-foreground max-w-xl">{t("interview.subheading")}</p>
             </div>
             <div className="grid h-20 w-20 place-items-center rounded-3xl gradient-brand shadow-glow shrink-0">
               <Mic className="h-9 w-9 text-white" />
@@ -222,22 +225,23 @@ function InterviewCoachPage() {
 
         <AnimatePresence mode="wait">
           {stage === "setup" && (
-            <motion.div
-              key="setup"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="space-y-6"
-            >
-              <SectionCard title="1. Choose interview type">
+            <motion.div key="setup" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+              <SectionCard title={t("interview.section1")}>
                 <div className="grid sm:grid-cols-3 gap-3">
-                  {TYPES.map((t) => (
-                    <PickCard key={t.id} active={type === t.id} onClick={() => setType(t.id)} label={t.label} desc={t.desc} Icon={t.icon} />
+                  {TYPES.map((typeItem) => (
+                    <PickCard
+                      key={typeItem.id}
+                      active={type === typeItem.id}
+                      onClick={() => setType(typeItem.id)}
+                      label={t(typeKeys[typeItem.id][0])}
+                      desc={t(typeKeys[typeItem.id][1])}
+                      Icon={typeItem.icon}
+                    />
                   ))}
                 </div>
               </SectionCard>
 
-              <SectionCard title="2. Choose difficulty">
+              <SectionCard title={t("interview.section2")}>
                 <div className="grid sm:grid-cols-3 gap-3">
                   {DIFFICULTIES.map((d) => (
                     <button
@@ -249,21 +253,21 @@ function InterviewCoachPage() {
                           : "border-border/60 hover:border-primary/40"
                       }`}
                     >
-                      <div className="text-sm font-semibold">{d.label}</div>
-                      <div className="text-xs text-muted-foreground mt-0.5">{d.desc}</div>
+                      <div className="text-sm font-semibold">{t(diffKeys[d.id][0])}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">{t(diffKeys[d.id][1])}</div>
                       <div className="mt-2 text-[11px] text-muted-foreground">
-                        Time per question: {TIME_LIMITS[d.id]}s
+                        {t("interview.timePerQuestion")} {TIME_LIMITS[d.id]}{t("interview.timeUnit")}
                       </div>
                     </button>
                   ))}
                 </div>
               </SectionCard>
 
-              <SectionCard title="3. Target role (optional)">
+              <SectionCard title={t("interview.section3")}>
                 <Input
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  placeholder="e.g. Backend Engineer, Product Manager"
+                  placeholder={t("interview.rolePlaceholder")}
                   className="rounded-full bg-secondary/60 border-border/60"
                 />
                 <div className="mt-5 flex justify-end">
@@ -273,13 +277,9 @@ function InterviewCoachPage() {
                     className="h-11 rounded-full gradient-brand text-white border-0 hover:opacity-90 px-6"
                   >
                     {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Preparing...
-                      </>
+                      <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("interview.preparing")}</>
                     ) : (
-                      <>
-                        Start mock interview <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
+                      <>{t("interview.startBtn")} <ArrowRight className="ml-2 h-4 w-4" /></>
                     )}
                   </Button>
                 </div>
@@ -325,26 +325,12 @@ function SectionCard({ title, children }: { title: string; children: React.React
   );
 }
 
-function PickCard({
-  active,
-  onClick,
-  label,
-  desc,
-  Icon,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-  desc: string;
-  Icon: typeof Brain;
-}) {
+function PickCard({ active, onClick, label, desc, Icon }: { active: boolean; onClick: () => void; label: string; desc: string; Icon: typeof Brain }) {
   return (
     <button
       onClick={onClick}
       className={`text-left rounded-2xl p-4 border transition-all ${
-        active
-          ? "border-primary/60 bg-accent/60 shadow-elegant scale-[1.01]"
-          : "border-border/60 bg-accent/20 hover:bg-accent/40"
+        active ? "border-primary/60 bg-accent/60 shadow-elegant scale-[1.01]" : "border-border/60 bg-accent/20 hover:bg-accent/40"
       }`}
     >
       <div className="grid h-9 w-9 place-items-center rounded-xl gradient-brand text-white">
@@ -357,30 +343,14 @@ function PickCard({
 }
 
 function InterviewStage({
-  rounds,
-  currentIdx,
-  answer,
-  setAnswer,
-  timeLeft,
-  timeLimit,
-  onSubmit,
-  onNext,
-  submitting,
-  finalizing,
-  onCancel,
+  rounds, currentIdx, answer, setAnswer, timeLeft, timeLimit,
+  onSubmit, onNext, submitting, finalizing, onCancel,
 }: {
-  rounds: Round[];
-  currentIdx: number;
-  answer: string;
-  setAnswer: (v: string) => void;
-  timeLeft: number;
-  timeLimit: number;
-  onSubmit: () => void;
-  onNext: () => void;
-  submitting: boolean;
-  finalizing: boolean;
-  onCancel: () => void;
+  rounds: Round[]; currentIdx: number; answer: string; setAnswer: (v: string) => void;
+  timeLeft: number; timeLimit: number; onSubmit: () => void; onNext: () => void;
+  submitting: boolean; finalizing: boolean; onCancel: () => void;
 }) {
+  const { t } = useI18n();
   const current = rounds[currentIdx];
   const progress = useMemo(
     () => ((currentIdx + (current?.evaluation ? 1 : 0)) / rounds.length) * 100,
@@ -393,13 +363,12 @@ function InterviewStage({
       <div className="rounded-3xl glass p-6 shadow-elegant">
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Question {currentIdx + 1} of {rounds.length}
+            {t("interview.question")} {currentIdx + 1} {t("interview.of")} {rounds.length}
           </div>
           <div className="flex items-center gap-2 text-sm font-semibold">
             <Timer className="h-4 w-4" />
             <span className={timeLeft < 15 ? "text-destructive" : ""}>
-              {String(Math.floor(timeLeft / 60)).padStart(1, "0")}:
-              {String(timeLeft % 60).padStart(2, "0")}
+              {String(Math.floor(timeLeft / 60)).padStart(1, "0")}:{String(timeLeft % 60).padStart(2, "0")}
             </span>
           </div>
         </div>
@@ -411,74 +380,53 @@ function InterviewStage({
             <textarea
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Type your answer here. Be specific and structured (e.g. STAR)."
+              placeholder={t("interview.answerPlaceholder")}
               rows={7}
               className="mt-4 w-full rounded-2xl bg-secondary/60 border border-border/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring/40"
             />
             <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-              <span>Time per answer: {timeLimit}s • Aim for clear, structured responses.</span>
-              <span>{answer.trim().split(/\s+/).filter(Boolean).length} words</span>
+              <span>{t("interview.timePerAnswerPrefix")} {timeLimit}{t("interview.timeUnit")} {t("interview.timePerAnswerSuffix")}</span>
+              <span>{answer.trim().split(/\s+/).filter(Boolean).length} {t("interview.words")}</span>
             </div>
             <div className="mt-5 flex flex-wrap gap-2 justify-end">
               <Button variant="ghost" className="rounded-full" onClick={onCancel}>
-                Cancel
+                {t("interview.cancel")}
               </Button>
-              <Button
-                onClick={onSubmit}
-                disabled={submitting}
-                className="h-11 rounded-full gradient-brand text-white border-0 hover:opacity-90 px-6"
-              >
+              <Button onClick={onSubmit} disabled={submitting} className="h-11 rounded-full gradient-brand text-white border-0 hover:opacity-90 px-6">
                 {submitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Evaluating...
-                  </>
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("interview.evaluating")}</>
                 ) : (
-                  <>Submit answer</>
+                  <>{t("interview.submitAnswer")}</>
                 )}
               </Button>
             </div>
           </>
         ) : (
-          <EvaluationView
-            evaluation={current.evaluation}
-            answer={current.answer}
-            isLast={isLast}
-            finalizing={finalizing}
-            onNext={onNext}
-          />
+          <EvaluationView evaluation={current.evaluation} answer={current.answer} isLast={isLast} finalizing={finalizing} onNext={onNext} />
         )}
       </div>
     </div>
   );
 }
 
-function EvaluationView({
-  evaluation,
-  answer,
-  isLast,
-  finalizing,
-  onNext,
-}: {
-  evaluation: Evaluation;
-  answer: string;
-  isLast: boolean;
-  finalizing: boolean;
-  onNext: () => void;
+function EvaluationView({ evaluation, answer, isLast, finalizing, onNext }: {
+  evaluation: Evaluation; answer: string; isLast: boolean; finalizing: boolean; onNext: () => void;
 }) {
+  const { t } = useI18n();
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mt-5 space-y-5">
       <div className="grid sm:grid-cols-3 gap-3">
-        <ScoreTile label="Score" value={evaluation.score} icon={Gauge} />
-        <ScoreTile label="Confidence" value={evaluation.confidence} icon={Target} />
+        <ScoreTile label={t("interview.scoreLabel")} value={evaluation.score} icon={Gauge} />
+        <ScoreTile label={t("interview.confidenceLabel")} value={evaluation.confidence} icon={Target} />
         <div className="rounded-2xl p-4 bg-accent/30 border border-border/60">
-          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Feedback</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("interview.feedbackLabel")}</div>
           <p className="mt-1 text-sm">{evaluation.feedback}</p>
         </div>
       </div>
 
       {answer && (
         <div className="rounded-2xl p-4 bg-secondary/40 border border-border/60">
-          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Your answer</div>
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("interview.yourAnswer")}</div>
           <p className="mt-1 text-sm whitespace-pre-wrap">{answer}</p>
         </div>
       )}
@@ -486,7 +434,7 @@ function EvaluationView({
       {evaluation.mistakes.length > 0 && (
         <div className="rounded-2xl p-4 bg-gradient-to-br from-amber-500/15 to-rose-500/15 border border-border/60">
           <div className="font-semibold text-sm flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-amber-500" /> Mistakes to fix
+            <AlertTriangle className="h-4 w-4 text-amber-500" /> {t("interview.mistakesToFix")}
           </div>
           <ul className="mt-2 space-y-1.5">
             {evaluation.mistakes.map((m, i) => (
@@ -501,25 +449,19 @@ function EvaluationView({
 
       <div className="rounded-2xl p-4 bg-gradient-to-br from-emerald-500/15 to-teal-500/15 border border-border/60">
         <div className="font-semibold text-sm flex items-center gap-2">
-          <Lightbulb className="h-4 w-4 text-emerald-500" /> Better answer
+          <Lightbulb className="h-4 w-4 text-emerald-500" /> {t("interview.betterAnswer")}
         </div>
         <p className="mt-2 text-sm whitespace-pre-wrap">{evaluation.betterAnswer}</p>
       </div>
 
       <div className="flex justify-end">
-        <Button
-          onClick={onNext}
-          disabled={finalizing}
-          className="h-11 rounded-full gradient-brand text-white border-0 hover:opacity-90 px-6"
-        >
+        <Button onClick={onNext} disabled={finalizing} className="h-11 rounded-full gradient-brand text-white border-0 hover:opacity-90 px-6">
           {finalizing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating report...
-            </>
+            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t("interview.generatingReport")}</>
           ) : isLast ? (
-            <>Finish & see report <Trophy className="ml-2 h-4 w-4" /></>
+            <>{t("interview.finishReport")} <Trophy className="ml-2 h-4 w-4" /></>
           ) : (
-            <>Next question <ArrowRight className="ml-2 h-4 w-4" /></>
+            <>{t("interview.nextQuestion")} <ArrowRight className="ml-2 h-4 w-4" /></>
           )}
         </Button>
       </div>
@@ -541,32 +483,31 @@ function ScoreTile({ label, value, icon: Icon }: { label: string; value: number;
 }
 
 function ReportView({ report, onReset }: { report: FinalReport; onReset: () => void }) {
+  const { t } = useI18n();
   return (
     <div className="space-y-6">
       <div className="rounded-3xl glass p-6 sm:p-8 shadow-elegant flex flex-col sm:flex-row sm:items-center gap-6">
         <Ring value={report.overallScore} />
         <div className="flex-1">
-          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Final Report
-          </div>
-          <h2 className="mt-1 text-2xl font-bold">Overall Performance</h2>
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("interview.finalReportLabel")}</div>
+          <h2 className="mt-1 text-2xl font-bold">{t("interview.overallPerformance")}</h2>
           <p className="mt-2 text-muted-foreground">{report.summary}</p>
           <div className="mt-4">
             <Button onClick={onReset} variant="outline" className="rounded-full">
-              <RotateCcw className="mr-2 h-4 w-4" /> Try another interview
+              <RotateCcw className="mr-2 h-4 w-4" /> {t("interview.tryAnother")}
             </Button>
           </div>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <ListCard title="Strong skills" items={report.strongSkills} icon={CheckCircle2} tone="text-emerald-500" ring="from-emerald-500/15 to-teal-500/15" />
-        <ListCard title="Weak skills" items={report.weakSkills} icon={AlertTriangle} tone="text-amber-500" ring="from-amber-500/15 to-rose-500/15" />
+        <ListCard title={t("interview.strongSkills")} items={report.strongSkills} icon={CheckCircle2} tone="text-emerald-500" ring="from-emerald-500/15 to-teal-500/15" />
+        <ListCard title={t("interview.weakSkills")} items={report.weakSkills} icon={AlertTriangle} tone="text-amber-500" ring="from-amber-500/15 to-rose-500/15" />
       </div>
 
       <div className="rounded-3xl glass p-6 shadow-elegant">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <GraduationCap className="h-4 w-4" /> Recommended learning
+          <GraduationCap className="h-4 w-4" /> {t("interview.recommendedLearning")}
         </h3>
         <div className="grid md:grid-cols-2 gap-3">
           {report.recommendedLearning.map((r, i) => (
@@ -580,7 +521,7 @@ function ReportView({ report, onReset }: { report: FinalReport; onReset: () => v
 
       <div className="rounded-3xl glass p-6 shadow-elegant">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-          <ArrowRight className="h-4 w-4" /> Next steps
+          <ArrowRight className="h-4 w-4" /> {t("interview.nextSteps")}
         </h3>
         <ul className="space-y-2">
           {report.nextSteps.map((s, i) => (
@@ -595,19 +536,7 @@ function ReportView({ report, onReset }: { report: FinalReport; onReset: () => v
   );
 }
 
-function ListCard({
-  title,
-  items,
-  icon: Icon,
-  tone,
-  ring,
-}: {
-  title: string;
-  items: string[];
-  icon: typeof CheckCircle2;
-  tone: string;
-  ring: string;
-}) {
+function ListCard({ title, items, icon: Icon, tone, ring }: { title: string; items: string[]; icon: typeof CheckCircle2; tone: string; ring: string }) {
   return (
     <div className={`rounded-3xl glass p-6 shadow-elegant bg-gradient-to-br ${ring} border border-border/60`}>
       <h3 className="font-semibold mb-3 flex items-center gap-2">
@@ -626,6 +555,7 @@ function ListCard({
 }
 
 function Ring({ value }: { value: number }) {
+  const { t } = useI18n();
   const r = 54;
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
@@ -634,13 +564,7 @@ function Ring({ value }: { value: number }) {
       <svg viewBox="0 0 140 140" className="h-full w-full -rotate-90">
         <circle cx="70" cy="70" r={r} stroke="currentColor" strokeWidth="10" className="text-border/60" fill="none" />
         <motion.circle
-          cx="70"
-          cy="70"
-          r={r}
-          strokeWidth="10"
-          fill="none"
-          strokeLinecap="round"
-          stroke="url(#ig)"
+          cx="70" cy="70" r={r} strokeWidth="10" fill="none" strokeLinecap="round" stroke="url(#ig)"
           initial={{ strokeDasharray: c, strokeDashoffset: c }}
           animate={{ strokeDashoffset: offset }}
           transition={{ duration: 1.1, ease: "easeOut" }}
@@ -655,7 +579,7 @@ function Ring({ value }: { value: number }) {
       <div className="absolute inset-0 grid place-items-center text-center">
         <div>
           <div className="text-3xl font-bold">{value}</div>
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Score</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("interview.ringScore")}</div>
         </div>
       </div>
     </div>
