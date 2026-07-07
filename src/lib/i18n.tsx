@@ -1,10 +1,27 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import en from "@/locales/en.json";
 import uz from "@/locales/uz.json";
+import enPatch from "@/locales/_patches/app.en.json";
+import uzPatch from "@/locales/_patches/app.uz.json";
 
 export type Lang = "en" | "uz";
 
-const dictionaries: Record<Lang, any> = { en, uz };
+function deepMerge(target: any, source: any): any {
+  const out = { ...target };
+  for (const key of Object.keys(source)) {
+    if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+      out[key] = deepMerge(out[key] ?? {}, source[key]);
+    } else {
+      out[key] = source[key];
+    }
+  }
+  return out;
+}
+
+const dictionaries: Record<Lang, any> = {
+  en: deepMerge(en, enPatch),
+  uz: deepMerge(uz, uzPatch),
+};
 
 const STORAGE_KEY = "careerai_lang";
 

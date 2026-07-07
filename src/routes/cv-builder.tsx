@@ -52,7 +52,7 @@ function CvPage() {
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
               <Badge className="rounded-full">{t("cv.badge")}</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.cv.title")}</h1>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("app.cv.title")}</h1>
               <p className="mt-2 text-muted-foreground">{t("cv.subtitle")}</p>
             </div>
             <div className="text-right">

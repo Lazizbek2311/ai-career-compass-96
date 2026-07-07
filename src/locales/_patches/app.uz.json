@@ -1,0 +1,43 @@
+{
+  "app": {
+    "root": {
+      "notFound": "Sahifa topilmadi",
+      "notFoundDesc": "Siz qidirayotgan sahifa mavjud emas yoki ko'chirilgan.",
+      "goHome": "Bosh sahifaga",
+      "errorTitle": "Sahifa yuklanmadi",
+      "errorDesc": "Bizning tomonimizda xatolik yuz berdi. Qayta yuklashga harakat qiling yoki bosh sahifaga qayting.",
+      "tryAgain": "Qayta urinish"
+    },
+    "theme": {
+      "toggle": "Mavzuni almashtirish"
+    },
+    "layout": {
+      "closeMenu": "Menyuni yopish",
+      "openMenu": "Menyuni ochish"
+    },
+    "cv": {
+      "title": "Rezyume yaratish"
+    },
+    "roadmap": {
+      "title": "O'quv yo'l xaritasi"
+    },
+    "profile": {
+      "title": "Profil"
+    },
+    "settings": {
+      "title": "Sozlamalar"
+    },
+    "login": {
+      "title": "Kirish"
+    },
+    "nav": {},
+    "hero": {},
+    "features": {},
+    "how": {},
+    "testimonials": {},
+    "faq": {},
+    "cta": {},
+    "footer": {},
+    "stats": {}
+  }
+}
