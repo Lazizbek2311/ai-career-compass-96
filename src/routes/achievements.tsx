@@ -34,9 +34,9 @@ function AchPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
-          <Badge className="rounded-full">{t("achievements.badge")}</Badge>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.achievements.title")}</h1>
-          <p className="mt-2 text-muted-foreground">{t("achievements.subtitle")}</p>
+          <Badge className="rounded-full">{t("modules.achievements.badge")}</Badge>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("modules.achievements.title")}</h1>
+          <p className="mt-2 text-muted-foreground">{t("modules.achievements.subtitle")}</p>
           <div className="mt-5 flex items-center gap-4">
             <Progress value={(earned / BADGES.length) * 100} className="h-2 flex-1" />
             <span className="text-sm font-semibold">{earned} / {BADGES.length}</span>
@@ -49,15 +49,15 @@ function AchPage() {
               <div className={`mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br ${b.color} grid place-items-center text-white shadow-glow`}>
                 <b.icon className="h-7 w-7" />
               </div>
-              <p className="mt-3 font-bold">{t(`achievements.badges.${b.key}.name`)}</p>
-              <p className="text-xs text-muted-foreground mt-1">{t(`achievements.badges.${b.key}.desc`)}</p>
-              {b.earned && <Badge variant="secondary" className="mt-3 rounded-full text-[10px]">{t("achievements.earned")}</Badge>}
+              <p className="mt-3 font-bold">{t(`modules.achievements.badges.${b.key}.name`)}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t(`modules.achievements.badges.${b.key}.desc`)}</p>
+              {b.earned && <Badge variant="secondary" className="mt-3 rounded-full text-[10px]">{t("modules.achievements.earned")}</Badge>}
             </motion.div>
           ))}
         </div>
 
         <div className="glass rounded-3xl p-6 shadow-elegant">
-          <h2 className="text-xl font-bold flex items-center gap-2"><Trophy className="h-5 w-5 text-primary" />{t("achievements.certificates")}</h2>
+          <h2 className="text-xl font-bold flex items-center gap-2"><Trophy className="h-5 w-5 text-primary" />{t("modules.achievements.certificates")}</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {CERTIFICATES.map((c) => (
               <div key={c.name} className="rounded-2xl border border-border/60 bg-card/50 p-4 flex items-center gap-3">

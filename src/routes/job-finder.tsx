@@ -41,16 +41,16 @@ function JobsPage() {
 
   const typeLabel = (x: string) => {
     if (x === "All") return t("common.all");
-    if (x === "Full-time") return t("jobs.types.fullTime");
-    if (x === "Contract") return t("jobs.types.contract");
-    if (x === "Internship") return t("jobs.types.internship");
+    if (x === "Full-time") return t("modules.jobs.types.fullTime");
+    if (x === "Contract") return t("modules.jobs.types.contract");
+    if (x === "Internship") return t("modules.jobs.types.internship");
     return x;
   };
   const levelLabel = (x: string) => {
     if (x === "All") return t("common.all");
-    if (x === "Junior") return t("jobs.levels.junior");
-    if (x === "Mid") return t("jobs.levels.mid");
-    if (x === "Senior") return t("jobs.levels.senior");
+    if (x === "Junior") return t("modules.jobs.levels.junior");
+    if (x === "Mid") return t("modules.jobs.levels.mid");
+    if (x === "Senior") return t("modules.jobs.levels.senior");
     return x;
   };
 
@@ -58,13 +58,13 @@ function JobsPage() {
     <DashboardLayout>
       <div className="space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
-          <Badge className="rounded-full">{t("jobs.badge")}</Badge>
-          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.jobs.title")}</h1>
-          <p className="mt-2 text-muted-foreground max-w-2xl">{t("jobs.subtitle")}</p>
+          <Badge className="rounded-full">{t("modules.jobs.badge")}</Badge>
+          <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("modules.jobs.title")}</h1>
+          <p className="mt-2 text-muted-foreground max-w-2xl">{t("modules.jobs.subtitle")}</p>
           <div className="mt-5 grid gap-3 md:grid-cols-4">
             <div className="md:col-span-2 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("jobs.searchPlaceholder")} className="pl-9 rounded-full" />
+              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("modules.jobs.searchPlaceholder")} className="pl-9 rounded-full" />
             </div>
             <Select value={type} onValueChange={setType}>
               <SelectTrigger className="rounded-full"><SelectValue>{typeLabel(type)}</SelectValue></SelectTrigger>
@@ -100,12 +100,12 @@ function JobsPage() {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <Badge className="rounded-full">{levelLabel(j.level)}</Badge>
-                  <Button size="sm" className="rounded-full gradient-brand text-white border-0">{t("jobs.apply")}</Button>
+                  <Button size="sm" className="rounded-full gradient-brand text-white border-0">{t("modules.jobs.apply")}</Button>
                 </div>
               </div>
             </motion.div>
           ))}
-          {filtered.length === 0 && <p className="text-center text-muted-foreground py-12">{t("jobs.noResults")}</p>}
+          {filtered.length === 0 && <p className="text-center text-muted-foreground py-12">{t("modules.jobs.noResults")}</p>}
         </div>
       </div>
     </DashboardLayout>

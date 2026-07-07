@@ -39,11 +39,11 @@ const DATA: Record<Role, Record<Country, [number, number, number]>> = {
 };
 
 const DEMAND: Record<Role, { level: string; growth: string; color: string }> = {
-  "AI Engineer": { level: "Very High", growth: "+38% / yr", color: "from-emerald-500 to-teal-500" },
-  "Data Scientist": { level: "High", growth: "+22% / yr", color: "from-blue-500 to-indigo-500" },
-  "Backend Developer": { level: "High", growth: "+18% / yr", color: "from-violet-500 to-purple-500" },
-  "Frontend Developer": { level: "Moderate", growth: "+12% / yr", color: "from-pink-500 to-rose-500" },
-  "Product Manager": { level: "High", growth: "+16% / yr", color: "from-orange-500 to-amber-500" },
+  "AI Engineer": { level: "veryHigh", growth: "+38% / yr", color: "from-emerald-500 to-teal-500" },
+  "Data Scientist": { level: "high", growth: "+22% / yr", color: "from-blue-500 to-indigo-500" },
+  "Backend Developer": { level: "high", growth: "+18% / yr", color: "from-violet-500 to-purple-500" },
+  "Frontend Developer": { level: "moderate", growth: "+12% / yr", color: "from-pink-500 to-rose-500" },
+  "Product Manager": { level: "high", growth: "+16% / yr", color: "from-orange-500 to-amber-500" },
 };
 
 const COUNTRIES: Country[] = ["USA", "Canada", "UK", "Germany", "UAE", "Uzbekistan"];
@@ -62,9 +62,9 @@ function SalaryPage() {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-3xl p-6 sm:p-8 shadow-elegant">
           <div className="flex items-start justify-between flex-wrap gap-4">
             <div>
-              <Badge className="rounded-full">{t("pages.salary.badge")}</Badge>
-              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("pages.salary.title")}</h1>
-              <p className="mt-2 text-muted-foreground max-w-2xl">{t("pages.salary.subtitle")}</p>
+              <Badge className="rounded-full">{t("modules.salary.badge")}</Badge>
+              <h1 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">{t("modules.salary.title")}</h1>
+              <p className="mt-2 text-muted-foreground max-w-2xl">{t("modules.salary.subtitle")}</p>
             </div>
             <Select value={role} onValueChange={(v) => setRole(v as Role)}>
               <SelectTrigger className="w-[220px] rounded-full"><SelectValue /></SelectTrigger>
@@ -75,11 +75,11 @@ function SalaryPage() {
           </div>
           <div className="mt-6 grid sm:grid-cols-2 gap-4">
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">{t("pages.salary.demand")}</p>
-              <p className={`text-2xl font-bold bg-gradient-to-r ${DEMAND[role].color} bg-clip-text text-transparent`}>{DEMAND[role].level}</p>
+              <p className="text-xs text-muted-foreground">{t("modules.salary.demand")}</p>
+              <p className={`text-2xl font-bold bg-gradient-to-r ${DEMAND[role].color} bg-clip-text text-transparent`}>{t(`modules.salary.demandLevels.${DEMAND[role].level}`)}</p>
             </div>
             <div className="glass rounded-2xl p-4">
-              <p className="text-xs text-muted-foreground">{t("pages.salary.growth")}</p>
+              <p className="text-xs text-muted-foreground">{t("modules.salary.growth")}</p>
               <p className="text-2xl font-bold flex items-center gap-2"><TrendingUp className="h-5 w-5 text-emerald-500" />{DEMAND[role].growth}</p>
             </div>
           </div>
