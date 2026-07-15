@@ -2,6 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { generateText } from "ai";
 import { z } from "zod";
 
+// ============================================================================
+// Assessment input (must stay compatible with existing career-test.tsx form)
+// ============================================================================
+
 const AssessmentInput = z.object({
   fullName: z.string().optional().default(""),
   age: z.string().optional().default(""),
@@ -18,6 +22,8 @@ const AssessmentInput = z.object({
   companyType: z.string().optional().default(""),
   workLifeBalance: z.number().default(7),
 });
+
+type Assessment = z.infer<typeof AssessmentInput>;
 
 const ReportSchema = z.object({
   summary: z.string(),
@@ -52,483 +58,761 @@ const ReportSchema = z.object({
 
 export type CareerReport = z.infer<typeof ReportSchema>;
 
-const REQUIRED_REPORT_STRUCTURE = `{
-  "summary": "string",
-  "strengths": ["string", "string", "string"],
-  "weaknesses": ["string", "string", "string"],
-  "careers": [
-    {
-      "title": "string",
-      "match": 98,
-      "whyItFits": "string",
-      "universityMajors": ["string", "string", "string"],
-      "technicalSkills": ["string", "string", "string", "string"],
-      "softSkills": ["string", "string", "string", "string"],
-      "salary": {
-        "local": "string",
-        "usa": "string",
-        "europe": "string"
-      },
-      "futureDemand": "string",
-      "demandScore": 92,
-      "roadmap": [
-        {
-          "phase": "string",
-          "duration": "string",
-          "focus": "string",
-          "milestones": ["string", "string", "string"]
-        }
-      ]
-    }
-  ]
-}`;
+// ============================================================================
+// Career library — each career has weighted traits used for scoring
+// ============================================================================
 
-function buildAnalysisPrompt(data: z.infer<typeof AssessmentInput>, simplified = false) {
-  const country = data.country || "Uzbekistan";
-  const preferredCountry = data.preferredCountry || "USA or Europe";
+type SalaryTier = "premium" | "high" | "mid" | "stable";
 
-  if (simplified) {
-    return `Return ONLY valid JSON. No markdown. No explanation.
+type CareerProfile = {
+  title: string;
+  interests: string[]; // any-of; higher overlap = higher score
+  subjects: string[];
+  skills: Partial<Record<SkillKey, number>>; // 0..1 weight of importance
+  personality: Partial<Record<PersonalityKey, number>>; // -1..1 preference
+  majors: string[];
+  technicalSkills: string[];
+  softSkills: string[];
+  demand: {
+    score: number;
+    text: string;
+  };
+  tier: SalaryTier;
+  learningTrack: "tech" | "design" | "science" | "business" | "medical" | "law" | "education" | "engineering";
+};
 
-You must generate a CareerAI career report using EXACTLY this JSON structure and EXACTLY these property names:
-${REQUIRED_REPORT_STRUCTURE}
+type SkillKey =
+  | "Communication"
+  | "Leadership"
+  | "Creativity"
+  | "Programming"
+  | "Mathematics"
+  | "English"
+  | "Teamwork"
+  | "Critical Thinking";
 
-Hard rules:
-- Top-level keys must be exactly: summary, strengths, weaknesses, careers.
-- Generate exactly 5 career objects in careers.
-- Every career object must include exactly: title, match, whyItFits, universityMajors, technicalSkills, softSkills, salary, futureDemand, demandScore, roadmap.
-- salary must include exactly: local, usa, europe.
-- roadmap items must include exactly: phase, duration, focus, milestones.
-- match and demandScore must be raw JSON numbers, not strings, not percentages.
-- All arrays must contain strings except careers and roadmap.
-- Do not return null values. Do not add extra keys.
+// Personality question keys — matches career-test.tsx q0..q5
+// q0: enjoys solving difficult problems
+// q1: likes working with people
+// q2: enjoys creating new ideas
+// q3: prefers leading a team
+// q4: enjoys analyzing data
+// q5: likes building things
+type PersonalityKey = "q0" | "q1" | "q2" | "q3" | "q4" | "q5";
 
-User assessment JSON:
-${JSON.stringify(data, null, 2)}`;
+const CAREER_LIBRARY: CareerProfile[] = [
+  {
+    title: "Software Engineer",
+    interests: ["programming", "engineering", "ai"],
+    subjects: ["cs", "math", "physics"],
+    skills: { Programming: 1, "Critical Thinking": 0.8, Mathematics: 0.6, Teamwork: 0.5, English: 0.5 },
+    personality: { q0: 1, q5: 1, q4: 0.5 },
+    majors: ["Computer Science", "Software Engineering", "Information Systems"],
+    technicalSkills: ["TypeScript", "Data Structures", "APIs", "Git", "Databases", "Testing"],
+    softSkills: ["Problem Solving", "Team Communication", "Ownership", "Debugging Patience"],
+    demand: { score: 94, text: "Consistently one of the highest-demand roles worldwide across every industry." },
+    tier: "high",
+    learningTrack: "tech",
+  },
+  {
+    title: "AI Engineer",
+    interests: ["ai", "programming", "math", "science"],
+    subjects: ["cs", "math", "physics"],
+    skills: { Programming: 1, Mathematics: 1, "Critical Thinking": 0.9, English: 0.6 },
+    personality: { q0: 1, q4: 1, q5: 0.6 },
+    majors: ["Artificial Intelligence", "Computer Science", "Data Science", "Applied Mathematics"],
+    technicalSkills: ["Python", "PyTorch", "Machine Learning", "LLMs", "Model Evaluation", "MLOps"],
+    softSkills: ["Research Mindset", "Persistence", "Communication", "Critical Thinking"],
+    demand: { score: 98, text: "Demand is exploding as every industry adopts AI copilots and automation." },
+    tier: "premium",
+    learningTrack: "tech",
+  },
+  {
+    title: "Data Scientist",
+    interests: ["ai", "math", "science", "business"],
+    subjects: ["math", "cs", "economics", "physics"],
+    skills: { Mathematics: 1, Programming: 0.8, "Critical Thinking": 0.9, Communication: 0.6 },
+    personality: { q0: 0.8, q4: 1, q1: 0.4 },
+    majors: ["Data Science", "Statistics", "Computer Science", "Economics"],
+    technicalSkills: ["Python", "SQL", "Statistics", "Pandas", "Visualization", "A/B Testing"],
+    softSkills: ["Storytelling", "Business Thinking", "Attention to Detail", "Curiosity"],
+    demand: { score: 93, text: "Every company that collects data needs people who can turn it into decisions." },
+    tier: "high",
+    learningTrack: "tech",
+  },
+  {
+    title: "Cybersecurity Engineer",
+    interests: ["cybersecurity", "programming", "engineering"],
+    subjects: ["cs", "math"],
+    skills: { Programming: 0.8, "Critical Thinking": 1, English: 0.6, Teamwork: 0.5 },
+    personality: { q0: 1, q4: 0.7 },
+    majors: ["Cybersecurity", "Computer Science", "Network Engineering"],
+    technicalSkills: ["Networking", "Linux", "Cryptography", "Cloud Security", "Python Scripting", "Incident Response"],
+    softSkills: ["Attention to Detail", "Ethical Judgment", "Calm Under Pressure", "Communication"],
+    demand: { score: 92, text: "Rising cyber threats keep security roles in critical global shortage." },
+    tier: "high",
+    learningTrack: "tech",
+  },
+  {
+    title: "Cloud / DevOps Engineer",
+    interests: ["programming", "engineering", "cybersecurity"],
+    subjects: ["cs"],
+    skills: { Programming: 0.8, "Critical Thinking": 0.8, Teamwork: 0.6 },
+    personality: { q0: 0.8, q5: 0.8 },
+    majors: ["Computer Science", "Information Systems", "Software Engineering"],
+    technicalSkills: ["Linux", "AWS/GCP", "Docker", "Kubernetes", "CI/CD", "Terraform"],
+    softSkills: ["Reliability", "Systems Thinking", "Ownership", "Documentation"],
+    demand: { score: 90, text: "Cloud-first architectures make DevOps a permanent core role." },
+    tier: "high",
+    learningTrack: "tech",
+  },
+  {
+    title: "UX/UI Designer",
+    interests: ["design", "programming", "marketing", "psychology"],
+    subjects: ["literature", "english"],
+    skills: { Creativity: 1, Communication: 0.8, Teamwork: 0.7, English: 0.6 },
+    personality: { q2: 1, q1: 0.7, q3: 0.3 },
+    majors: ["Interaction Design", "Graphic Design", "Human-Computer Interaction", "Psychology"],
+    technicalSkills: ["Figma", "Prototyping", "Design Systems", "User Research", "Accessibility", "Wireframing"],
+    softSkills: ["Empathy", "Storytelling", "Collaboration", "Iteration"],
+    demand: { score: 86, text: "Digital products keep multiplying, and each one needs great UX." },
+    tier: "mid",
+    learningTrack: "design",
+  },
+  {
+    title: "Graphic Designer",
+    interests: ["design", "marketing"],
+    subjects: ["literature"],
+    skills: { Creativity: 1, Communication: 0.6 },
+    personality: { q2: 1, q1: 0.3 },
+    majors: ["Graphic Design", "Visual Communication", "Fine Arts"],
+    technicalSkills: ["Illustrator", "Photoshop", "Typography", "Brand Systems", "Layout", "Color Theory"],
+    softSkills: ["Creativity", "Attention to Detail", "Client Communication", "Time Management"],
+    demand: { score: 78, text: "Brand and content-heavy industries keep visual designers in steady demand." },
+    tier: "mid",
+    learningTrack: "design",
+  },
+  {
+    title: "Game Developer",
+    interests: ["programming", "design", "ai"],
+    subjects: ["cs", "math", "physics"],
+    skills: { Programming: 1, Creativity: 0.8, Mathematics: 0.7 },
+    personality: { q0: 0.8, q2: 0.9, q5: 1 },
+    majors: ["Computer Science", "Game Development", "Interactive Media"],
+    technicalSkills: ["C#", "Unity", "Unreal", "3D Math", "Shaders", "Game AI"],
+    softSkills: ["Creativity", "Collaboration", "Persistence", "Player Empathy"],
+    demand: { score: 82, text: "Gaming and interactive media keep expanding into education and enterprise." },
+    tier: "mid",
+    learningTrack: "tech",
+  },
+  {
+    title: "Product Manager",
+    interests: ["business", "programming", "design", "marketing"],
+    subjects: ["economics", "english", "cs"],
+    skills: { Leadership: 1, Communication: 1, "Critical Thinking": 0.8, English: 0.7 },
+    personality: { q1: 0.9, q3: 1, q2: 0.7 },
+    majors: ["Business Administration", "Computer Science", "Information Systems"],
+    technicalSkills: ["Analytics", "Roadmapping", "SQL Basics", "A/B Testing", "Wireframing", "AI Product Fundamentals"],
+    softSkills: ["Leadership", "Prioritization", "Communication", "Decision Making"],
+    demand: { score: 88, text: "Every software company competes on product quality and needs PM leadership." },
+    tier: "high",
+    learningTrack: "business",
+  },
+  {
+    title: "Business Analyst",
+    interests: ["business", "finance", "math"],
+    subjects: ["economics", "math"],
+    skills: { "Critical Thinking": 1, Communication: 0.8, Mathematics: 0.7 },
+    personality: { q4: 1, q1: 0.6 },
+    majors: ["Business Analytics", "Economics", "Information Systems", "Finance"],
+    technicalSkills: ["Excel", "SQL", "Power BI/Tableau", "Process Mapping", "Requirements", "Statistics"],
+    softSkills: ["Analytical Thinking", "Stakeholder Communication", "Documentation", "Empathy"],
+    demand: { score: 84, text: "Companies increasingly rely on analysts to guide data-driven decisions." },
+    tier: "mid",
+    learningTrack: "business",
+  },
+  {
+    title: "Financial Analyst",
+    interests: ["finance", "business", "math"],
+    subjects: ["economics", "math"],
+    skills: { Mathematics: 1, "Critical Thinking": 0.9, Communication: 0.6 },
+    personality: { q4: 1, q0: 0.7 },
+    majors: ["Finance", "Economics", "Accounting", "Business Administration"],
+    technicalSkills: ["Financial Modeling", "Excel", "Valuation", "Accounting Basics", "SQL", "Bloomberg"],
+    softSkills: ["Attention to Detail", "Ethical Judgment", "Communication", "Discipline"],
+    demand: { score: 82, text: "Finance remains a foundational, globally portable career track." },
+    tier: "high",
+    learningTrack: "business",
+  },
+  {
+    title: "Economist",
+    interests: ["finance", "business", "math", "science"],
+    subjects: ["economics", "math", "history"],
+    skills: { Mathematics: 1, "Critical Thinking": 1, Communication: 0.7, English: 0.7 },
+    personality: { q0: 0.8, q4: 1 },
+    majors: ["Economics", "Applied Mathematics", "Public Policy"],
+    technicalSkills: ["Econometrics", "Statistics", "R/Python", "Data Analysis", "Modeling", "Research"],
+    softSkills: ["Analytical Writing", "Research", "Critical Thinking", "Communication"],
+    demand: { score: 80, text: "Governments, banks, and think tanks all need rigorous economic analysis." },
+    tier: "mid",
+    learningTrack: "business",
+  },
+  {
+    title: "Marketing Specialist",
+    interests: ["marketing", "business", "design", "psychology"],
+    subjects: ["english", "literature", "economics"],
+    skills: { Creativity: 0.9, Communication: 1, English: 0.8, Teamwork: 0.7 },
+    personality: { q1: 1, q2: 0.8, q3: 0.6 },
+    majors: ["Marketing", "Communications", "Business Administration"],
+    technicalSkills: ["SEO", "Content", "Analytics", "Paid Ads", "Social Strategy", "Copywriting"],
+    softSkills: ["Storytelling", "Empathy", "Collaboration", "Adaptability"],
+    demand: { score: 80, text: "Digital marketing keeps growing as attention shifts online." },
+    tier: "mid",
+    learningTrack: "business",
+  },
+  {
+    title: "Doctor",
+    interests: ["medicine", "science"],
+    subjects: ["biology", "chemistry"],
+    skills: { "Critical Thinking": 1, Communication: 0.9, English: 0.7 },
+    personality: { q0: 0.9, q1: 1 },
+    majors: ["Medicine (MD)", "Biology", "Biomedical Sciences"],
+    technicalSkills: ["Anatomy", "Diagnostics", "Pharmacology", "Clinical Reasoning", "Patient Care", "Research"],
+    softSkills: ["Empathy", "Resilience", "Communication", "Ethical Judgment"],
+    demand: { score: 92, text: "Healthcare demand keeps rising with aging populations everywhere." },
+    tier: "premium",
+    learningTrack: "medical",
+  },
+  {
+    title: "Biomedical Researcher",
+    interests: ["medicine", "science", "ai"],
+    subjects: ["biology", "chemistry", "math"],
+    skills: { "Critical Thinking": 1, Mathematics: 0.7, English: 0.7 },
+    personality: { q0: 1, q4: 0.9 },
+    majors: ["Biomedical Sciences", "Biology", "Biotechnology", "Chemistry"],
+    technicalSkills: ["Lab Techniques", "Statistics", "Research Design", "Bioinformatics", "Writing", "Data Analysis"],
+    softSkills: ["Curiosity", "Discipline", "Communication", "Collaboration"],
+    demand: { score: 84, text: "AI-driven drug discovery and genomics are creating a new wave of research jobs." },
+    tier: "mid",
+    learningTrack: "science",
+  },
+  {
+    title: "Lawyer",
+    interests: ["law", "business"],
+    subjects: ["history", "literature", "english"],
+    skills: { Communication: 1, "Critical Thinking": 1, English: 1 },
+    personality: { q1: 0.9, q3: 0.8, q0: 0.7 },
+    majors: ["Law", "Political Science", "International Relations"],
+    technicalSkills: ["Legal Research", "Writing", "Contract Drafting", "Litigation Basics", "Regulation", "Negotiation"],
+    softSkills: ["Argumentation", "Ethical Judgment", "Discipline", "Empathy"],
+    demand: { score: 78, text: "Regulation and cross-border business keep the legal field stable and lucrative." },
+    tier: "high",
+    learningTrack: "law",
+  },
+  {
+    title: "Teacher / Educator",
+    interests: ["teaching", "psychology", "science"],
+    subjects: ["literature", "english", "history", "math", "biology"],
+    skills: { Communication: 1, Teamwork: 0.8, English: 0.7, Creativity: 0.6 },
+    personality: { q1: 1, q3: 0.7, q2: 0.6 },
+    majors: ["Education", "Pedagogy", "Subject-specific BEd"],
+    technicalSkills: ["Curriculum Design", "Assessment", "EdTech Tools", "Classroom Management", "Public Speaking", "Research"],
+    softSkills: ["Patience", "Empathy", "Communication", "Adaptability"],
+    demand: { score: 76, text: "Great teachers stay in permanent demand, especially in STEM and languages." },
+    tier: "stable",
+    learningTrack: "education",
+  },
+  {
+    title: "Psychologist",
+    interests: ["psychology", "medicine", "teaching"],
+    subjects: ["biology", "literature", "english"],
+    skills: { Communication: 1, "Critical Thinking": 0.9, English: 0.7 },
+    personality: { q1: 1, q0: 0.7 },
+    majors: ["Psychology", "Clinical Psychology", "Cognitive Science"],
+    technicalSkills: ["Assessment", "Therapy Methods", "Statistics", "Research", "Interviewing", "Documentation"],
+    softSkills: ["Empathy", "Active Listening", "Ethical Judgment", "Patience"],
+    demand: { score: 82, text: "Mental-health awareness has made psychology one of the fastest-growing fields." },
+    tier: "mid",
+    learningTrack: "medical",
+  },
+  {
+    title: "Architect",
+    interests: ["design", "engineering", "science"],
+    subjects: ["math", "physics", "literature"],
+    skills: { Creativity: 1, Mathematics: 0.7, "Critical Thinking": 0.8 },
+    personality: { q2: 1, q5: 0.9, q0: 0.5 },
+    majors: ["Architecture", "Urban Design", "Civil Engineering"],
+    technicalSkills: ["AutoCAD", "Revit", "3D Modeling", "Structural Basics", "Sustainability", "Project Planning"],
+    softSkills: ["Creativity", "Client Communication", "Project Management", "Attention to Detail"],
+    demand: { score: 76, text: "Sustainable cities and urban growth keep architecture globally relevant." },
+    tier: "mid",
+    learningTrack: "engineering",
+  },
+  {
+    title: "Mechanical Engineer",
+    interests: ["engineering", "robotics", "science"],
+    subjects: ["physics", "math"],
+    skills: { Mathematics: 1, "Critical Thinking": 0.9, Programming: 0.4 },
+    personality: { q0: 0.9, q5: 1, q4: 0.6 },
+    majors: ["Mechanical Engineering", "Mechatronics", "Aerospace Engineering"],
+    technicalSkills: ["CAD", "Thermodynamics", "Materials", "MATLAB", "Manufacturing", "Simulation"],
+    softSkills: ["Problem Solving", "Teamwork", "Documentation", "Persistence"],
+    demand: { score: 80, text: "Manufacturing, energy, and robotics keep mechanical engineers essential." },
+    tier: "mid",
+    learningTrack: "engineering",
+  },
+  {
+    title: "Electrical Engineer",
+    interests: ["engineering", "robotics", "science", "programming"],
+    subjects: ["physics", "math", "cs"],
+    skills: { Mathematics: 1, "Critical Thinking": 0.9, Programming: 0.6 },
+    personality: { q0: 1, q5: 0.9, q4: 0.7 },
+    majors: ["Electrical Engineering", "Electronics", "Robotics"],
+    technicalSkills: ["Circuits", "Embedded Systems", "Signals", "MATLAB", "PCB Design", "Microcontrollers"],
+    softSkills: ["Analytical Thinking", "Teamwork", "Precision", "Documentation"],
+    demand: { score: 84, text: "EV, renewable energy, and IoT are driving strong hiring for EE talent." },
+    tier: "high",
+    learningTrack: "engineering",
+  },
+  {
+    title: "Robotics Engineer",
+    interests: ["robotics", "engineering", "ai", "programming"],
+    subjects: ["physics", "math", "cs"],
+    skills: { Programming: 1, Mathematics: 1, "Critical Thinking": 0.9 },
+    personality: { q0: 1, q5: 1, q4: 0.7 },
+    majors: ["Robotics", "Mechatronics", "Electrical Engineering", "Computer Science"],
+    technicalSkills: ["ROS", "Control Systems", "Computer Vision", "Embedded C++", "Kinematics", "Simulation"],
+    softSkills: ["Systems Thinking", "Persistence", "Collaboration", "Documentation"],
+    demand: { score: 88, text: "Automation and humanoid robotics are creating a fresh global talent race." },
+    tier: "high",
+    learningTrack: "engineering",
+  },
+  {
+    title: "Civil Engineer",
+    interests: ["engineering", "science"],
+    subjects: ["physics", "math", "geography"],
+    skills: { Mathematics: 0.9, "Critical Thinking": 0.8, Teamwork: 0.6 },
+    personality: { q5: 1, q0: 0.7 },
+    majors: ["Civil Engineering", "Structural Engineering", "Urban Planning"],
+    technicalSkills: ["Structural Analysis", "AutoCAD", "Materials", "Surveying", "Project Planning", "Codes"],
+    softSkills: ["Reliability", "Teamwork", "Communication", "Ownership"],
+    demand: { score: 74, text: "Infrastructure and green building keep civil engineering steadily needed." },
+    tier: "mid",
+    learningTrack: "engineering",
+  },
+  {
+    title: "Content Creator / Journalist",
+    interests: ["marketing", "teaching", "design"],
+    subjects: ["literature", "english", "history"],
+    skills: { Communication: 1, English: 1, Creativity: 0.9 },
+    personality: { q1: 0.9, q2: 1 },
+    majors: ["Journalism", "Communications", "Media Studies"],
+    technicalSkills: ["Writing", "Editing", "SEO", "Video Basics", "Social Strategy", "Interviewing"],
+    softSkills: ["Storytelling", "Curiosity", "Discipline", "Adaptability"],
+    demand: { score: 72, text: "Creator economy and independent media keep expanding globally." },
+    tier: "mid",
+    learningTrack: "business",
+  },
+  {
+    title: "Environmental Scientist",
+    interests: ["science", "engineering"],
+    subjects: ["biology", "chemistry", "geography"],
+    skills: { "Critical Thinking": 1, Mathematics: 0.6, English: 0.7 },
+    personality: { q0: 0.8, q4: 0.9 },
+    majors: ["Environmental Science", "Ecology", "Earth Sciences"],
+    technicalSkills: ["Field Research", "GIS", "Statistics", "Lab Work", "Modeling", "Reporting"],
+    softSkills: ["Analytical Thinking", "Communication", "Persistence", "Collaboration"],
+    demand: { score: 78, text: "Climate action makes sustainability roles one of the fastest-growing categories." },
+    tier: "mid",
+    learningTrack: "science",
+  },
+];
+
+// ============================================================================
+// Scoring
+// ============================================================================
+
+const ANSWER_TO_VALUE: Record<string, number> = {
+  "Strongly Agree": 2,
+  Agree: 1,
+  Neutral: 0,
+  Disagree: -1,
+  "Strongly Disagree": -2,
+};
+
+function personalityValue(assessment: Assessment, key: PersonalityKey): number {
+  const raw = assessment.personality[key];
+  if (!raw) return 0;
+  return ANSWER_TO_VALUE[raw] ?? 0;
+}
+
+function skillValue(assessment: Assessment, key: SkillKey): number {
+  // Skills are stored on a 1..5 or 0..10 scale by the test; normalise to 0..1
+  const raw = assessment.skills[key];
+  if (typeof raw !== "number" || !Number.isFinite(raw)) return 0.4;
+  if (raw > 10) return 1;
+  if (raw >= 0 && raw <= 10) return Math.max(0, Math.min(1, raw / 10));
+  return 0.4;
+}
+
+function hashString(input: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i += 1) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
   }
-
-  return `You are CareerAI, an expert AI career counselor for students and professionals. Analyze the user's assessment and generate a personalized career report.
-
-Return ONLY a valid JSON object. Do not include markdown fences, comments, headings, explanations, or text before/after the JSON.
-
-The JSON output MUST match this exact structure, property names, and value types:
-${REQUIRED_REPORT_STRUCTURE}
-
-Schema alignment rules:
-1. Top-level object keys: summary, strengths, weaknesses, careers.
-2. summary: one professional personalized paragraph as a string.
-3. strengths: array of 4-6 strings about this user's strengths.
-4. weaknesses: array of 3-5 strings about realistic improvement areas for this user.
-5. careers: array of exactly 5 distinct career objects, ranked by match descending.
-6. Each career object keys: title, match, whyItFits, universityMajors, technicalSkills, softSkills, salary, futureDemand, demandScore, roadmap.
-7. title: career name string.
-8. match: raw JSON number from 70 to 99. Do not write "98%".
-9. whyItFits: string explaining why this career matches the user's interests, subjects, personality, skills, and goals.
-10. universityMajors: array of 3-5 major names as strings.
-11. technicalSkills: array of 5-7 required technical skills as strings.
-12. softSkills: array of 4-6 required soft skills as strings.
-13. salary: object with exactly local, usa, europe as strings.
-14. salary.local: realistic annual range in ${country}, using local currency where possible.
-15. salary.usa: realistic annual range in USD.
-16. salary.europe: realistic annual range in EUR.
-17. futureDemand: 1-2 sentence demand outlook string.
-18. demandScore: raw JSON number from 70 to 99. Do not write "92/100".
-19. roadmap: array of 3-5 phase objects.
-20. Each roadmap phase keys: phase, duration, focus, milestones.
-21. milestones: array of 3-5 concrete milestone strings.
-22. Do not add fields such as career, percentage, reason, salaries, localSalary, internationalSalary, requiredSkills, phases, steps, or recommendation.
-23. Do not omit any required field. Do not use null.
-
-Personalization requirements:
-- Reference the user's selected interests: ${data.interests.join(", ") || "not specified"}.
-- Reference the user's favorite subjects: ${data.subjects.join(", ") || "not specified"}.
-- Consider personality answers and skill ratings.
-- Consider preferred country: ${preferredCountry}.
-- Be specific, practical, premium, and motivational.
-
-USER ASSESSMENT JSON:
-${JSON.stringify(data, null, 2)}`;
+  return Math.abs(h);
 }
 
-function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : String(error);
-}
+type ScoredCareer = {
+  profile: CareerProfile;
+  score: number;
+  matchPct: number;
+  interestOverlap: string[];
+  subjectOverlap: string[];
+  skillOverlap: SkillKey[];
+  personalityOverlap: PersonalityKey[];
+};
 
-function preview(value: string, maxLength = 2500) {
-  return value.length > maxLength ? `${value.slice(0, maxLength)}…[truncated ${value.length - maxLength} chars]` : value;
-}
+function scoreCareers(assessment: Assessment): ScoredCareer[] {
+  const seed = hashString(
+    `${assessment.fullName}|${assessment.age}|${assessment.country}|${assessment.interests.join(",")}|${assessment.subjects.join(",")}|${JSON.stringify(assessment.skills)}|${JSON.stringify(assessment.personality)}`,
+  );
 
-function extractJsonObject(raw: string) {
-  const cleaned = raw
-    .replace(/^\uFEFF/, "")
-    .replace(/```json\s*/gi, "")
-    .replace(/```\s*/g, "")
-    .trim();
+  const interestSet = new Set(assessment.interests);
+  const subjectSet = new Set(assessment.subjects);
 
-  const start = cleaned.indexOf("{");
-  if (start === -1) throw new Error("No JSON object start found in AI response");
+  const scored = CAREER_LIBRARY.map((profile, index) => {
+    let score = 0;
+    const interestOverlap: string[] = [];
+    const subjectOverlap: string[] = [];
+    const skillOverlap: SkillKey[] = [];
+    const personalityOverlap: PersonalityKey[] = [];
 
-  let depth = 0;
-  let inString = false;
-  let escaped = false;
-
-  for (let i = start; i < cleaned.length; i += 1) {
-    const char = cleaned[i];
-
-    if (inString) {
-      if (escaped) {
-        escaped = false;
-      } else if (char === "\\") {
-        escaped = true;
-      } else if (char === '"') {
-        inString = false;
+    // Interests: up to 5 x 6 = 30 points
+    for (const it of profile.interests) {
+      if (interestSet.has(it)) {
+        score += 6;
+        interestOverlap.push(it);
       }
-      continue;
+    }
+    // Subjects: up to ~9 points
+    for (const sub of profile.subjects) {
+      if (subjectSet.has(sub)) {
+        score += 3;
+        subjectOverlap.push(sub);
+      }
+    }
+    // Skills: weighted, up to ~15 points
+    for (const [key, weight] of Object.entries(profile.skills) as [SkillKey, number][]) {
+      const value = skillValue(assessment, key);
+      score += value * weight * 5;
+      if (value >= 0.6 && weight >= 0.6) skillOverlap.push(key);
+    }
+    // Personality: signed, up to ~12 points
+    for (const [key, weight] of Object.entries(profile.personality) as [PersonalityKey, number][]) {
+      const v = personalityValue(assessment, key); // -2..2
+      score += v * weight * 1.5;
+      if (v > 0 && weight > 0) personalityOverlap.push(key);
     }
 
-    if (char === '"') {
-      inString = true;
-    } else if (char === "{") {
-      depth += 1;
-    } else if (char === "}") {
-      depth -= 1;
-      if (depth === 0) return cleaned.slice(start, i + 1);
+    // Goals nudges
+    if (assessment.workMode === "Remote" && profile.learningTrack === "tech") score += 2;
+    if (assessment.workMode === "Office" && (profile.learningTrack === "medical" || profile.learningTrack === "engineering" || profile.learningTrack === "law")) score += 1.5;
+    if (assessment.companyType === "Startup" && (profile.title.includes("Product") || profile.learningTrack === "tech" || profile.learningTrack === "design")) score += 1;
+    if (assessment.companyType === "Big Company" && (profile.learningTrack === "business" || profile.learningTrack === "law")) score += 1;
+
+    // Expected salary nudge
+    const expected = Number.parseFloat(assessment.expectedSalary || "");
+    if (Number.isFinite(expected) && expected > 0) {
+      const tierValue = profile.tier === "premium" ? 6000 : profile.tier === "high" ? 4000 : profile.tier === "mid" ? 2500 : 1500;
+      const distance = Math.abs(expected - tierValue) / 1000;
+      score -= Math.min(distance * 0.4, 4);
     }
-  }
 
-  throw new Error("No complete JSON object found in AI response");
-}
+    // Deterministic per-user tiebreak (tiny)
+    const jitter = ((seed + index * 2654435761) % 1000) / 5000; // 0..0.2
+    score += jitter;
 
-function parseNumber(value: unknown, fallback: number) {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string") {
-    const parsed = Number.parseFloat(value.replace(/[^0-9.-]/g, ""));
-    if (Number.isFinite(parsed)) return parsed;
-  }
-  return fallback;
-}
-
-function normalizeNumericFields(value: unknown) {
-  if (!value || typeof value !== "object") return value;
-  const report = value as { careers?: unknown };
-  if (!Array.isArray(report.careers)) return value;
-
-  return {
-    ...(value as Record<string, unknown>),
-    careers: report.careers.map((career, index) => {
-      if (!career || typeof career !== "object") return career;
-      const careerRecord = career as Record<string, unknown>;
-      return {
-        ...careerRecord,
-        match: parseNumber(careerRecord.match, Math.max(70, 96 - index * 3)),
-        demandScore: parseNumber(careerRecord.demandScore, Math.max(70, 94 - index * 3)),
-      };
-    }),
-  };
-}
-
-function parseCareerReport(raw: string) {
-  const jsonText = extractJsonObject(raw)
-    .replace(/,\s*([}\]])/g, "$1")
-    .replace(/[\u0000-\u001F\u007F]/g, "");
-  const parsed = JSON.parse(jsonText) as unknown;
-  return ReportSchema.parse(normalizeNumericFields(parsed));
-}
-
-function ensureFiveCareers(report: CareerReport, data: z.infer<typeof AssessmentInput>) {
-  const fallback = createFallbackReport(data);
-  const careers = report.careers.slice(0, 5);
-
-  for (const career of fallback.careers) {
-    if (careers.length >= 5) break;
-    if (!careers.some((existing) => existing.title.toLowerCase() === career.title.toLowerCase())) {
-      careers.push(career);
-    }
-  }
-
-  return ReportSchema.parse({
-    ...report,
-    strengths: report.strengths.length > 0 ? report.strengths : fallback.strengths,
-    weaknesses: report.weaknesses.length > 0 ? report.weaknesses : fallback.weaknesses,
-    careers,
+    return { profile, score, interestOverlap, subjectOverlap, skillOverlap, personalityOverlap, matchPct: 0 };
   });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  // Convert raw score to a compatibility % (relative + absolute floors/ceilings).
+  const top = scored[0]?.score ?? 1;
+  const bottom = scored[scored.length - 1]?.score ?? 0;
+  const range = Math.max(top - bottom, 1);
+  for (const item of scored) {
+    const normalised = (item.score - bottom) / range; // 0..1
+    // Anchor top ~98%, floor ~55%
+    item.matchPct = Math.round(55 + normalised * 43);
+  }
+  // Ensure the top career reads as a strong match
+  if (scored[0]) scored[0].matchPct = Math.max(scored[0].matchPct, 92);
+
+  return scored;
 }
 
-function createFallbackReport(data: z.infer<typeof AssessmentInput>): CareerReport {
-  const country = data.country || "Uzbekistan";
-  const interests = data.interests.length ? data.interests.join(", ") : "technology, problem solving, and growth";
-  const subjects = data.subjects.length ? data.subjects.join(", ") : "mathematics and computer science";
-  const preferred = data.preferredCountry || "international opportunities";
+// ============================================================================
+// Personalized narrative builders
+// ============================================================================
 
+const INTEREST_LABEL: Record<string, string> = {
+  ai: "artificial intelligence",
+  programming: "programming",
+  math: "mathematics",
+  business: "business",
+  medicine: "medicine",
+  engineering: "engineering",
+  design: "design",
+  finance: "finance",
+  marketing: "marketing",
+  teaching: "teaching",
+  psychology: "psychology",
+  law: "law",
+  science: "science",
+  cybersecurity: "cybersecurity",
+  robotics: "robotics",
+};
+
+const SUBJECT_LABEL: Record<string, string> = {
+  math: "Mathematics",
+  physics: "Physics",
+  chemistry: "Chemistry",
+  biology: "Biology",
+  english: "English",
+  history: "History",
+  geography: "Geography",
+  cs: "Computer Science",
+  economics: "Economics",
+  literature: "Literature",
+};
+
+const PERSONALITY_LABEL: Record<PersonalityKey, string> = {
+  q0: "your appetite for hard problems",
+  q1: "your comfort working with people",
+  q2: "your drive to create new ideas",
+  q3: "your instinct for leading teams",
+  q4: "your love of analyzing data",
+  q5: "your enjoyment of building things",
+};
+
+function joinList(items: string[], max = 3): string {
+  const trimmed = items.slice(0, max);
+  if (trimmed.length === 0) return "";
+  if (trimmed.length === 1) return trimmed[0];
+  if (trimmed.length === 2) return `${trimmed[0]} and ${trimmed[1]}`;
+  return `${trimmed.slice(0, -1).join(", ")}, and ${trimmed[trimmed.length - 1]}`;
+}
+
+function buildWhyItFits(sc: ScoredCareer, a: Assessment): string {
+  const parts: string[] = [];
+  if (sc.interestOverlap.length) {
+    parts.push(
+      `it lines up with your interest in ${joinList(sc.interestOverlap.map((i) => INTEREST_LABEL[i] ?? i))}`,
+    );
+  }
+  if (sc.subjectOverlap.length) {
+    parts.push(
+      `it leans on subjects you already enjoy — ${joinList(sc.subjectOverlap.map((s) => SUBJECT_LABEL[s] ?? s))}`,
+    );
+  }
+  if (sc.skillOverlap.length) {
+    parts.push(`your strongest skills (${joinList(sc.skillOverlap.slice(0, 3))}) are exactly what this role rewards`);
+  }
+  if (sc.personalityOverlap.length) {
+    parts.push(joinList(sc.personalityOverlap.map((k) => PERSONALITY_LABEL[k])));
+  }
+  const country = a.preferredCountry || a.country || "your target market";
+  const opening = `${sc.profile.title} is a strong fit for you because`;
+  const body = parts.length ? parts.join("; ") : "your overall profile aligns well with the day-to-day of this role";
+  return `${opening} ${body}. In ${country}, this career also matches your goals around work mode (${a.workMode || "flexible"}) and company type (${a.companyType || "no strong preference"}).`;
+}
+
+function buildStrengths(a: Assessment): string[] {
+  const items: string[] = [];
+  const orderedSkills = (Object.keys(a.skills) as SkillKey[])
+    .filter((k) => typeof a.skills[k] === "number")
+    .sort((x, y) => (a.skills[y] as number) - (a.skills[x] as number));
+  const topSkills = orderedSkills.slice(0, 3);
+  if (topSkills.length) {
+    items.push(`Solid self-rated ${joinList(topSkills)} — a strong base to build on.`);
+  }
+  if (a.interests.length >= 3) {
+    items.push(`You have clear interests across ${joinList(a.interests.map((i) => INTEREST_LABEL[i] ?? i))}, which makes it easier to specialise.`);
+  }
+  const strongPersonality = (Object.keys(a.personality) as PersonalityKey[])
+    .filter((k) => (ANSWER_TO_VALUE[a.personality[k]] ?? 0) >= 1);
+  if (strongPersonality.length) {
+    items.push(`You show ${joinList(strongPersonality.map((k) => PERSONALITY_LABEL[k]))}, which top employers value.`);
+  }
+  if (a.subjects.length) {
+    items.push(`Your favourite subjects (${joinList(a.subjects.map((s) => SUBJECT_LABEL[s] ?? s))}) already point toward high-demand fields.`);
+  }
+  if (items.length < 4) {
+    items.push("Motivation to align education choices with real career and salary outcomes.");
+  }
+  return items.slice(0, 5);
+}
+
+function buildWeaknesses(a: Assessment): string[] {
+  const items: string[] = [];
+  const orderedSkills = (Object.keys(a.skills) as SkillKey[])
+    .filter((k) => typeof a.skills[k] === "number")
+    .sort((x, y) => (a.skills[x] as number) - (a.skills[y] as number));
+  const lowSkills = orderedSkills.slice(0, 2);
+  if (lowSkills.length) {
+    items.push(`Room to grow in ${joinList(lowSkills)} — a focused 8–12 week plan can move the needle fast.`);
+  }
+  const weakPersonality = (Object.keys(a.personality) as PersonalityKey[])
+    .filter((k) => (ANSWER_TO_VALUE[a.personality[k]] ?? 0) <= -1);
+  if (weakPersonality.length) {
+    items.push(`Watch out for ${joinList(weakPersonality.map((k) => PERSONALITY_LABEL[k]))} — build habits that stretch this muscle.`);
+  }
+  if ((a.skills["English"] ?? 5) < 6) {
+    items.push("Advanced English communication needs polishing to unlock international roles.");
+  }
+  items.push("Build a small public portfolio to prove practical ability, not just theory.");
+  items.push("Practice interview storytelling — how you explain a project matters as much as the project itself.");
+  return items.slice(0, 4);
+}
+
+function buildSummary(top: ScoredCareer, a: Assessment): string {
+  const country = a.country || "Uzbekistan";
+  const target = a.preferredCountry || "international opportunities";
+  const interests = a.interests.length ? joinList(a.interests.map((i) => INTEREST_LABEL[i] ?? i), 4) : "modern, high-growth fields";
+  const subjects = a.subjects.length ? joinList(a.subjects.map((s) => SUBJECT_LABEL[s] ?? s), 3) : "quantitative and analytical topics";
+  return `Based on your interests in ${interests}, your favourite subjects (${subjects}), and your goal of pursuing ${target} from ${country}, your profile is strongest for a path in ${top.profile.title}. This report ranks your top 5 careers by an AI compatibility score, then gives you a personalised roadmap, skill plan, and salary outlook for each. Use it as a decision map — not a verdict.`;
+}
+
+function buildRoadmap(sc: ScoredCareer): CareerReport["careers"][number]["roadmap"] {
+  const t = sc.profile.title;
+  const track = sc.profile.learningTrack;
+  const first = track === "medical"
+    ? { phase: "Foundations", duration: "0-6 months", focus: `Build strong biology, chemistry, and English foundations for ${t}.`, milestones: ["Master school-level biology and chemistry", "Improve academic English", "Shadow a professional or volunteer at a clinic"] }
+    : track === "law"
+      ? { phase: "Foundations", duration: "0-4 months", focus: `Build reading, writing, and reasoning stamina for ${t}.`, milestones: ["Read one legal or policy article per week", "Practice structured writing", "Follow current events daily"] }
+      : track === "design"
+        ? { phase: "Foundations", duration: "0-3 months", focus: `Build visual literacy and tool basics for ${t}.`, milestones: ["Complete a Figma or design fundamentals course", "Redesign 3 real screens", "Start a design log"] }
+        : track === "business"
+          ? { phase: "Foundations", duration: "0-3 months", focus: `Learn the language of business relevant to ${t}.`, milestones: ["Master Excel and basic finance", "Read 2 business classics", "Start following industry newsletters"] }
+          : { phase: "Foundations", duration: "0-3 months", focus: `Build core technical fundamentals for ${t}.`, milestones: ["Learn or refresh core programming or math skills", "Build 3 small practice projects", "Set up a public portfolio"] };
+
+  return [
+    first,
+    {
+      phase: "Core Skills",
+      duration: "3-8 months",
+      focus: `Get productive on the day-to-day skills a ${t} actually uses.`,
+      milestones: sc.profile.technicalSkills.slice(0, 3).map((s) => `Ship a project using ${s}`),
+    },
+    {
+      phase: "Portfolio & Depth",
+      duration: "8-14 months",
+      focus: `Build proof-of-work that stands out for ${t} roles.`,
+      milestones: ["Ship one substantial capstone project", "Get feedback from a mentor in the field", "Document everything publicly"],
+    },
+    {
+      phase: "Career Launch",
+      duration: "14-18 months",
+      focus: `Convert learning into internships, entry roles, or admissions for ${t}.`,
+      milestones: ["Prepare a targeted CV and portfolio", "Practice interview storytelling", "Apply to at least 10 opportunities"],
+    },
+  ];
+}
+
+const SALARY_TABLE: Record<SalaryTier, { local: string; usa: string; europe: string }> = {
+  premium: { local: "UZS 220M–520M / year", usa: "USD 130K–240K / year", europe: "EUR 75K–150K / year" },
+  high:    { local: "UZS 150M–380M / year", usa: "USD 95K–180K / year",  europe: "EUR 55K–120K / year" },
+  mid:     { local: "UZS 90M–240M / year",  usa: "USD 70K–130K / year",  europe: "EUR 40K–85K / year"  },
+  stable:  { local: "UZS 60M–160M / year",  usa: "USD 45K–90K / year",   europe: "EUR 28K–60K / year"  },
+};
+
+function buildCareerEntry(sc: ScoredCareer, a: Assessment): CareerReport["careers"][number] {
+  const salary = SALARY_TABLE[sc.profile.tier];
+  const country = a.country || "Uzbekistan";
   return {
-    summary: `Based on your interests in ${interests}, your subject preferences around ${subjects}, and your goal of pursuing ${preferred}, your profile is strongest for technology-driven careers that combine analytical thinking, continuous learning, and practical problem solving. The recommendations below prioritize high future demand, strong salary potential, and a realistic learning path from your current level.`,
-    strengths: [
-      "Strong potential for analytical and structured problem solving.",
-      "Clear interest alignment with modern, high-growth career fields.",
-      "Good foundation for building technical skills through consistent practice.",
-      "Motivation to connect education choices with long-term salary and career outcomes.",
-    ],
-    weaknesses: [
-      "Needs a focused portfolio to prove practical ability beyond theory.",
-      "Should strengthen advanced English communication for international opportunities.",
-      "May need deeper specialization before competing for premium roles.",
-      "Should practice interview storytelling and project explanation skills.",
-    ],
-    careers: [
-      {
-        title: "AI Engineer",
-        match: 98,
-        whyItFits: "This path matches your interest in AI, programming, mathematics, and future-focused work. It rewards curiosity, problem solving, and the ability to build intelligent systems with real-world impact.",
-        universityMajors: ["Computer Science", "Artificial Intelligence", "Data Science", "Software Engineering"],
-        technicalSkills: ["Python", "Machine Learning", "Deep Learning", "Data Structures", "APIs", "Model Evaluation"],
-        softSkills: ["Critical Thinking", "Communication", "Persistence", "Research Mindset", "Teamwork"],
-        salary: {
-          local: `${country}: UZS 180M-420M per year for strong junior-to-mid talent`,
-          usa: "USD 120K-220K per year",
-          europe: "EUR 70K-140K per year",
-        },
-        futureDemand: "Demand is expected to remain very high as companies adopt AI copilots, automation, personalization, and intelligent analytics across industries.",
-        demandScore: 97,
-        roadmap: [
-          {
-            phase: "Foundation",
-            duration: "0-3 months",
-            focus: "Build programming and math fundamentals.",
-            milestones: ["Complete Python basics", "Practice algebra and statistics", "Build 3 small console projects"],
-          },
-          {
-            phase: "Core AI Skills",
-            duration: "3-8 months",
-            focus: "Learn machine learning workflows and model evaluation.",
-            milestones: ["Train models with scikit-learn", "Understand regression and classification", "Publish 2 notebook projects"],
-          },
-          {
-            phase: "Production Portfolio",
-            duration: "8-14 months",
-            focus: "Turn AI knowledge into deployable products.",
-            milestones: ["Build an AI web app", "Create a GitHub portfolio", "Deploy a model-backed API"],
-          },
-          {
-            phase: "Professional Readiness",
-            duration: "14-18 months",
-            focus: "Prepare for internships, interviews, and real team workflows.",
-            milestones: ["Practice ML interview questions", "Contribute to open source", "Apply for AI internships"],
-          },
-        ],
-      },
-      {
-        title: "Data Scientist",
-        match: 95,
-        whyItFits: "Data science fits your analytical profile because it combines mathematics, pattern recognition, and communication. It is ideal if you enjoy finding meaning in information and turning it into decisions.",
-        universityMajors: ["Data Science", "Statistics", "Computer Science", "Economics"],
-        technicalSkills: ["Python", "SQL", "Statistics", "Data Visualization", "Machine Learning", "Experiment Design"],
-        softSkills: ["Business Thinking", "Storytelling", "Attention to Detail", "Curiosity", "Collaboration"],
-        salary: {
-          local: `${country}: UZS 140M-340M per year`,
-          usa: "USD 105K-180K per year",
-          europe: "EUR 60K-120K per year",
-        },
-        futureDemand: "Organizations increasingly need people who can transform data into strategy, especially in finance, healthcare, education, logistics, and technology.",
-        demandScore: 94,
-        roadmap: [
-          {
-            phase: "Analytics Foundation",
-            duration: "0-3 months",
-            focus: "Learn data handling and statistical thinking.",
-            milestones: ["Learn Python data libraries", "Practice SQL queries", "Complete statistics exercises"],
-          },
-          {
-            phase: "Project Building",
-            duration: "3-7 months",
-            focus: "Create practical analysis projects.",
-            milestones: ["Analyze public datasets", "Build dashboards", "Explain insights in written reports"],
-          },
-          {
-            phase: "Machine Learning",
-            duration: "7-12 months",
-            focus: "Develop predictive modeling skills.",
-            milestones: ["Train classification models", "Compare model metrics", "Document business recommendations"],
-          },
-        ],
-      },
-      {
-        title: "Backend Developer",
-        match: 92,
-        whyItFits: "Backend development is a strong fit if you like logical systems, programming, databases, and building reliable products that users depend on every day.",
-        universityMajors: ["Software Engineering", "Computer Science", "Information Systems"],
-        technicalSkills: ["TypeScript", "Node.js", "Databases", "APIs", "Authentication", "Cloud Deployment"],
-        softSkills: ["Reliability", "Debugging Patience", "Team Communication", "Ownership", "Systems Thinking"],
-        salary: {
-          local: `${country}: UZS 120M-300M per year`,
-          usa: "USD 95K-170K per year",
-          europe: "EUR 55K-110K per year",
-        },
-        futureDemand: "Backend engineers remain essential because every AI, mobile, SaaS, fintech, and enterprise product needs secure and scalable server-side systems.",
-        demandScore: 91,
-        roadmap: [
-          {
-            phase: "Programming Basics",
-            duration: "0-3 months",
-            focus: "Build strong coding fundamentals.",
-            milestones: ["Learn TypeScript or Python", "Practice algorithms", "Build small API exercises"],
-          },
-          {
-            phase: "Backend Systems",
-            duration: "3-8 months",
-            focus: "Learn databases, APIs, and authentication.",
-            milestones: ["Build REST APIs", "Use PostgreSQL", "Implement login and permissions"],
-          },
-          {
-            phase: "Deployment and Scale",
-            duration: "8-12 months",
-            focus: "Ship reliable production projects.",
-            milestones: ["Deploy a full-stack app", "Add tests", "Monitor errors and performance"],
-          },
-        ],
-      },
-      {
-        title: "Product Manager for AI Products",
-        match: 88,
-        whyItFits: "This career combines technology, communication, strategy, and leadership. It fits well if you enjoy understanding user needs and guiding teams to build useful AI-powered products.",
-        universityMajors: ["Computer Science", "Business Administration", "Information Systems", "Innovation Management"],
-        technicalSkills: ["AI Product Fundamentals", "Analytics", "Wireframing", "SQL Basics", "A/B Testing", "Prompt Design"],
-        softSkills: ["Leadership", "Communication", "Prioritization", "Empathy", "Decision Making"],
-        salary: {
-          local: `${country}: UZS 130M-360M per year`,
-          usa: "USD 115K-200K per year",
-          europe: "EUR 70K-130K per year",
-        },
-        futureDemand: "Demand is growing for product leaders who understand both AI capabilities and real user problems, especially in SaaS, education, finance, and healthcare.",
-        demandScore: 88,
-        roadmap: [
-          {
-            phase: "Product Foundations",
-            duration: "0-3 months",
-            focus: "Learn product thinking and user research.",
-            milestones: ["Study product case studies", "Interview potential users", "Write problem statements"],
-          },
-          {
-            phase: "AI Product Skills",
-            duration: "3-7 months",
-            focus: "Understand how AI features are designed and evaluated.",
-            milestones: ["Prototype AI workflows", "Define success metrics", "Create product requirement documents"],
-          },
-          {
-            phase: "Portfolio and Leadership",
-            duration: "7-12 months",
-            focus: "Show that you can guide a product from idea to launch.",
-            milestones: ["Launch a small product", "Collect user feedback", "Present a roadmap"],
-          },
-        ],
-      },
-      {
-        title: "Cybersecurity Analyst",
-        match: 85,
-        whyItFits: "Cybersecurity fits a detail-oriented learner who likes technology, investigation, and protecting systems. It offers a clear skills ladder and strong global demand.",
-        universityMajors: ["Cybersecurity", "Computer Science", "Information Security", "Network Engineering"],
-        technicalSkills: ["Networking", "Linux", "Security Monitoring", "Python Scripting", "Cloud Security", "Incident Response"],
-        softSkills: ["Attention to Detail", "Calm Under Pressure", "Ethical Judgment", "Communication", "Persistence"],
-        salary: {
-          local: `${country}: UZS 110M-280M per year`,
-          usa: "USD 90K-165K per year",
-          europe: "EUR 55K-115K per year",
-        },
-        futureDemand: "Demand is strong because businesses, governments, and AI-enabled platforms need better protection against fraud, data leaks, and infrastructure attacks.",
-        demandScore: 86,
-        roadmap: [
-          {
-            phase: "IT Basics",
-            duration: "0-3 months",
-            focus: "Understand computers, networks, and operating systems.",
-            milestones: ["Learn networking fundamentals", "Practice Linux commands", "Understand web basics"],
-          },
-          {
-            phase: "Security Foundations",
-            duration: "3-8 months",
-            focus: "Learn defensive security and risk analysis.",
-            milestones: ["Study common vulnerabilities", "Use security labs", "Write incident reports"],
-          },
-          {
-            phase: "Career Preparation",
-            duration: "8-12 months",
-            focus: "Build credibility with labs, certificates, and portfolio work.",
-            milestones: ["Complete beginner certification prep", "Document lab projects", "Apply for SOC internships"],
-          },
-        ],
-      },
-    ],
+    title: sc.profile.title,
+    match: sc.matchPct,
+    whyItFits: buildWhyItFits(sc, a),
+    universityMajors: sc.profile.majors,
+    technicalSkills: sc.profile.technicalSkills,
+    softSkills: sc.profile.softSkills,
+    salary: {
+      local: `${country}: ${salary.local}`,
+      usa: salary.usa,
+      europe: salary.europe,
+    },
+    futureDemand: sc.profile.demand.text,
+    demandScore: sc.profile.demand.score,
+    roadmap: buildRoadmap(sc),
   };
 }
 
-function buildResponse(report: CareerReport, data: z.infer<typeof AssessmentInput>, source: "ai" | "fallback") {
-  return {
-    report,
-    generatedAt: new Date().toISOString(),
-    user: { name: data.fullName, country: data.country },
-    source,
+function buildDeterministicReport(a: Assessment): CareerReport {
+  const ranked = scoreCareers(a);
+  const top5 = ranked.slice(0, 5);
+  const report: CareerReport = {
+    summary: buildSummary(top5[0], a),
+    strengths: buildStrengths(a),
+    weaknesses: buildWeaknesses(a),
+    careers: top5.map((sc) => buildCareerEntry(sc, a)),
   };
+  return ReportSchema.parse(report);
 }
+
+// ============================================================================
+// Optional AI polish for the summary paragraph (never affects ranking)
+// ============================================================================
+
+async function polishSummaryWithAI(report: CareerReport, a: Assessment): Promise<CareerReport> {
+  const key = process.env.LOVABLE_API_KEY;
+  if (!key) return report;
+  try {
+    const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
+    const gateway = createLovableAiGatewayProvider(key);
+    const prompt = `Rewrite the following career-report summary in ONE polished, motivating paragraph (max 90 words). Keep the facts exactly. Do not add markdown. Do not add labels. Return only the paragraph.
+
+USER: ${a.fullName || "Student"} from ${a.country || "Uzbekistan"}. Target: ${a.preferredCountry || "international"}. Interests: ${a.interests.join(", ") || "n/a"}. Top career: ${report.careers[0]?.title}.
+
+ORIGINAL SUMMARY:
+${report.summary}`;
+    const result = await generateText({
+      model: gateway("google/gemini-3-flash-preview"),
+      prompt,
+      temperature: 0.4,
+      maxOutputTokens: 300,
+    });
+    const cleaned = result.text.trim().replace(/^["'`]+|["'`]+$/g, "");
+    if (cleaned.length > 40) {
+      return { ...report, summary: cleaned };
+    }
+  } catch (error) {
+    console.warn("[CareerAI] AI summary polish failed, using deterministic summary.", error);
+  }
+  return report;
+}
+
+// ============================================================================
+// Server function
+// ============================================================================
 
 export const analyzeCareer = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => AssessmentInput.parse(input))
   .handler(async ({ data }) => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) {
-      console.error("[CareerAI analyzeCareer] Missing LOVABLE_API_KEY. Returning fallback report.");
-      return buildResponse(createFallbackReport(data), data, "fallback");
-    }
-
-    const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
-    const gateway = createLovableAiGatewayProvider(key);
-
-    console.info("[CareerAI analyzeCareer] Starting report generation", {
-      hasName: Boolean(data.fullName),
-      country: data.country || "not provided",
+    const report = buildDeterministicReport(data);
+    console.info("[CareerAI analyzeCareer] Deterministic ranking complete", {
+      top: report.careers.map((c) => ({ title: c.title, match: c.match })),
       interestsCount: data.interests.length,
       subjectsCount: data.subjects.length,
       skillsCount: Object.keys(data.skills).length,
     });
-
-    const attempts = [
-      { label: "primary-schema-aligned", prompt: buildAnalysisPrompt(data, false) },
-      { label: "simplified-json-only", prompt: buildAnalysisPrompt(data, true) },
-    ];
-
-    for (const attempt of attempts) {
-      try {
-        console.info(`[CareerAI analyzeCareer] Attempt: ${attempt.label}`, {
-          promptLength: attempt.prompt.length,
-          promptPreview: preview(attempt.prompt, 1200),
-        });
-
-        const result = await generateText({
-          model: gateway("google/gemini-3-flash-preview"),
-          prompt: attempt.prompt,
-          temperature: 0.2,
-          maxOutputTokens: 6500,
-        });
-
-        console.info(`[CareerAI analyzeCareer] Raw AI response received: ${attempt.label}`, {
-          responseLength: result.text.length,
-          finishReason: result.finishReason,
-          responsePreview: preview(result.text),
-        });
-
-        const parsed = ensureFiveCareers(parseCareerReport(result.text), data);
-        console.info(`[CareerAI analyzeCareer] Report parsed successfully: ${attempt.label}`, {
-          careerCount: parsed.careers.length,
-          topCareer: parsed.careers[0]?.title,
-          matches: parsed.careers.map((career) => career.match),
-        });
-
-        return buildResponse(parsed, data, "ai");
-      } catch (error) {
-        console.error(`[CareerAI analyzeCareer] Attempt failed: ${attempt.label}`, {
-          error: getErrorMessage(error),
-        });
-      }
-    }
-
-    console.error("[CareerAI analyzeCareer] All AI parsing attempts failed. Returning valid fallback report.");
-    return buildResponse(createFallbackReport(data), data, "fallback");
+    const polished = await polishSummaryWithAI(report, data);
+    return {
+      report: polished,
+      generatedAt: new Date().toISOString(),
+      user: { name: data.fullName, country: data.country },
+      source: "engine" as const,
+    };
   });

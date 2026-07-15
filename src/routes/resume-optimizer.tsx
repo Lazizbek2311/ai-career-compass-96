@@ -26,7 +26,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { analyzeResume, type ResumeReport } from "@/lib/resume.functions";
-import { l } from "@/lib/i18n";
+import { useI18n as l } from "@/lib/i18n";
 
 export const Route = createFileRoute("/resume-optimizer")({
   head: () => ({
